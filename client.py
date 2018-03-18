@@ -25,36 +25,27 @@ else:
 # Due to updated ECDSA generated tls.cert we need to let gprc know that
 # we need to use that cipher suite otherwise there will be a handhsake
 # error when we communicate with the lnd rpc server.
-os.environ["GRPC_SSL_CIPHER_SUITES"] = 'ECDHE-RSA-AES128-GCM-SHA256:' \
-                                       'ECDHE-RSA-AES128-SHA256:' \
-                                       'ECDHE-RSA-AES256-SHA384:' \
-                                       'ECDHE-RSA-AES256-GCM-SHA384:' \
-                                       'ECDHE-ECDSA-AES128-GCM-SHA256:' \
-                                       'ECDHE-ECDSA-AES128-SHA256:' \
-                                       'ECDHE-ECDSA-AES256-SHA384:' \
-                                       'ECDHE-ECDSA-AES256-GCM-SHA384'
+os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 
 
-def get_cert():
+def get_cert(filepath=None):
     """Read in tls.cert from file
 
     Note: you need to open the file in byte mode as of grpc 1.8.2
     https://github.com/grpc/grpc/issues/13866
     """
-    with open(TLS_FILEPATH, 'rb') as f:
+    filepath = filepath or TLS_FILEPATH
+    with open(filepath, 'rb') as f:
         cert = f.read()
     return cert
 
 
-def get_macaroon(read_only=True):
+def get_macaroon(filepath=None):
     """Read and decode macaroon from file
 
     The macaroon is decoded into a hex string and returned.
     """
-    if read_only:
-        filepath = READ_ONLY_MACAROON_FILEPATH
-    else:
-        filepath = ADMIN_MACAROON_FILEPATH
+    filepath = filepath or READ_ONLY_MACAROON_FILEPATH
     with open(filepath, 'rb') as f:
         macaroon_bytes = f.read()
     return binascii.hexlify(macaroon_bytes).decode()
@@ -86,16 +77,18 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
 
 class RPCClient:
 
-    def __init__(self, ip_address, cert=None, macaroon=None):
+    def __init__(self, ip_address, cert=None, cert_filepath=None, macaroon=None, macaroon_filepath=None):
         if cert is None:
-            cert = get_cert()
-        else:
-            cert = cert
+            cert = get_cert(cert_filepath)
 
         if macaroon is None:
-            macaroon = get_macaroon()
-        else:
-            macaroon = macaroon
+            macaroon = get_macaroon(macaroon_filepath)
+
+        if cert is None:
+            cert = get_cert(cert_filepath)
+
+        if macaroon is None:
+            macaroon = get_macaroon(macaroon_filepath)
 
         credentials = generate_credentials(cert, macaroon)
 
@@ -311,18 +304,15 @@ class RPCClient:
 
 class AsyncRPCClient:
 
-    def __init__(self, ip_address, cert=None, macaroon=None):
+    def __init__(self, ip_address, cert=None, cert_filepath=None, macaroon=None, macaroon_filepath=None):
         if cert is None:
-            cert = get_cert()
-        else:
-            cert = cert
+            cert = get_cert(cert_filepath)
 
         if macaroon is None:
-            macaroon = get_macaroon()
-        else:
-            macaroon = macaroon
+            macaroon = get_macaroon(macaroon_filepath)
 
         credentials = generate_credentials(cert, macaroon)
+
         ip_address = 'ipv4:///' + ip_address
         channel = aiogrpc.secure_channel(ip_address, credentials)
         self.stub = lnrpc.LightningStub(channel)
