@@ -1,10 +1,11 @@
 # lnd-grpc-client
 A python grpc client for LND (Lightning Network Daemon) ⚡⚡⚡
 
-This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. 
+This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. Because of async support this only works with python 3.5+. I may break out a sync only version for python 2 if there is a need but async and grpc are kinda made for eachother so I probably wont :)
 
 
 ## dependencies
+- python 3.5+
 - grpcio
 - aiogrpc
 - grpcio-tools
@@ -61,3 +62,4 @@ loop.run_until_complete(run())
 ### TODO
 - [ ] improve docs
 - [ ] add tests
+
