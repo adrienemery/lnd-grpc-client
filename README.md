@@ -19,6 +19,8 @@ For now you can clone this repo or copy the three files (`rpc_pb2.py` `rpc_pb2_g
 
 
 ## How to use
+The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
+
 ```python
 from client import RPCClient
 
