@@ -17,7 +17,8 @@ def admin_client():
 
 
 def test_init():
-    client = LNDClient('127.0.0.1:10009')
+    """Ensure we can create a client with no errors"""
+    LNDClient('127.0.0.1:10009')
 
 
 def test_get_info(client):
@@ -37,16 +38,8 @@ def test_list_peers(client):
     client.list_peers()
 
 
-def test_open_channel(client):
-    raise Exception
-
-
 def test_list_invoices(client):
     client.list_invoices()
-
-
-def test_subscribe_invoices(client):
-    raise Exception
 
 
 def tests_add_invoice_fail_read_only(client):
@@ -58,10 +51,6 @@ def tests_add_invoice_fail_read_only(client):
 
 def tests_add_invoice(admin_client):
     admin_client.add_invoice(200, 'test')
-
-
-def test_unlock(admin_client):
-    raise Exception
 
 
 def test_new_address(admin_client):
