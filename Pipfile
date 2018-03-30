@@ -15,3 +15,8 @@ googleapis-common-protos = "*"
 
 [dev-packages]
 
+pytest = "*"
+tox = "*"
+coverage = "*"
+pytest-cov = "*"
+wheel = "*"

@@ -1,8 +1,8 @@
 import aiogrpc
-from lndrpc.common import get_cert, get_macaroon, generate_credentials, ln, lnrpc
+from lndgrpc.common import get_cert, get_macaroon, generate_credentials, ln, lnrpc
 
 
-class AsyncRPCClient(object):
+class AsyncLNDClient(object):
 
     def __init__(self, ip_address, cert=None, cert_filepath=None, macaroon=None, macaroon_filepath=None):
         if cert is None:

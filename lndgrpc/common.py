@@ -2,7 +2,7 @@ import binascii
 import platform
 import os
 import grpc
-from lndrpc import rpc_pb2, rpc_pb2_grpc
+from . import rpc_pb2, rpc_pb2_grpc
 
 ln = rpc_pb2
 lnrpc = rpc_pb2_grpc
