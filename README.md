@@ -3,29 +3,21 @@ A python grpc client for LND (Lightning Network Daemon) ⚡⚡⚡
 
 This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. 
 
-Because of async support this only works with python 3.5+. I may break out a sync only version for python 2 if there is a need but async and grpc are kinda made for eachother so I probably wont :)
-
-
-## dependencies
-- python 3.5+
-- grpcio
-- aiogrpc
-- grpcio-tools
-- googleapis-common-protos
-
+Because of async support this only works with python 3.5+.
 
 ## Installation
-For now you can clone this repo or copy the three files (`rpc_pb2.py` `rpc_pb2_grpc.py`, `client.py`) into your project. I am hoping to have on PyPI soon though so its easy to integrate into a standard workflow.
-
+```bash
+$ pip install lndgrpc
+```
 
 ## How to use
 The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
 
 ```python
-from client import RPCClient
+from lndgrpc import LNDClient
 
 # pass in the ip-address with RPC port
-lnd = RPCClient("127.0.0.1:10009")
+lnd = LNDClient("127.0.0.1:10009")
 
 lnd.get_info()
 
@@ -38,10 +30,10 @@ for invoice in lnd.subscribe_invoices():
 
 ```python
 import asyncio
-from client import AsyncRPCClient
+from lndgrpc import AsyncLNDClient
 
 # pass in the ip-address with RPC port
-async_lnd = AsyncRPCClient("127.0.0.1:10009")
+async_lnd = AsyncLNDClient("127.0.0.1:10009")
 
 async def subscribe_invoices():
     print('Listening for invoices...')
