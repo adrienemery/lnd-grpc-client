@@ -1,4 +1,6 @@
 import sys
+from codecs import open
+from os import path
 from setuptools import setup, find_packages
 
 install_requires = [
@@ -18,13 +20,20 @@ else:
     # exclude the async_client
     exclude_packages.append('*.async')
 
+here = path.abspath(path.dirname(__file__))
+
+# Get the long description from the README file
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name='lndgrpc',
     packages=find_packages(exclude=exclude_packages),
     install_requires=install_requires,
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
-    version='0.1.1',
+    version='0.1.2',
     description='An rpc client for LND (lightning network deamon)',
+    long_description=long_description,
     author='Adrien Emery',
     author_email='adrien.emery@gmail.com',
     url='https://github.com/adrienemery/lnd-grpc-client',
