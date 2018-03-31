@@ -1,5 +1,5 @@
 import grpc
-from lndgrpc.common import get_cert, get_macaroon, generate_credentials, ln, lnrpc
+from lndgrpc.common import (get_cert, get_macaroon, generate_credentials, ln, lnrpc)
 
 
 class LNDClient(object):

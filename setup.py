@@ -1,24 +1,41 @@
-from setuptools import setup
+import sys
+from setuptools import setup, find_packages
+
+install_requires = [
+    'grpcio',
+    'grpcio-tools',
+    'googleapis-common-protos'
+]
+exclude_packages = ['tests']
+
+MAJOR = sys.version_info[0]
+MINOR = sys.version_info[1]
+
+# only include the async grpc client for python 3.5+
+if MAJOR == 3 and MINOR >= 5:
+    install_requires.append('aiogrpc')
+else:
+    # exclude the async_client
+    exclude_packages.append('*.async')
+
 setup(
     name='lndgrpc',
-    packages=['lndgrpc'],
-    install_requires=[
-        'grpcio-tools',
-        'grpcio',
-        'aiogrpc',
-        'googleapis-common-protos'
-    ],
-    version='0.1.0',
+    packages=find_packages(exclude=exclude_packages),
+    install_requires=install_requires,
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
+    version='0.1.1',
     description='An rpc client for LND (lightning network deamon)',
     author='Adrien Emery',
     author_email='adrien.emery@gmail.com',
     url='https://github.com/adrienemery/lnd-grpc-client',
-    download_url='https://github.com/adrienemery/lnd-grpc-client/archive/0.1.tar.gz',
+    download_url='https://github.com/adrienemery/lnd-grpc-client/archive/0.1.1.tar.gz',
     keywords=['lnd', 'lightning-network', 'bitcoin', 'grpc', 'rpc', 'async'],
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
