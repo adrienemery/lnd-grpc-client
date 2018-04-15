@@ -30,8 +30,8 @@ os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 def get_cert(filepath=None):
     """Read in tls.cert from file
 
-    Note: you need to open the file in byte mode as of grpc 1.8.2
-    https://github.com/grpc/grpc/issues/13866
+    Note: tls files need to be read in byte mode as of grpc 1.8.2
+          https://github.com/grpc/grpc/issues/13866
     """
     filepath = filepath or TLS_FILEPATH
     with open(filepath, 'rb') as f:
@@ -72,3 +72,47 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
 
     def __call__(self, context, callback):
         callback([('macaroon', self.macaroon)], None)
+
+
+class BaseClient(object):
+    grpc_module = grpc
+
+    def __init__(self, ip_address, cert=None, cert_filepath=None, macaroon=None, macaroon_filepath=None):
+        if cert is None:
+            cert = get_cert(cert_filepath)
+
+        if macaroon is None:
+            macaroon = get_macaroon(macaroon_filepath)
+
+        if cert is None:
+            cert = get_cert(cert_filepath)
+
+        if macaroon is None:
+            macaroon = get_macaroon(macaroon_filepath)
+
+        self._credentials = generate_credentials(cert, macaroon)
+        self.ip_address = ip_address
+
+    @property
+    def _ln_stub(self):
+        """Create a ln_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials)
+        return lnrpc.LightningStub(channel)
+
+    @property
+    def _wallet_stub(self):
+        """Create a wallet_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials)
+        return lnrpc.WalletUnlockerStub(channel)
