@@ -12,7 +12,7 @@ Note: the async client is only available for Python 3.5+
 $ pip install lndgrpc
 ```
 
-## How to use
+## Basic Usage
 The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
 
 ```python
@@ -54,6 +54,14 @@ async def run():
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())
+```
+
+### Specifying Macaroon/Cert files
+By default the client will attempt to lookup the `readonly.macaron` and `tls.cert` files in thier default directory. 
+However if you want to specify a different macaroon or different path you can pass in the filepath explicitly.
+
+```python
+lnd = LNDClient("127.0.0.1:10009", macaroon_filepath='~/.lnd/invoice.macaroon', cert_filepath='path/to/tls.cert')
 ```
 
 
