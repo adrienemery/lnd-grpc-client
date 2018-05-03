@@ -75,7 +75,9 @@ if MAJOR == 3 and MINOR >= 6:
         @handle_rpc_errors
         async def unlock(self, password):
             """Unlock encrypted wallet at lnd startup"""
-            pass  # TODO
+            request = ln.UnlockWalletRequest(wallet_password=password.encode())
+            response = await self._wallet_stub.UnlockWallet(request)
+            return response
 
         @handle_rpc_errors
         async def new_address(self):
