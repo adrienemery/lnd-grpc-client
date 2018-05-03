@@ -13,8 +13,8 @@ exclude_packages = ['tests']
 MAJOR = sys.version_info[0]
 MINOR = sys.version_info[1]
 
-# only include the async grpc client for python 3.5+
-if MAJOR == 3 and MINOR >= 5:
+# only include the async grpc client for python 3.6+
+if MAJOR == 3 and MINOR >= 6:
     install_requires.append('aiogrpc')
 else:
     # exclude the async_client

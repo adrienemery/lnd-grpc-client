@@ -5,7 +5,9 @@ from lndgrpc.errors import handle_rpc_errors
 MAJOR = sys.version_info[0]
 MINOR = sys.version_info[1]
 
-if MAJOR == 3 and MINOR >= 5:
+
+# only python 3.6+ is supported by aiogrpc
+if MAJOR == 3 and MINOR >= 6:
     import aiogrpc
 
     class AsyncLNDClient(BaseClient):
@@ -46,7 +48,7 @@ if MAJOR == 3 and MINOR >= 5:
         async def open_channel(self, node_pubkey, local_funding_amount=None, push_sat=None, private=False):
             """Open a channel to an existing peer"""
             request = ln.OpenChannelRequest(
-                node_pubkey=node_pubkey,
+                node_pubkey_string=node_pubkey,
                 local_funding_amount=local_funding_amount,
                 push_sat=push_sat,
                 private=private
@@ -83,8 +85,9 @@ if MAJOR == 3 and MINOR >= 5:
             return response
 
         @handle_rpc_errors
-        async def connect_peer(self, ln_address, permanent=False):
+        async def connect_peer(self, pub_key, host, permanent=False):
             """Connect to a remote lnd peer"""
+            ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
             request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
             response = await self._ln_stub.ConnectPeer(request)
             return response
@@ -99,6 +102,11 @@ if MAJOR == 3 and MINOR >= 5:
         @handle_rpc_errors
         async def close_channel(self, channel_point, force=False, target_conf=None, sat_per_byte=None):
             """Close an existing channel"""
+            funding_txid, output_index = channel_point.split(':')
+            channel_point = ln.ChannelPoint(
+                funding_txid_str=funding_txid,
+                output_index=int(output_index)
+            )
             request = ln.CloseChannelRequest(
                 channel_point=channel_point,
                 force=force,
@@ -174,7 +182,7 @@ if MAJOR == 3 and MINOR >= 5:
         @handle_rpc_errors
         async def decode_payment_request(self, payment_request):
             """Decode a payment request"""
-            request = ln.PayReqString(payment_request)
+            request = ln.PayReqString(pay_req=payment_request)
             response = await self._ln_stub.DecodePayReq(request)
             return response
 
