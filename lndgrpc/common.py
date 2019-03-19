@@ -11,12 +11,12 @@ lnrpc = rpc_pb2_grpc
 system = platform.system().lower()
 if system == 'linux':
     TLS_FILEPATH = os.path.expanduser('~/.lnd/tls.cert')
-    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/admin.macaroon')
-    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/readonly.macaroon')
+    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/data/chain/bitcoin/mainnet/admin.macaroon')
+    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/data/chain/bitcoin/mainnet/readonly.macaroon')
 elif system == 'darwin':
     TLS_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/tls.cert')
-    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/admin.macaroon')
-    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/readonly.macaroon')
+    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/data/chain/bitcoin/mainnet/admin.macaroon')
+    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/data/chain/bitcoin/mainnet/readonly.macaroon')
 else:
     raise SystemError('Unrecognized system')
 
@@ -102,7 +102,7 @@ class BaseClient(object):
         StatusCode.UNAVAILABLE which will make the channel unusable.
         To ensure the channel is usable we create a new one for each request.
         """
-        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials)
+        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials, options=[('grpc.max_receive_message_length',1024*1024*50)])
         return lnrpc.LightningStub(channel)
 
     @property
@@ -114,5 +114,5 @@ class BaseClient(object):
         StatusCode.UNAVAILABLE which will make the channel unusable.
         To ensure the channel is usable we create a new one for each request.
         """
-        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials)
+        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials, options=[('grpc.max_receive_message_length',1024*1024*50)])
         return lnrpc.WalletUnlockerStub(channel)
