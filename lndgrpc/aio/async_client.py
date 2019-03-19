@@ -80,10 +80,10 @@ if MAJOR == 3 and MINOR >= 6:
             return response
 
         @handle_rpc_errors
-        async def new_address(self):
+        async def new_address(self, address_type=0):
             """Generates a new witness address"""
-            request = ln.NewWitnessAddressRequest()
-            response = await self._ln_stub.NewWitnessAddress(request)
+            request = ln.NewAddressRequest(type=address_type)
+            response = await self._ln_stub.NewAddress(request)
             return response
 
         @handle_rpc_errors

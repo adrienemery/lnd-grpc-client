@@ -73,10 +73,10 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def new_address(self):
+    def new_address(self, address_type=0):
         """Generates a new witness address"""
-        request = ln.NewWitnessAddressRequest()
-        response = self._ln_stub.NewWitnessAddress(request)
+        request = ln.NewAddressRequest(type=address_type)
+        response = self._ln_stub.NewAddress(request)
         return response
 
     @handle_rpc_errors
