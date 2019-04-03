@@ -11,6 +11,7 @@ aiogrpc = "*"
 grpcio-tools = "*"
 grpcio = "*"
 googleapis-common-protos = "*"
+requests = "*"
 
 
 [dev-packages]
