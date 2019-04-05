@@ -1,24 +1,23 @@
 import pytest
 import grpc
 from lndgrpc.client import LNDClient
-from lndgrpc.common import ADMIN_MACAROON_FILEPATH, READ_ONLY_MACAROON_FILEPATH
 
 
 @pytest.fixture
 def client():
-    client = LNDClient('127.0.0.1:10009', macaroon_filepath=READ_ONLY_MACAROON_FILEPATH)
+    client = LNDClient(admin=False, network='simnet')
     return client
 
 
 @pytest.fixture
 def admin_client():
-    client = LNDClient('127.0.0.1:10009', macaroon_filepath=ADMIN_MACAROON_FILEPATH)
+    client = LNDClient('127.0.0.1:10009', admin=True, network='simnet')
     return client
 
 
 def test_init():
     """Ensure we can create a client with no errors"""
-    LNDClient('127.0.0.1:10009')
+    LNDClient(network='simnet')
 
 
 def test_get_info(client):

@@ -9,14 +9,15 @@ lnrpc = rpc_pb2_grpc
 
 
 system = platform.system().lower()
+
 if system == 'linux':
     TLS_FILEPATH = os.path.expanduser('~/.lnd/tls.cert')
-    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/data/chain/bitcoin/mainnet/admin.macaroon')
-    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/.lnd/data/chain/bitcoin/mainnet/readonly.macaroon')
+    ADMIN_MACAROON_BASE_FILEPATH = '~/.lnd/data/chain/bitcoin/{}/admin.macaroon'
+    READ_ONLY_MACAROON_BASE_FILEPATH = '~/.lnd/data/chain/bitcoin/{}/readonly.macaroon'
 elif system == 'darwin':
     TLS_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/tls.cert')
-    ADMIN_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/data/chain/bitcoin/mainnet/admin.macaroon')
-    READ_ONLY_MACAROON_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/data/chain/bitcoin/mainnet/readonly.macaroon')
+    ADMIN_MACAROON_BASE_FILEPATH = '~/Library/Application Support/Lnd/data/chain/bitcoin/{}/admin.macaroon'
+    READ_ONLY_MACAROON_BASE_FILEPATH = '~/Library/Application Support/Lnd/data/chain/bitcoin/{}/readonly.macaroon'
 else:
     raise SystemError('Unrecognized system')
 
@@ -39,12 +40,17 @@ def get_cert(filepath=None):
     return cert
 
 
-def get_macaroon(filepath=None):
+def get_macaroon(admin=False, network='mainnet', filepath=None):
     """Read and decode macaroon from file
 
     The macaroon is decoded into a hex string and returned.
     """
-    filepath = filepath or READ_ONLY_MACAROON_FILEPATH
+    if filepath is None:
+        if admin:
+            filepath = os.path.expanduser(ADMIN_MACAROON_BASE_FILEPATH.format(network))
+        else:
+            filepath = os.path.expanduser(READ_ONLY_MACAROON_BASE_FILEPATH.format(network))
+
     with open(filepath, 'rb') as f:
         macaroon_bytes = f.read()
     return binascii.hexlify(macaroon_bytes).decode()
@@ -77,19 +83,19 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
 class BaseClient(object):
     grpc_module = grpc
 
-    def __init__(self, ip_address, cert=None, cert_filepath=None, macaroon=None, macaroon_filepath=None):
+    def __init__(self, ip_address='127.0.0.1:10009', network='mainnet', admin=False, cert=None,
+                 cert_filepath=None, macaroon=None, macaroon_filepath=None):
         if cert is None:
             cert = get_cert(cert_filepath)
 
         if macaroon is None:
-            macaroon = get_macaroon(macaroon_filepath)
+            macaroon = get_macaroon(admin=admin, network=network, filepath=macaroon_filepath)
 
         if cert is None:
             cert = get_cert(cert_filepath)
 
-        if macaroon is None:
-            macaroon = get_macaroon(macaroon_filepath)
-
+        self.admin = admin
+        self.network = network
         self._credentials = generate_credentials(cert, macaroon)
         self.ip_address = ip_address
 
@@ -102,7 +108,9 @@ class BaseClient(object):
         StatusCode.UNAVAILABLE which will make the channel unusable.
         To ensure the channel is usable we create a new one for each request.
         """
-        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials, options=[('grpc.max_receive_message_length',1024*1024*50)])
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
         return lnrpc.LightningStub(channel)
 
     @property
@@ -114,5 +122,7 @@ class BaseClient(object):
         StatusCode.UNAVAILABLE which will make the channel unusable.
         To ensure the channel is usable we create a new one for each request.
         """
-        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials, options=[('grpc.max_receive_message_length',1024*1024*50)])
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
         return lnrpc.WalletUnlockerStub(channel)
