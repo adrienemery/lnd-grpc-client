@@ -18,7 +18,7 @@ if MAJOR == 3 and MINOR >= 6:
     install_requires.append('aiogrpc')
 else:
     # exclude the async_client
-    exclude_packages.append('*.async')
+    exclude_packages.append('*.aio')
 
 here = path.abspath(path.dirname(__file__))
 
