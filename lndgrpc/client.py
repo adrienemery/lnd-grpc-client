@@ -1,4 +1,4 @@
-from .common import ln, BaseClient
+from .common import invoices, ln, BaseClient
 from .errors import handle_rpc_errors
 
 
@@ -67,9 +67,34 @@ class LNDClient(BaseClient):
             yield invoice
 
     @handle_rpc_errors
+    def subscribe_single_invoice(self, r_hash):
+        request = ln.PaymentHash(r_hash=r_hash)
+        for invoice in self._invoices_stub.SubscribeSingleInvoice(request):
+            yield invoice
+
+    @handle_rpc_errors
     def add_invoice(self, value, memo=''):
         request = ln.Invoice(value=value, memo=memo)
         response = self._ln_stub.AddInvoice(request)
+        return response
+
+    @handle_rpc_errors
+    def add_hold_invoice(self, hash, value=0, memo=''):
+        request = invoices.AddHoldInvoiceRequest(
+            hash=hash, value=value, memo=memo)
+        response = self._invoices_stub.AddHoldInvoice(request)
+        return response
+
+    @handle_rpc_errors
+    def settle_invoice(self, preimage):
+        request = invoices.SettleInvoiceMsg(preimage=preimage)
+        response = self._invoices_stub.SettleInvoice(request)
+        return response
+
+    @handle_rpc_errors
+    def cancel_invoice(self, payment_hash):
+        request = invoices.CancelInvoiceMsg(payment_hash=payment_hash)
+        response = self._invoices_stub.CancelInvoice(request)
         return response
 
     @handle_rpc_errors

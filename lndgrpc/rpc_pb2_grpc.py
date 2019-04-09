@@ -100,7 +100,7 @@ class WalletUnlockerServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def InitWallet(self, request, context):
-    """*
+    """* 
     InitWallet is used when lnd is starting up for the first time to fully
     initialize the daemon and its internal wallet. At the very least a wallet
     password must be provided. This will be used to encrypt sensitive material
@@ -435,7 +435,7 @@ class LightningServicer(object):
     """* lncli: `walletbalance`
     WalletBalance returns total unspent outputs(confirmed and unconfirmed), all
     confirmed unspent outputs and all unconfirmed unspent outputs under control
-    of the wallet.
+    of the wallet. 
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -612,7 +612,7 @@ class LightningServicer(object):
 
   def ClosedChannels(self, request, context):
     """* lncli: `closedchannels`
-    ClosedChannels returns a description of all the closed channels that
+    ClosedChannels returns a description of all the closed channels that 
     this node was a participant in.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
