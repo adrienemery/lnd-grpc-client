@@ -18,8 +18,9 @@ The api mirrors the underlying lnd grpc api (http://api.lightning.community/) bu
 ```python
 from lndgrpc import LNDClient
 
-# pass in the ip-address with RPC port
-lnd = LNDClient("127.0.0.1:10009")
+# pass in the ip-address with RPC port and network ('mainnet', 'testnet', 'simnet')
+# the client defaults to 127.0.0.1:10009 and mainnet if no args provided
+lnd = LNDClient("127.0.0.1:10009", network='simnet')
 
 lnd.get_info()
 
@@ -34,8 +35,7 @@ for invoice in lnd.subscribe_invoices():
 import asyncio
 from lndgrpc import AsyncLNDClient
 
-# pass in the ip-address with RPC port
-async_lnd = AsyncLNDClient("127.0.0.1:10009")
+async_lnd = AsyncLNDClient()
 
 async def subscribe_invoices():
     print('Listening for invoices...')
@@ -57,15 +57,18 @@ loop.run_until_complete(run())
 ```
 
 ### Specifying Macaroon/Cert files
-By default the client will attempt to lookup the `readonly.macaron` and `tls.cert` files in thier default directory. 
+By default the client will attempt to lookup the `readonly.macaron` and `tls.cert` files in the mainnet directory. 
 However if you want to specify a different macaroon or different path you can pass in the filepath explicitly.
 
 ```python
-lnd = LNDClient("127.0.0.1:10009", macaroon_filepath='~/.lnd/invoice.macaroon', cert_filepath='path/to/tls.cert')
+lnd = LNDClient(macaroon_filepath='~/.lnd/invoice.macaroon', cert_filepath='path/to/tls.cert')
 ```
 
+#### Admin macaroon
+Use the admin macaroon to perform write actions (ie. creating invoices, creating new addresses)
 
-### TODO
-- [ ] improve docs
-- [ ] add tests
+```python
+lnd = LNDClient(admin=True)
+lnd.add_invoice(2000)
+```
 
