@@ -253,7 +253,7 @@ class LNDClient(BaseClient):
         if fee_rate:
             kwargs['fee_rate'] = fee_rate
         if channel_point:
-            kwargs['channel_point'] = channel_point
+            kwargs['chan_point'] = channel_point
         if time_lock_delta:
             kwargs['time_lock_delta'] = time_lock_delta
 
