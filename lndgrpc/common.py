@@ -99,19 +99,8 @@ class BaseClient(object):
         self._credentials = generate_credentials(cert, macaroon)
         self.ip_address = ip_address
 
-    @property
-    def _ln_stub(self):
-        """Create a ln_stub dynamically to ensure channel freshness
-
-        If we make a call to the Lightning RPC service when the wallet
-        is locked or the server is down we will get back an RPCError with
-        StatusCode.UNAVAILABLE which will make the channel unusable.
-        To ensure the channel is usable we create a new one for each request.
-        """
-        channel = self.grpc_module.secure_channel(
-            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
-        )
-        return lnrpc.LightningStub(channel)
+        channel = self.grpc_module.secure_channel(self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)])
+        self.stub=lnrpc.LightningStub(channel)
 
     @property
     def _wallet_stub(self):

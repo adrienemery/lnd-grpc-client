@@ -19,29 +19,29 @@ if MAJOR == 3 and MINOR >= 6:
 
         @handle_rpc_errors
         async def get_info(self):
-            response = await self._ln_stub.GetInfo(ln.GetInfoRequest())
+            response = await self.stub.GetInfo(ln.GetInfoRequest())
             return response
 
         @handle_rpc_errors
         async def wallet_balance(self):
-            response = await self._ln_stub.WalletBalance(ln.WalletBalanceRequest())
+            response = await self.stub.WalletBalance(ln.WalletBalanceRequest())
             return response
 
         @handle_rpc_errors
         async def channel_balance(self):
-            response = await self._ln_stub.ChannelBalance(ln.ChannelBalanceRequest())
+            response = await self.stub.ChannelBalance(ln.ChannelBalanceRequest())
             return response
 
         @handle_rpc_errors
         async def list_peers(self):
             """List all active, currently connected peers"""
-            response = await self._ln_stub.ListPeers(ln.ListPeersRequest())
+            response = await self.stub.ListPeers(ln.ListPeersRequest())
             return response
 
         @handle_rpc_errors
         async def list_channels(self):
             """List all open channels"""
-            response = await self._ln_stub.ListChannels(ln.ListChannelsRequest())
+            response = await self.stub.ListChannels(ln.ListChannelsRequest())
             return response
 
         @handle_rpc_errors
@@ -53,23 +53,23 @@ if MAJOR == 3 and MINOR >= 6:
                 push_sat=push_sat,
                 private=private
             )
-            response = await self._ln_stub.OpenChannel(request)
+            response = await self.stub.OpenChannel(request)
             return response
 
         @handle_rpc_errors
         async def list_invoices(self):
             request = ln.ListInvoiceRequest()
-            response = await self._ln_stub.ListInvoices(request)
+            response = await self.stub.ListInvoices(request)
             return response
 
         @handle_rpc_errors
         async def subscribe_invoices(self):
-            await self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription())
+            await self.stub.SubscribeInvoices(ln.InvoiceSubscription())
 
         @handle_rpc_errors
         async def add_invoice(self, value, memo=''):
             request = ln.Invoice(value=value, memo=memo)
-            response = await self._ln_stub.AddInvoice(request)
+            response = await self.stub.AddInvoice(request)
             return response
 
         @handle_rpc_errors
@@ -83,7 +83,7 @@ if MAJOR == 3 and MINOR >= 6:
         async def new_address(self, address_type=0):
             """Generates a new witness address"""
             request = ln.NewAddressRequest(type=address_type)
-            response = await self._ln_stub.NewAddress(request)
+            response = await self.stub.NewAddress(request)
             return response
 
         @handle_rpc_errors
@@ -91,14 +91,14 @@ if MAJOR == 3 and MINOR >= 6:
             """Connect to a remote lnd peer"""
             ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
             request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
-            response = await self._ln_stub.ConnectPeer(request)
+            response = await self.stub.ConnectPeer(request)
             return response
 
         @handle_rpc_errors
         async def disconnect_peer(self, pub_key):
             """Disconnect a remote lnd peer identified by public key"""
             request = ln.DisconnectPeerRequest(pub_key=pub_key)
-            response = await self._ln_stub.DisconnectPeer(request)
+            response = await self.stub.DisconnectPeer(request)
             return response
 
         @handle_rpc_errors
@@ -115,112 +115,112 @@ if MAJOR == 3 and MINOR >= 6:
                 target_conf=target_conf,
                 sat_per_byte=sat_per_byte
             )
-            response = await self._ln_stub.CloseChannel(request)
+            response = await self.stub.CloseChannel(request)
             return response
 
         @handle_rpc_errors
         async def pending_channels(self):
             """Display information pertaining to pending channels"""
             request = ln.PendingChannelsRequest()
-            response = await self._ln_stub.PendingChannels(request)
+            response = await self.stub.PendingChannels(request)
             return response
 
         @handle_rpc_errors
         async def send_payment(self, payment_request):
             """Send a payment over lightning"""
             request = ln.SendRequest(payment_request=payment_request)
-            response = await self._ln_stub.SendPaymentSync(request)
+            response = await self.stub.SendPaymentSync(request)
             return response
 
         @handle_rpc_errors
         async def lookup_invoice(self, r_hash_str):
             """Lookup an existing invoice by its payment hash"""
             request = ln.PaymentHash(r_hash_str=r_hash_str)
-            response = await self._ln_stub.LookupInvoice(request)
+            response = await self.stub.LookupInvoice(request)
             return response
 
         @handle_rpc_errors
         async def list_payments(self):
             """List all outgoing payments"""
             request = ln.ListPaymentsRequest()
-            response = await self._ln_stub.ListPayments(request)
+            response = await self.stub.ListPayments(request)
             return response
 
         @handle_rpc_errors
         async def describe_graph(self):
             """Describe the network graph"""
             request = ln.ChannelGraphRequest()
-            response = await self._ln_stub.DescribeGraph(request)
+            response = await self.stub.DescribeGraph(request)
             return response
 
         @handle_rpc_errors
         async def get_channel_info(self, channel_id):
             """Get the state of a specific channel"""
             requset = ln.ChanInfoRequest(chan_id=channel_id)
-            response = await self._ln_stub.GetChanInfo(requset)
+            response = await self.stub.GetChanInfo(requset)
             return response
 
         @handle_rpc_errors
         async def get_node_info(self, pub_key):
             """Get information on a specific node"""
             request = ln.NodeInfoRequest(pub_key=pub_key)
-            response = await self._ln_stub.GetNodeInfo(request)
+            response = await self.stub.GetNodeInfo(request)
             return response
 
         @handle_rpc_errors
         async def query_routes(self, pub_key, amt, num_routes=5):
             """Query a route to a destination"""
             request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, num_routes=num_routes)
-            response = await self._ln_stub.QueryRoutes(request)
+            response = await self.stub.QueryRoutes(request)
             return response
 
         @handle_rpc_errors
         async def get_network_info(self):
             """Returns basic stats about the known channel graph for this node"""
             request = ln.NetworkInfoRequest()
-            response = await self._ln_stub.GetNetworkInfo(request)
+            response = await self.stub.GetNetworkInfo(request)
             return response
 
         @handle_rpc_errors
         async def decode_payment_request(self, payment_request):
             """Decode a payment request"""
             request = ln.PayReqString(pay_req=payment_request)
-            response = await self._ln_stub.DecodePayReq(request)
+            response = await self.stub.DecodePayReq(request)
             return response
 
         @handle_rpc_errors
         async def list_transactions(self):
             """List on chain transactions from the wallet"""
             request = ln.GetTransactionsRequest()
-            response = await self._ln_stub.GetTransactions(request)
+            response = await self.stub.GetTransactions(request)
             return response
 
         @handle_rpc_errors
         async def stop_daemon(self):
             """Stop and shutdown the daemon"""
             request = ln.StopRequest()
-            response = await self._ln_stub.StopDaemon(request)
+            response = await self.stub.StopDaemon(request)
             return response
 
         @handle_rpc_errors
         async def sign_message(self, msg):
             """Sign a message with the node's private key"""
             request = ln.SignMessageRequest(msg=msg)
-            response = await self._ln_stub.SignMessage(request)
+            response = await self.stub.SignMessage(request)
             return response
 
         @handle_rpc_errors
         async def verify_message(self, msg, signature):
             """Verify a message signed with the signature"""
             request = ln.VerifyMessageRequest(msg=msg, signature=signature)
-            response = await self._ln_stub.VerifyMessage(request)
+            response = await self.stub.VerifyMessage(request)
             return response
 
         @handle_rpc_errors
         async def fee_report(self):
             """Display the current fee policies of all active channels"""
             request = ln.FeeReportRequest()
-            response = await self._ln_stub.FeeReport(request)
+            response = await self.stub.FeeReport(request)
             return response
 
         @handle_rpc_errors
@@ -239,5 +239,5 @@ if MAJOR == 3 and MINOR >= 6:
                 optional_kwargs['target_conf'] = target_conf
 
             request = ln.SendCoinsRequest(addr=address, amount=amount, **optional_kwargs)
-            response = await self._ln_stub.SendCoins(request)
+            response = await self.stub.SendCoins(request)
             return response

@@ -18,29 +18,29 @@ class LNDClient(BaseClient):
 
     @handle_rpc_errors
     def get_info(self):
-        response = self._ln_stub.GetInfo(ln.GetInfoRequest())
+        response = self.stub.GetInfo(ln.GetInfoRequest())
         return response
 
     @handle_rpc_errors
     def wallet_balance(self):
-        response = self._ln_stub.WalletBalance(ln.WalletBalanceRequest())
+        response = self.stub.WalletBalance(ln.WalletBalanceRequest())
         return response
 
     @handle_rpc_errors
     def channel_balance(self):
-        response = self._ln_stub.ChannelBalance(ln.ChannelBalanceRequest())
+        response = self.stub.ChannelBalance(ln.ChannelBalanceRequest())
         return response
 
     @handle_rpc_errors
     def list_peers(self):
         """List all active, currently connected peers"""
-        response = self._ln_stub.ListPeers(ln.ListPeersRequest())
+        response = self.stub.ListPeers(ln.ListPeersRequest())
         return response
 
     @handle_rpc_errors
     def list_channels(self):
         """List all open channels"""
-        response = self._ln_stub.ListChannels(ln.ListChannelsRequest())
+        response = self.stub.ListChannels(ln.ListChannelsRequest())
         return response
 
     @handle_rpc_errors
@@ -52,31 +52,31 @@ class LNDClient(BaseClient):
             push_sat=push_sat,
             private=private
         )
-        response = self._ln_stub.OpenChannel(request)
+        response = self.stub.OpenChannel(request)
         return response
 
     @handle_rpc_errors
     def list_invoices(self):
         request = ln.ListInvoiceRequest()
-        response = self._ln_stub.ListInvoices(request)
+        response = self.stub.ListInvoices(request)
         return response
 
     @handle_rpc_errors
     def subscribe_invoices(self):
-        for invoice in self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription()):
+        for invoice in self.stub.SubscribeInvoices(ln.InvoiceSubscription()):
             yield invoice
 
     @handle_rpc_errors
     def add_invoice(self, value, memo=''):
         request = ln.Invoice(value=value, memo=memo)
-        response = self._ln_stub.AddInvoice(request)
+        response = self.stub.AddInvoice(request)
         return response
 
     @handle_rpc_errors
     def new_address(self, address_type=0):
         """Generates a new witness address"""
         request = ln.NewAddressRequest(type=address_type)
-        response = self._ln_stub.NewAddress(request)
+        response = self.stub.NewAddress(request)
         return response
 
     @handle_rpc_errors
@@ -84,14 +84,14 @@ class LNDClient(BaseClient):
         """Connect to a remote lnd peer"""
         ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
         request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
-        response = self._ln_stub.ConnectPeer(request)
+        response = self.stub.ConnectPeer(request)
         return response
 
     @handle_rpc_errors
     def disconnect_peer(self, pub_key):
         """Disconnect a remote lnd peer identified by public key"""
         request = ln.DisconnectPeerRequest(pub_key=pub_key)
-        response = self._ln_stub.DisconnectPeer(request)
+        response = self.stub.DisconnectPeer(request)
         return response
 
     @handle_rpc_errors
@@ -108,112 +108,112 @@ class LNDClient(BaseClient):
             target_conf=target_conf,
             sat_per_byte=sat_per_byte
         )
-        response = self._ln_stub.CloseChannel(request)
+        response = self.stub.CloseChannel(request)
         return response
 
     @handle_rpc_errors
     def pending_channels(self):
         """Display information pertaining to pending channels"""
         request = ln.PendingChannelsRequest()
-        response = self._ln_stub.PendingChannels(request)
+        response = self.stub.PendingChannels(request)
         return response
 
     @handle_rpc_errors
     def send_payment(self, payment_request):
         """Send a payment over lightning"""
         request = ln.SendRequest(payment_request=payment_request)
-        response = self._ln_stub.SendPaymentSync(request)
+        response = self.stub.SendPaymentSync(request)
         return response
 
     @handle_rpc_errors
-    def lookup_invoice(self, r_hash_str):
+    def lookup_invoice(self, r_hash):
         """Lookup an existing invoice by its payment hash"""
-        request = ln.PaymentHash(r_hash_str=r_hash_str)
-        response = self._ln_stub.LookupInvoice(request)
+        request = ln.PaymentHash(r_hash=r_hash)
+        response = self.stub.LookupInvoice(request)
         return response
 
     @handle_rpc_errors
     def list_payments(self):
         """List all outgoing payments"""
         request = ln.ListPaymentsRequest()
-        response = self._ln_stub.ListPayments(request)
+        response = self.stub.ListPayments(request)
         return response
 
     @handle_rpc_errors
     def describe_graph(self):
         """Describe the network graph"""
         request = ln.ChannelGraphRequest()
-        response = self._ln_stub.DescribeGraph(request)
+        response = self.stub.DescribeGraph(request)
         return response
 
     @handle_rpc_errors
     def get_channel_info(self, channel_id):
         """Get the state of a specific channel"""
         requset = ln.ChanInfoRequest(chan_id=channel_id)
-        response = self._ln_stub.GetChanInfo(requset)
+        response = self.stub.GetChanInfo(requset)
         return response
 
     @handle_rpc_errors
     def get_node_info(self, pub_key):
         """Get information on a specific node"""
         request = ln.NodeInfoRequest(pub_key=pub_key)
-        response = self._ln_stub.GetNodeInfo(request)
+        response = self.stub.GetNodeInfo(request)
         return response
 
     @handle_rpc_errors
     def query_routes(self, pub_key, amt, num_routes=5):
         """Query a route to a destination"""
         request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, num_routes=num_routes)
-        response = self._ln_stub.QueryRoutes(request)
+        response = self.stub.QueryRoutes(request)
         return response
 
     @handle_rpc_errors
     def get_network_info(self):
         """Returns basic stats about the known channel graph for this node"""
         request = ln.NetworkInfoRequest()
-        response = self._ln_stub.GetNetworkInfo(request)
+        response = self.stub.GetNetworkInfo(request)
         return response
 
     @handle_rpc_errors
     def decode_payment_request(self, payment_request):
         """Decode a payment request"""
         request = ln.PayReqString(pay_req=payment_request)
-        response = self._ln_stub.DecodePayReq(request)
+        response = self.stub.DecodePayReq(request)
         return response
 
     @handle_rpc_errors
     def list_transactions(self):
         """List on chain transactions from the wallet"""
         request = ln.GetTransactionsRequest()
-        response = self._ln_stub.GetTransactions(request)
+        response = self.stub.GetTransactions(request)
         return response
 
     @handle_rpc_errors
     def stop_daemon(self):
         """Stop and shutdown the daemon"""
         request = ln.StopRequest()
-        response = self._ln_stub.StopDaemon(request)
+        response = self.stub.StopDaemon(request)
         return response
 
     @handle_rpc_errors
     def sign_message(self, msg):
         """Sign a message with the node's private key"""
         request = ln.SignMessageRequest(msg=msg)
-        response = self._ln_stub.SignMessage(request)
+        response = self.stub.SignMessage(request)
         return response
 
     @handle_rpc_errors
     def verify_message(self, msg, signature):
         """Verify a message signed with the signature"""
         request = ln.VerifyMessageRequest(msg=msg, signature=signature)
-        response = self._ln_stub.VerifyMessage(request)
+        response = self.stub.VerifyMessage(request)
         return response
 
     @handle_rpc_errors
     def fee_report(self):
         """Display the current fee policies of all active channels"""
         request = ln.FeeReportRequest()
-        response = self._ln_stub.FeeReport(request)
+        response = self.stub.FeeReport(request)
         return response
 
     @handle_rpc_errors
@@ -233,7 +233,7 @@ class LNDClient(BaseClient):
             kwargs['time_lock_delta'] = time_lock_delta
 
         request = ln.PolicyUpdateRequest(**kwargs)
-        response = self._ln_stub.UpdateChannelPolicy(request)
+        response = self.stub.UpdateChannelPolicy(request)
         return response
 
     @handle_rpc_errors
@@ -251,5 +251,5 @@ class LNDClient(BaseClient):
             optional_kwargs['target_conf'] = target_conf
 
         request = ln.SendCoinsRequest(addr=address, amount=amount, **optional_kwargs)
-        response = self._ln_stub.SendCoins(request)
+        response = self.stub.SendCoins(request)
         return response
