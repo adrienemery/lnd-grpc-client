@@ -18,6 +18,10 @@ elif system == 'darwin':
     TLS_FILEPATH = os.path.expanduser('~/Library/Application Support/Lnd/tls.cert')
     ADMIN_MACAROON_BASE_FILEPATH = '~/Library/Application Support/Lnd/data/chain/bitcoin/{}/admin.macaroon'
     READ_ONLY_MACAROON_BASE_FILEPATH = '~/Library/Application Support/Lnd/data/chain/bitcoin/{}/readonly.macaroon'
+elif system == 'windows':
+    TLS_FILEPATH = os.path.join(os.path.expanduser("~"), 'AppData', 'Local', 'Lnd', 'tls.cert')
+    ADMIN_MACAROON_BASE_FILEPATH = os.path.join(os.path.expanduser("~"), 'AppData', 'Local', 'Lnd', 'data', 'chain', 'bitcoin', 'mainnet', 'admin.macaroon')
+    READ_ONLY_MACAROON_BASE_FILEPATH = os.path.join(os.path.expanduser("~"), 'AppData', 'Local', 'Lnd', 'data', 'chain', 'bitcoin', 'mainnet', 'readonly.macaroon')
 else:
     raise SystemError('Unrecognized system')
 
