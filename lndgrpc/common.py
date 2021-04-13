@@ -2,11 +2,13 @@ import binascii
 import platform
 import os
 import grpc
-from . import rpc_pb2, rpc_pb2_grpc
+from . import rpc_pb2, rpc_pb2_grpc, router_pb2, router_pb2_grpc
 
 ln = rpc_pb2
 lnrpc = rpc_pb2_grpc
 
+router = router_pb2
+routerrpc = router_pb2_grpc
 
 system = platform.system().lower()
 
@@ -116,6 +118,20 @@ class BaseClient(object):
             self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
         )
         return lnrpc.LightningStub(channel)
+
+    @property
+    def _router_stub(self):
+        """Create a ln_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
+        return routerrpc.RouterStub(channel)
 
     @property
     def _wallet_stub(self):

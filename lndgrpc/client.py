@@ -1,4 +1,4 @@
-from .common import ln, BaseClient
+from .common import router, ln, BaseClient
 from .errors import handle_rpc_errors
 
 
@@ -16,6 +16,40 @@ class LNDClient(BaseClient):
     def generate_seed(self):
         raise NotImplementedError
 
+
+    # ROUTERRPC
+    @handle_rpc_errors
+    def build_route(self,amt_msat,oid,hop_pubkeys):
+        request = router.BuildRouteRequest(
+            amt_msat=amt_msat,
+            outgoing_chan_id=oid,
+            hop_pubkeys=hop_pubkeys,
+        )
+        response = self._router_stub.BuildRoute(request)
+        return response
+
+    @handle_rpc_errors
+    def send_to_route(self,pay_hash,route):
+        request = router.SendToRouteRequest(
+            payment_hash=pay_hash,
+            route=route,
+        )
+        response = self._router_stub.SendToRouteV2(request)
+        return response
+
+    @handle_rpc_errors
+    def send_payment_v1(self, **kwargs):
+        request = router.SendPaymentRequest(**kwargs)
+        response = self._router_stub.SendPayment(request)
+        return response
+
+    @handle_rpc_errors
+    def send_payment_v2(self, **kwargs):
+        request = router.SendPaymentRequest(**kwargs)
+        response = self._router_stub.SendPaymentV2(request)
+        return response
+
+    # LIGHTNING
     @handle_rpc_errors
     def get_info(self):
         response = self._ln_stub.GetInfo(ln.GetInfoRequest())
@@ -154,9 +188,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def get_node_info(self, pub_key):
+    def get_node_info(self, pub_key, include_channels=True):
         """Get information on a specific node"""
-        request = ln.NodeInfoRequest(pub_key=pub_key)
+        request = ln.NodeInfoRequest(pub_key=pub_key, include_channels=include_channels)
         response = self._ln_stub.GetNodeInfo(request)
         return response
 
