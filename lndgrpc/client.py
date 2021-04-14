@@ -19,11 +19,12 @@ class LNDClient(BaseClient):
 
     # ROUTERRPC
     @handle_rpc_errors
-    def build_route(self,amt_msat,oid,hop_pubkeys):
+    def build_route(self,amt_msat,oid,hop_pubkeys,**kwargs):
         request = router.BuildRouteRequest(
             amt_msat=amt_msat,
             outgoing_chan_id=oid,
             hop_pubkeys=hop_pubkeys,
+            **kwargs
         )
         response = self._router_stub.BuildRoute(request)
         return response
@@ -35,6 +36,12 @@ class LNDClient(BaseClient):
             route=route,
         )
         response = self._router_stub.SendToRouteV2(request)
+        return response
+
+    @handle_rpc_errors
+    def send_payment_v2(self,**kwargs):
+        request = router.SendPaymentRequest(**kwargs)
+        response = self._router_stub.SendPaymentV2(request)
         return response
 
     @handle_rpc_errors
@@ -78,14 +85,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def open_channel(self, node_pubkey, local_funding_amount=None, push_sat=None, private=False):
+    def open_channel(self, **kwargs):
         """Open a channel to an existing peer"""
-        request = ln.OpenChannelRequest(
-            node_pubkey_string=node_pubkey,
-            local_funding_amount=local_funding_amount,
-            push_sat=push_sat,
-            private=private
-        )
+        request = ln.OpenChannelRequest(**kwargs)
         response = self._ln_stub.OpenChannel(request)
         return response
 
