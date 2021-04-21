@@ -155,9 +155,10 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def send_payment(self, payment_request):
+    def send_payment(self, payment_request, fee_limit_msat, **kwargs):
         """Send a payment over lightning"""
-        request = ln.SendRequest(payment_request=payment_request)
+        fee_limit = ln.FeeLimit(fixed_msat=fee_limit_msat)
+        request = ln.SendRequest(payment_request=payment_request, fee_limit=fee_limit, **kwargs)
         response = self._ln_stub.SendPaymentSync(request)
         return response
 
