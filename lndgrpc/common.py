@@ -5,7 +5,9 @@ import grpc
 from . import (
     rpc_pb2, rpc_pb2_grpc,
     router_pb2, router_pb2_grpc,
-    verrpc_pb2, verrpc_pb2_grpc    
+    verrpc_pb2, verrpc_pb2_grpc,
+    signer_pb2, signer_pb2_grpc,
+    walletkit_pb2, walletkit_pb2_grpc
 )
 
 ln = rpc_pb2
@@ -16,6 +18,12 @@ routerrpc = router_pb2_grpc
 
 ver = verrpc_pb2
 verrpc = verrpc_pb2_grpc
+
+walletkit = walletkit_pb2
+walletkitrpc = walletkit_pb2_grpc
+
+signer = signer_pb2
+signerrpc = signer_pb2_grpc
 
 system = platform.system().lower()
 
@@ -153,6 +161,34 @@ class BaseClient(object):
             self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
         )
         return lnrpc.WalletUnlockerStub(channel)
+
+    @property
+    def _walletkit_stub(self):
+        """Create a wallet_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
+        return walletkitrpc.WalletKitStub(channel)
+
+    @property
+    def _signer_stub(self):
+        """Create a wallet_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
+        return signerrpc.SignerStub(channel)
 
 
     @property

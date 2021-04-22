@@ -1,4 +1,4 @@
-from .common import ver, router, ln, BaseClient
+from .common import ver, walletkit, signer, router, ln, BaseClient
 from .errors import handle_rpc_errors
 
 
@@ -16,7 +16,15 @@ class LNDClient(BaseClient):
     def generate_seed(self):
         raise NotImplementedError
 
+    #WALLETRPC
+    @handle_rpc_errors
+    def next_addr(self, account=""):
+        request = walletkit.AddrRequest(account=account)
+        response = self._walletkit_stub.NextAddr(request)
+        return response
+
     #VERRPC
+    @handle_rpc_errors
     def get_version(self, **kwargs):
         request = ver.VersionRequest()
         response = self._version_stub.GetVersion(request)
