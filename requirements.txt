@@ -4,4 +4,4 @@ grpcio
 googleapis-common-protos
 requests
 pdir2
-protobuf-to-dict @ git+ssh://git@github.com/wearefair/protobuf-to-dict@master
+protobuf3-to-dict
