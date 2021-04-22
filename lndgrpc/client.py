@@ -1,4 +1,4 @@
-from .common import router, ln, BaseClient
+from .common import ver, router, ln, BaseClient
 from .errors import handle_rpc_errors
 
 
@@ -16,10 +16,15 @@ class LNDClient(BaseClient):
     def generate_seed(self):
         raise NotImplementedError
 
+    #VERRPC
+    def get_version(self, **kwargs):
+        request = ver.VersionRequest()
+        response = self._version_stub.GetVersion(request)
+        return response   
 
     # ROUTERRPC
     @handle_rpc_errors
-    def build_route(self,amt_msat,oid,hop_pubkeys,**kwargs):
+    def build_route(self, amt_msat, oid, hop_pubkeys, **kwargs):
         request = router.BuildRouteRequest(
             amt_msat=amt_msat,
             outgoing_chan_id=oid,

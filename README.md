@@ -84,9 +84,18 @@ git clone https://github.com/lightningnetwork/lnd.git
 
 ```python
 from pathlib import Path
+import shutil
+
 for proto in list(Path("lnd/lnrpc").rglob("*.proto")):
     shutil.copy(proto,Path.cwd())
 
 for proto in list(Path(".").rglob("*.proto")):
     sh.python("-m","grpc_tools.protoc","--proto_path=.","--python_out=.","--grpc_python_out=.", str(proto))
 ```
+
+Last Step:
+In File: verrpc_pb2_grpc.py
+Change:
+import verrpc_pb2 as verrpc__pb2
+To:
+from lndgrpc import verrpc_pb2 as verrpc__pb2

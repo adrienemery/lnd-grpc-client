@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import verrpc_pb2 as verrpc__pb2
+from lndgrpc import verrpc_pb2 as verrpc__pb2
 
 
 class VersionerStub(object):
