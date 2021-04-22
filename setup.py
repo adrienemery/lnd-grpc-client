@@ -3,22 +3,27 @@ from codecs import open
 from os import path
 from setuptools import setup, find_packages
 
-install_requires = [
-    'grpcio',
-    'grpcio-tools',
-    'googleapis-common-protos'
-]
+# install_requires = [
+#     'grpcio',
+#     'grpcio-tools',
+#     'googleapis-common-protos'
+# ]
 exclude_packages = ['tests']
+
+with open("requirements.txt") as reqs_file:
+    reqs = reqs_file.read()
+
+reqs = reqs.split("\n")
 
 MAJOR = sys.version_info[0]
 MINOR = sys.version_info[1]
 
 # only include the async grpc client for python 3.6+
-if MAJOR == 3 and MINOR >= 6:
-    install_requires.append('aiogrpc')
-else:
-    # exclude the async_client
-    exclude_packages.append('*.aio')
+# if MAJOR == 3 and MINOR >= 6:
+#     install_requires.append('aiogrpc')
+# else:
+#     # exclude the async_client
+#     exclude_packages.append('*.aio')
 
 here = path.abspath(path.dirname(__file__))
 
@@ -28,10 +33,11 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='lndgrpc',
-    packages=find_packages(exclude=exclude_packages),
-    install_requires=install_requires,
+    # packages=find_packages(exclude=exclude_packages),
+    packages=["lndgrpc"],
+    install_requires=reqs,
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
-    version='0.2.1',
+    version='0.2.2',
     description='An rpc client for LND (lightning network deamon)',
     long_description=long_description,
     author='Adrien Emery',
