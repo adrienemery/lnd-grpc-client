@@ -72,3 +72,21 @@ lnd = LNDClient(admin=True)
 lnd.add_invoice(2000)
 ```
 
+### Generating Proto Files
+```bash
+virtualenv lnd
+source lnd/bin/activate
+pip install grpcio grpcio-tools googleapis-common-protos
+git clone https://github.com/googleapis/googleapis.git
+git clone https://github.com/lightningnetwork/lnd.git
+# python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. rpc.proto
+```
+
+```python
+from pathlib import Path
+for proto in list(Path("lnd/lnrpc").rglob("*.proto")):
+    shutil.copy(proto,Path.cwd())
+
+for proto in list(Path(".").rglob("*.proto")):
+    sh.python("-m","grpc_tools.protoc","--proto_path=.","--python_out=.","--grpc_python_out=.", str(proto))
+```
