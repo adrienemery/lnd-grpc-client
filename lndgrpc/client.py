@@ -293,7 +293,7 @@ class LNDClient(BaseClient):
 
     @handle_rpc_errors
     def update_channel_policy(self, base_fee_msat=None, fee_rate=None, time_lock_delta=None,
-                              channel_point=None, all_channels=False):
+                              chan_point=None, all_channels=False):
         """Update the channel policy for all channels, or a single channel"""
         kwargs = {
             'global': all_channels
@@ -302,8 +302,12 @@ class LNDClient(BaseClient):
             kwargs['base_fee_msat'] = base_fee_msat
         if fee_rate:
             kwargs['fee_rate'] = fee_rate
-        if channel_point:
-            kwargs['channel_point'] = channel_point
+        if chan_point:
+            txid, out_index = chan_point.split(":")
+            txid_reversed = bytearray(bytes.fromhex(txid))
+            txid_reversed.reverse()
+            cp = ln.ChannelPoint(funding_txid_bytes=bytes(txid_reversed), output_index=int(out_index))
+            kwargs['chan_point'] = cp
         if time_lock_delta:
             kwargs['time_lock_delta'] = time_lock_delta
 

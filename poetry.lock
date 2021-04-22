@@ -104,16 +104,23 @@ python-versions = "*"
 six = ">=1.9"
 
 [[package]]
-name = "protobuf3-to-dict"
-version = "0.1.5"
+name = "protobuf-to-dict"
+version = "0.2.8"
 description = "Ben Hodgson: A teeny Python library for creating Python dicts from protocol buffers and the reverse. Useful as an intermediate step before serialisation (e.g. to JSON). Kapor: upgrade it to PB3 and PY3, rename it to protobuf3-to-dict"
 category = "main"
 optional = false
 python-versions = "*"
+develop = false
 
 [package.dependencies]
 protobuf = ">=2.3.0"
 six = "*"
+
+[package.source]
+type = "git"
+url = "ssh://git@github.com/wearefair/protobuf-to-dict"
+reference = "master"
+resolved_reference = "376bd37a0d1a3d38c90c0b99a8d72ad2b343c433"
 
 [[package]]
 name = "python-dateutil"
@@ -145,7 +152,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8"
-content-hash = "8211ba4a06f1f7a835584f3944b75da98d5a2ab10fdc53671d08776ec7c3e360"
+content-hash = "1eaef99532ee8b9d51726b3f818509917e75709be61b62a852604cd8e04bf87d"
 
 [metadata.files]
 aiogrpc = [
@@ -334,9 +341,7 @@ protobuf = [
     {file = "protobuf-3.15.8-py2.py3-none-any.whl", hash = "sha256:a0a08c6b2e6d6c74a6eb5bf6184968eefb1569279e78714e239d33126e753403"},
     {file = "protobuf-3.15.8.tar.gz", hash = "sha256:0277f62b1e42210cafe79a71628c1d553348da81cbd553402a7f7549c50b11d0"},
 ]
-protobuf3-to-dict = [
-    {file = "protobuf3-to-dict-0.1.5.tar.gz", hash = "sha256:1e42c25b5afb5868e3a9b1962811077e492c17557f9c66f0fe40d821375d2b5a"},
-]
+protobuf-to-dict = []
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},

@@ -11,6 +11,6 @@ aiogrpc = "^1.8"
 googleapis-common-protos = "^1.53.0"
 grpcio = "^1.37.0"
 grpcio-tools = "^1.37.0"
-protobuf3-to-dict = "^0.1.5"
 pdir2 = "^0.3.2"
 pandas = "^1.2.4"
+protobuf-to-dict = {git = "ssh://git@github.com/wearefair/protobuf-to-dict"}
