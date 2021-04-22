@@ -36,8 +36,8 @@ setup(
     long_description=long_description,
     author='Adrien Emery',
     author_email='adrien.emery@gmail.com',
-    url='https://github.com/adrienemery/lnd-grpc-client',
-    download_url='https://github.com/adrienemery/lnd-grpc-client/archive/0.2.0.tar.gz',
+    url='https://github.com/sako0938/lnd-grpc-client',
+    # download_url='https://github.com/adrienemery/lnd-grpc-client/archive/0.2.0.tar.gz',
     keywords=['lnd', 'lightning-network', 'bitcoin', 'grpc', 'rpc', 'async'],
     license='MIT',
     classifiers=[
