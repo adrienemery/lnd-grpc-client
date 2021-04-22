@@ -1,4 +1,4 @@
-from .common import ver, walletkit, signer, router, ln, BaseClient
+from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient
 from .errors import handle_rpc_errors
 
 
@@ -16,11 +16,36 @@ class LNDClient(BaseClient):
     def generate_seed(self):
         raise NotImplementedError
 
+    #WALLETUNLOCKERRPC
+    @handle_rpc_errors
+    def unlock_wallet(self, **kwargs):
+        # .lnrpc
+        request = walletunlocker.UnlockWalletRequest(
+            **kwargs,
+            # wallet_password=<bytes>,
+            # recovery_window=<int32>,
+            # channel_backups=<ChanBackupSnapshot>,
+            # stateless_init=<bool>,
+        )
+        try:
+            response = self._walletunlocker_stub.UnlockWallet(request)
+            return response
+        except Exception as e:
+            print(e)
+            print("Wallet might already be unlocked")
+
+
     #WALLETRPC
     @handle_rpc_errors
     def next_addr(self, account=""):
         request = walletkit.AddrRequest(account=account)
         response = self._walletkit_stub.NextAddr(request)
+        return response
+
+    @handle_rpc_errors
+    def list_accounts(self, **kwargs):
+        request = walletkit.ListAccountsRequest(**kwargs)
+        response = self._walletkit_stub.ListAccounts(request)
         return response
 
     #VERRPC
