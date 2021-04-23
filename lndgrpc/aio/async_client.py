@@ -1,5 +1,5 @@
 import sys
-from lndgrpc.common import ln, BaseClient
+from lndgrpc.common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient
 from lndgrpc.errors import handle_rpc_errors
 
 MAJOR = sys.version_info[0]
@@ -131,6 +131,15 @@ if MAJOR == 3 and MINOR >= 6:
             request = ln.SendRequest(payment_request=payment_request)
             response = await self._ln_stub.SendPaymentSync(request)
             return response
+
+        # ROUTERRPC
+        @handle_rpc_errors
+        async def send_payment_v2(self, payment_request):
+            """Send a payment over lightning"""
+            request = router.SendPaymentRequest(payment_request=payment_request,**kwargs)
+            response = await self._router_stub.SendPaymentV2(request)
+            return response
+
 
         @handle_rpc_errors
         async def lookup_invoice(self, r_hash_str):
