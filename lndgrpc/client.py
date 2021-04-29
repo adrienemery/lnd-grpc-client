@@ -101,6 +101,11 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
+    def forwarding_history(self, **kwargs):
+        response = self._ln_stub.ForwardingHistory(ln.ForwardingHistoryRequest(**kwargs))
+        return response
+
+    @handle_rpc_errors
     def wallet_balance(self):
         response = self._ln_stub.WalletBalance(ln.WalletBalanceRequest())
         return response
