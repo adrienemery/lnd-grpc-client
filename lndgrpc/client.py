@@ -79,7 +79,10 @@ class LNDClient(BaseClient):
     @handle_rpc_errors
     def send_payment_v2(self,**kwargs):
         request = router.SendPaymentRequest(**kwargs)
-        response = self._router_stub.SendPaymentV2(request)
+        last_response = None
+        for response in self._router_stub.SendPaymentV2(request):
+            print(response)
+            last_response = response
         return response
 
     @handle_rpc_errors
@@ -88,16 +91,25 @@ class LNDClient(BaseClient):
         response = self._router_stub.SendPayment(request)
         return response
 
-    @handle_rpc_errors
-    def send_payment_v2(self, **kwargs):
-        request = router.SendPaymentRequest(**kwargs)
-        response = self._router_stub.SendPaymentV2(request)
-        return response
-
     # LIGHTNING
     @handle_rpc_errors
     def get_info(self):
         response = self._ln_stub.GetInfo(ln.GetInfoRequest())
+        return response
+
+    @handle_rpc_errors
+    def bake_macaroon(self, permissions, root_key_id):
+        new_permissions = []
+        perm = ln.MacaroonPermission(entity="invoices",action="read")
+        new_permissions.append(perm)
+        response = self._ln_stub.BakeMacaroon(
+            ln.BakeMacaroonRequest(permissions=new_permissions, root_key_id=root_key_id)
+        )
+        return response
+
+    @handle_rpc_errors
+    def list_macaroon_ids(self):
+        response = self._ln_stub.ListMacaroonIDs(ln.ListMacaroonIDsRequest())
         return response
 
     @handle_rpc_errors
@@ -131,7 +143,10 @@ class LNDClient(BaseClient):
     def open_channel(self, **kwargs):
         """Open a channel to an existing peer"""
         request = ln.OpenChannelRequest(**kwargs)
-        response = self._ln_stub.OpenChannel(request)
+        last_response = None
+        for response in self._ln_stub.OpenChannel(request):
+            print(response)
+            last_response = response
         return response
 
     @handle_rpc_errors
@@ -227,7 +242,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def get_channel_info(self, channel_id):
+    def get_chan_info(self, channel_id):
         """Get the state of a specific channel"""
         requset = ln.ChanInfoRequest(chan_id=channel_id)
         response = self._ln_stub.GetChanInfo(requset)
