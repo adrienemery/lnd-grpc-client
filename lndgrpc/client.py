@@ -68,7 +68,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def send_to_route(self,pay_hash,route):
+    def send_to_route(self, pay_hash, route):
         request = router.SendToRouteRequest(
             payment_hash=pay_hash,
             route=route,
@@ -77,8 +77,8 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def send_payment_v2(self,**kwargs):
-        request = router.SendPaymentRequest(**kwargs)
+    def send_payment_v2(self,payment_request,**kwargs):
+        request = router.SendPaymentRequest(payment_request=payment_request, **kwargs)
         last_response = None
         for response in self._router_stub.SendPaymentV2(request):
             print(response)
