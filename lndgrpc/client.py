@@ -140,9 +140,14 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def open_channel(self, **kwargs):
+    def open_channel(self, node_pubkey, local_funding_amount, sat_per_byte, **kwargs):
         """Open a channel to an existing peer"""
-        request = ln.OpenChannelRequest(**kwargs)
+        request = ln.OpenChannelRequest(
+            node_pubkey=node_pubkey,
+            local_funding_amount=local_funding_amount,
+            sat_per_byte=sat_per_byte,
+            **kwargs
+        )
         last_response = None
         for response in self._ln_stub.OpenChannel(request):
             print(response)
@@ -174,8 +179,10 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def connect_peer(self, pub_key, host, permanent=False):
+    def connect_peer(self, pub_key, host, ln_at_url, permanent=False):
         """Connect to a remote lnd peer"""
+        if ln_at_url:
+            pub_key, host = ln_at_url.split("@")
         ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
         request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
         response = self._ln_stub.ConnectPeer(request)
