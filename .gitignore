@@ -11,7 +11,8 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
+# Allow dist, so we can install from github
+#dist/
 downloads/
 eggs/
 .eggs/

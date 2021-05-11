@@ -1,7 +1,0 @@
-aiogrpc
-grpcio-tools
-grpcio
-googleapis-common-protos
-requests
-pdir2
-protobuf3-to-dict
