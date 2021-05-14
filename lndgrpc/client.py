@@ -58,10 +58,12 @@ class LNDClient(BaseClient):
     # ROUTERRPC
     @handle_rpc_errors
     def build_route(self, amt_msat, oid, hop_pubkeys, **kwargs):
+        hop_pubkeys_bytes = [ bytes.fromhex(pk) for pk in hop_pubkeys ]
+        print(hop_pubkeys_bytes)
         request = router.BuildRouteRequest(
             amt_msat=amt_msat,
             outgoing_chan_id=oid,
-            hop_pubkeys=hop_pubkeys,
+            hop_pubkeys=hop_pubkeys_bytes,
             **kwargs
         )
         response = self._router_stub.BuildRoute(request)
@@ -73,8 +75,15 @@ class LNDClient(BaseClient):
             payment_hash=pay_hash,
             route=route,
         )
+
         response = self._router_stub.SendToRouteV2(request)
         return response
+        
+        # for response in self._router_stub.SendToRouteV2(request):
+        #     print(response)
+        #     last_response = response
+        # return response
+        
 
     @handle_rpc_errors
     def send_payment_v2(self,payment_request,**kwargs):
@@ -143,7 +152,7 @@ class LNDClient(BaseClient):
     def open_channel(self, node_pubkey, local_funding_amount, sat_per_byte, **kwargs):
         """Open a channel to an existing peer"""
         request = ln.OpenChannelRequest(
-            node_pubkey=node_pubkey,
+            node_pubkey=bytes.fromhex(node_pubkey),
             local_funding_amount=local_funding_amount,
             sat_per_byte=sat_per_byte,
             **kwargs
@@ -179,7 +188,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def connect_peer(self, pub_key, host, ln_at_url, permanent=False):
+    def connect_peer(self, pub_key, host, ln_at_url=None, permanent=False):
         """Connect to a remote lnd peer"""
         if ln_at_url:
             pub_key, host = ln_at_url.split("@")

@@ -6,7 +6,7 @@ authors = ["Kornpow <test@email.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "3.8"
+python = ">3.6"
 protobuf = "^3.15.8"
 aiogrpc = "^1.8"
 googleapis-common-protos = "^1.53.0"
