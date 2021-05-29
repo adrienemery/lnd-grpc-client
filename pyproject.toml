@@ -1,9 +1,13 @@
 [tool.poetry]
-name = "lndgrpc"
+name = "py-lnd-grpc"
 version = "0.2.3"
 description = "An rpc client for LND (lightning network deamon)"
 authors = ["Kornpow <test@email.com>"]
+readme = "README.md"
 license = "MIT"
+packages = [
+    { include = "lndgrpc" },
+]
 
 [tool.poetry.dependencies]
 python = ">3.6"

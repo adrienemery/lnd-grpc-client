@@ -244,9 +244,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def list_payments(self):
+    def list_payments(self, **kwargs):
         """List all outgoing payments"""
-        request = ln.ListPaymentsRequest()
+        request = ln.ListPaymentsRequest(**kwargs)
         response = self._ln_stub.ListPayments(request)
         return response
 

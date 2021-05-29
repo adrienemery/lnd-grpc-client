@@ -99,3 +99,10 @@ Change:
 import verrpc_pb2 as verrpc__pb2
 To:
 from lndgrpc import verrpc_pb2 as verrpc__pb2
+
+## Deploy to Test-PyPi
+```bash
+poetry build
+twine check dist/*
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+```
