@@ -4,16 +4,33 @@ A python grpc client for LND (Lightning Network Daemon) ⚡⚡⚡
 This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. 
 
 ## Dependencies
-Python 2.7, 3.4+
-Note: the async client is only available for Python 3.5+
+- Python 3.6+
+- Working LND lightning node, take note of its ip address.
+- Copy your admin.macaroon and tls.cert files from your node to a directoy on your machine. 
+
 
 ## Installation
 ```bash
-$ pip install lndgrpc
+pip install py-lnd-grpc
+
+# Test it is working
+# Set these values as needed!
+export CRED_PATH=/path/to/macaroon/and/tls/cert
+export LND_NODE_IP=192.168.1.xx
+
+# This will run a get_info() request on your node, checking its connection.
+python3 -m lndgrpc
 ```
 
 ## Basic Usage
 The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
+
+### Configuration Environment Variables
+
+```bash
+export CRED_PATH=/path/to/macaroon/and/tls/cert
+export LND_NODE_IP=192.168.1.xx
+```
 
 ```python
 from lndgrpc import LNDClient
@@ -22,6 +39,10 @@ from lndgrpc import LNDClient
 # the client defaults to 127.0.0.1:10009 and mainnet if no args provided
 lnd = LNDClient("127.0.0.1:10009", network='simnet')
 
+# Unlock you wallet
+lnd.unlock_wallet(wallet_password=b"your_wallet_password")
+
+# Get general data about your node
 lnd.get_info()
 
 print('Listening for invoices...')
