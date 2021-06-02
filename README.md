@@ -22,15 +22,28 @@ export LND_NODE_IP=192.168.1.xx
 python3 -m lndgrpc
 ```
 
-## Basic Usage
-The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
 
-### Configuration Environment Variables
+
+### Environment Variables
+
+These environment variables are only used when testing node connectivity and/or correct module installation from the command line. This library is primarily used through Python scripting.
 
 ```bash
 export CRED_PATH=/path/to/macaroon/and/tls/cert
 export LND_NODE_IP=192.168.1.xx
+
+python3 -m lndgrpc
+
+# You should expect to see:
+#
+# .....
+# .....
+# .....
+# lndgrpc package is installed... Wow it works!
 ```
+
+## Basic Usage
+The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
 
 ```python
 from lndgrpc import LNDClient
@@ -82,18 +95,13 @@ By default the client will attempt to lookup the `readonly.macaron` and `tls.cer
 However if you want to specify a different macaroon or different path you can pass in the filepath explicitly.
 
 ```python
-lnd = LNDClient(macaroon_filepath='~/.lnd/invoice.macaroon', cert_filepath='path/to/tls.cert')
+lnd = LNDClient(
+    macaroon_filepath='~/.lnd/invoice.macaroon', 
+    cert_filepath='path/to/tls.cert'
+)
 ```
 
-#### Admin macaroon
-Use the admin macaroon to perform write actions (ie. creating invoices, creating new addresses)
-
-```python
-lnd = LNDClient(admin=True)
-lnd.add_invoice(2000)
-```
-
-### Generating Proto Files
+## Generating LND Proto Files
 ```bash
 virtualenv lnd
 source lnd/bin/activate
