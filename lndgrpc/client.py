@@ -258,17 +258,11 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def get_channel_info(self, channel_id):
+    def get_chan_info(self, channel_id):
         """Get the state of a specific channel"""
         requset = ln.ChanInfoRequest(chan_id=channel_id)
         response = self._ln_stub.GetChanInfo(requset)
         return response
-
-    @handle_rpc_errors
-    def get_chan_info(self, channel_id):
-        """Get the state of a specific channel"""
-        print("WARNING: get_chan_info deprecated, please use get_channel_info.")
-        return get_channel_info(channel_id)
 
     @handle_rpc_errors
     def get_node_info(self, pub_key, include_channels=True):
@@ -292,7 +286,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def decode_payment_request(self, payment_request):
+    def decode_pay_req(self, payment_request):
         """Decode a payment request"""
         request = ln.PayReqString(pay_req=payment_request)
         response = self._ln_stub.DecodePayReq(request)
