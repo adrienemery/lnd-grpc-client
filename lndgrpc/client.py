@@ -1,4 +1,4 @@
-from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient
+from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient, invoices
 from .errors import handle_rpc_errors
 
 
@@ -164,8 +164,8 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def list_invoices(self):
-        request = ln.ListInvoiceRequest()
+    def list_invoices(self, **kwargs):
+        request = ln.ListInvoiceRequest(**kwargs)
         response = self._ln_stub.ListInvoices(request)
         return response
 
@@ -175,8 +175,8 @@ class LNDClient(BaseClient):
             yield invoice
 
     @handle_rpc_errors
-    def add_invoice(self, value, memo=''):
-        request = ln.Invoice(value=value, memo=memo)
+    def add_invoice(self, value, memo='', **kwargs):
+        request = ln.Invoice(value=value, memo=memo, **kwargs)
         response = self._ln_stub.AddInvoice(request)
         return response
 
@@ -355,6 +355,16 @@ class LNDClient(BaseClient):
     def send_on_chain_many(self, address_amount_map, sat_ber_byte=None, target_conf=None):
         """Send bitcoin on-chain to multiple addresses"""
         pass  # TODO
+
+    # INVOICES
+    @handle_rpc_errors
+    def subscribe_single_invoice(self, r_hash):
+        """Subscribe to state of a single invoice"""
+        request = invoices.SubscribeSingleInvoiceRequest(r_hash=r_hash)
+        response = self._invoices_stub.SubscribeSingleInvoice(request)
+        for first in response:
+            return first
+
 
     @handle_rpc_errors
     def send_on_chain(self, address, amount, sat_ber_byte=None, target_conf=None):

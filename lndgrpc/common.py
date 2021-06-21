@@ -9,6 +9,7 @@ from . import (
     signer_pb2, signer_pb2_grpc,
     walletkit_pb2, walletkit_pb2_grpc,
     walletunlocker_pb2, walletunlocker_pb2_grpc,
+    invoices_pb2, invoices_pb2_grpc
 )
 
 ln = rpc_pb2
@@ -28,6 +29,9 @@ signerrpc = signer_pb2_grpc
 
 walletunlocker = walletunlocker_pb2
 walletunlockerrpc = walletunlocker_pb2_grpc
+
+invoices = invoices_pb2
+invoicesrpc = invoices_pb2_grpc
 
 system = platform.system().lower()
 
@@ -222,3 +226,31 @@ class BaseClient(object):
             self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
         )
         return verrpc.VersionerStub(channel)
+
+    @property
+    def _invoices_stub(self):
+        """Create a version_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
+        return invoicesrpc.InvoicesStub(channel)
+
+    @property
+    def _invoices_servicer_stub(self):
+        """Create a version_stub dynamically to ensure channel freshness
+
+        If we make a call to the Lightning RPC service when the wallet
+        is locked or the server is down we will get back an RPCError with
+        StatusCode.UNAVAILABLE which will make the channel unusable.
+        To ensure the channel is usable we create a new one for each request.
+        """
+        channel = self.grpc_module.secure_channel(
+            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+        )
+        return invoicesrpc.InvoicesServicer(channel)

@@ -105,21 +105,30 @@ lnd = LNDClient(
 ```bash
 virtualenv lnd
 source lnd/bin/activate
-pip install grpcio grpcio-tools googleapis-common-protos
-git clone https://github.com/googleapis/googleapis.git
+pip install grpcio grpcio-tools googleapis-common-protos sh
 git clone https://github.com/lightningnetwork/lnd.git
+mkdir genprotos
+git clone https://github.com/googleapis/googleapis.git
+
 # python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. rpc.proto
 ```
 
 ```python
 from pathlib import Path
 import shutil
+import sh
 
-for proto in list(Path("lnd/lnrpc").rglob("*.proto")):
-    shutil.copy(proto,Path.cwd())
+for proto in list(Path("../lnd/lnrpc").rglob("*.proto")):
+    shutil.copy(proto, Path.cwd())
 
-for proto in list(Path(".").rglob("*.proto")):
-    sh.python("-m","grpc_tools.protoc","--proto_path=.","--python_out=.","--grpc_python_out=.", str(proto))
+protos = list(Path(".").glob("*.proto"))
+
+for protofile in protos:
+    try:
+        sh.python("-m", "grpc_tools.protoc", "--proto_path=.", "--python_out=.", "--grpc_python_out=.", str(protofile))
+        protos.remove(protofile)
+    except Exception as e:
+        print(f"Error in proto: {protofile}")
 ```
 
 Last Step:
