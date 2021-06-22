@@ -252,7 +252,26 @@ class AsyncLNDClient(BaseClient):
         response = [print(x) async for x in self._invoices_stub.SubscribeSingleInvoice(request)]
         return response
 
-    # async def list_peers(self):
-    #     """List all active, currently connected peers"""
-    #     response = await self._ln_stub.ListPeers(ln.ListPeersRequest())
-    #     return response
+    @handle_rpc_errors
+    async def track_payment_v2(self, payment_hash, no_inflight_updates=False):
+        """Subscribe to state of a single invoice"""
+        request = router.TrackPaymentRequest(
+            payment_hash=bytes.fromhex(payment_hash),
+            no_inflight_updates=no_inflight_updates
+        )
+        response = [print(x) async for x in self._router_stub.TrackPaymentV2(request)]
+        return response
+
+    @handle_rpc_errors
+    async def subscribe_htlc_events(self):
+        """
+        SubscribeHtlcEvents creates a uni-directional stream
+        from the server to the client which delivers a stream of htlc events.
+        """
+        def handle_htlc(htlc):
+            print("new htlc event!")
+            print(htlc)
+            
+        request = router.SubscribeHtlcEventsRequest()
+        response = [handle_htlc(x) async for x in self._router_stub.SubscribeHtlcEvents(request)]
+        return response
