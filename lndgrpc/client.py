@@ -48,6 +48,25 @@ class LNDClient(BaseClient):
         response = self._walletkit_stub.ListAccounts(request)
         return response
 
+    @handle_rpc_errors
+    def list_unspent(self, min_confs=0,max_confs=100000, **kwargs):
+        # Default to these min/max for convenience
+        request = walletkit.ListUnspentRequest(min_confs=0, max_confs=100000, **kwargs)
+        response = self._walletkit_stub.ListUnspent(request)
+        return response
+
+    @handle_rpc_errors
+    def label_transaction(self, txid, label, overwrite=False):
+        """
+        Label an on-chain txn known to the wallet
+            txid: hex-string
+            label: string
+            overwrite: bool
+        """
+        request = walletkit.LabelTransactionRequest(txid=bytes.fromhex(txid)[::-1], label=label, overwrite=overwrite)
+        response = self._walletkit_stub.LabelTransaction(request)
+        return response
+
     #VERRPC
     @handle_rpc_errors
     def get_version(self, **kwargs):
@@ -78,12 +97,6 @@ class LNDClient(BaseClient):
 
         response = self._router_stub.SendToRouteV2(request)
         return response
-        
-        # for response in self._router_stub.SendToRouteV2(request):
-        #     print(response)
-        #     last_response = response
-        # return response
-        
 
     @handle_rpc_errors
     def send_payment_v2(self,payment_request,**kwargs):
@@ -100,7 +113,7 @@ class LNDClient(BaseClient):
         response = self._router_stub.SendPayment(request)
         return response
 
-    # LIGHTNING
+    # LIGHTNINGRPC
     @handle_rpc_errors
     def get_info(self):
         response = self._ln_stub.GetInfo(ln.GetInfoRequest())
@@ -140,6 +153,17 @@ class LNDClient(BaseClient):
     def list_peers(self):
         """List all active, currently connected peers"""
         response = self._ln_stub.ListPeers(ln.ListPeersRequest())
+        return response
+
+    @handle_rpc_errors
+    def get_transactions(self, start_height, end_height, **kwargs):
+        """List all open channels"""
+        request = ln.GetTransactionsRequest(
+            start_height=start_height,
+            end_height=end_height,
+            **kwargs,
+        )
+        response = self._ln_stub.GetTransactions(request)
         return response
 
     @handle_rpc_errors
