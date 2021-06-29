@@ -67,6 +67,31 @@ class LNDClient(BaseClient):
         response = self._walletkit_stub.LabelTransaction(request)
         return response
 
+    @handle_rpc_errors
+    def publish_transaction(self, tx_hex, label=""):
+        # Default to these min/max for convenience
+        request = walletkit.Transaction(tx_hex=tx_hex, label=label)
+        response = self._walletkit_stub.PublishTransaction(request)
+        return response
+
+    @handle_rpc_errors
+    def fund_psbt(self, psbt, raw, **kwargs):
+        # Default to these min/max for convenience
+        request = walletkit.FundPsbtRequest(psbt=psbt, raw=raw, **kwargs)
+        response = self._walletkit_stub.FundPsbt(request)
+        return response
+
+    @handle_rpc_errors
+    def finalize_psbt(self, signed_psbt, raw_final_tx):
+        # Default to these min/max for convenience
+        request = walletkit.FinalizePsbtRequest(
+            signed_psbt=signed_psbt,
+            raw_final_tx=raw_final_tx
+        )
+        response = self._walletkit_stub.FinalizePsbt(request)
+        return response
+
+
     #VERRPC
     @handle_rpc_errors
     def get_version(self, **kwargs):
