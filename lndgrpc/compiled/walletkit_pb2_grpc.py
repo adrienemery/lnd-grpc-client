@@ -2,8 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import signer_pb2 as signer__pb2
-from lndgrpc import walletkit_pb2 as walletkit__pb2
+from lndgrpc.compiled import signer_pb2 as lndgrpc_dot_compiled_dot_signer__pb2
+from lndgrpc.compiled import walletkit_pb2 as lndgrpc_dot_compiled_dot_walletkit__pb2
 
 
 class WalletKitStub(object):
@@ -19,98 +19,98 @@ class WalletKitStub(object):
         """
         self.ListUnspent = channel.unary_unary(
                 '/walletrpc.WalletKit/ListUnspent',
-                request_serializer=walletkit__pb2.ListUnspentRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ListUnspentResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentResponse.FromString,
                 )
         self.LeaseOutput = channel.unary_unary(
                 '/walletrpc.WalletKit/LeaseOutput',
-                request_serializer=walletkit__pb2.LeaseOutputRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.LeaseOutputResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputResponse.FromString,
                 )
         self.ReleaseOutput = channel.unary_unary(
                 '/walletrpc.WalletKit/ReleaseOutput',
-                request_serializer=walletkit__pb2.ReleaseOutputRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ReleaseOutputResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputResponse.FromString,
                 )
         self.ListLeases = channel.unary_unary(
                 '/walletrpc.WalletKit/ListLeases',
-                request_serializer=walletkit__pb2.ListLeasesRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ListLeasesResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesResponse.FromString,
                 )
         self.DeriveNextKey = channel.unary_unary(
                 '/walletrpc.WalletKit/DeriveNextKey',
-                request_serializer=walletkit__pb2.KeyReq.SerializeToString,
-                response_deserializer=signer__pb2.KeyDescriptor.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.KeyReq.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.FromString,
                 )
         self.DeriveKey = channel.unary_unary(
                 '/walletrpc.WalletKit/DeriveKey',
-                request_serializer=signer__pb2.KeyLocator.SerializeToString,
-                response_deserializer=signer__pb2.KeyDescriptor.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyLocator.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.FromString,
                 )
         self.NextAddr = channel.unary_unary(
                 '/walletrpc.WalletKit/NextAddr',
-                request_serializer=walletkit__pb2.AddrRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.AddrResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.AddrRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.AddrResponse.FromString,
                 )
         self.ListAccounts = channel.unary_unary(
                 '/walletrpc.WalletKit/ListAccounts',
-                request_serializer=walletkit__pb2.ListAccountsRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ListAccountsResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.FromString,
                 )
         self.ImportAccount = channel.unary_unary(
                 '/walletrpc.WalletKit/ImportAccount',
-                request_serializer=walletkit__pb2.ImportAccountRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ImportAccountResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountResponse.FromString,
                 )
         self.ImportPublicKey = channel.unary_unary(
                 '/walletrpc.WalletKit/ImportPublicKey',
-                request_serializer=walletkit__pb2.ImportPublicKeyRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ImportPublicKeyResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyResponse.FromString,
                 )
         self.PublishTransaction = channel.unary_unary(
                 '/walletrpc.WalletKit/PublishTransaction',
-                request_serializer=walletkit__pb2.Transaction.SerializeToString,
-                response_deserializer=walletkit__pb2.PublishResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.Transaction.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PublishResponse.FromString,
                 )
         self.SendOutputs = channel.unary_unary(
                 '/walletrpc.WalletKit/SendOutputs',
-                request_serializer=walletkit__pb2.SendOutputsRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.SendOutputsResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsResponse.FromString,
                 )
         self.EstimateFee = channel.unary_unary(
                 '/walletrpc.WalletKit/EstimateFee',
-                request_serializer=walletkit__pb2.EstimateFeeRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.EstimateFeeResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeResponse.FromString,
                 )
         self.PendingSweeps = channel.unary_unary(
                 '/walletrpc.WalletKit/PendingSweeps',
-                request_serializer=walletkit__pb2.PendingSweepsRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.PendingSweepsResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsResponse.FromString,
                 )
         self.BumpFee = channel.unary_unary(
                 '/walletrpc.WalletKit/BumpFee',
-                request_serializer=walletkit__pb2.BumpFeeRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.BumpFeeResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeResponse.FromString,
                 )
         self.ListSweeps = channel.unary_unary(
                 '/walletrpc.WalletKit/ListSweeps',
-                request_serializer=walletkit__pb2.ListSweepsRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.ListSweepsResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsResponse.FromString,
                 )
         self.LabelTransaction = channel.unary_unary(
                 '/walletrpc.WalletKit/LabelTransaction',
-                request_serializer=walletkit__pb2.LabelTransactionRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.LabelTransactionResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionResponse.FromString,
                 )
         self.FundPsbt = channel.unary_unary(
                 '/walletrpc.WalletKit/FundPsbt',
-                request_serializer=walletkit__pb2.FundPsbtRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.FundPsbtResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtResponse.FromString,
                 )
         self.FinalizePsbt = channel.unary_unary(
                 '/walletrpc.WalletKit/FinalizePsbt',
-                request_serializer=walletkit__pb2.FinalizePsbtRequest.SerializeToString,
-                response_deserializer=walletkit__pb2.FinalizePsbtResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtResponse.FromString,
                 )
 
 
@@ -384,98 +384,98 @@ def add_WalletKitServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'ListUnspent': grpc.unary_unary_rpc_method_handler(
                     servicer.ListUnspent,
-                    request_deserializer=walletkit__pb2.ListUnspentRequest.FromString,
-                    response_serializer=walletkit__pb2.ListUnspentResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentResponse.SerializeToString,
             ),
             'LeaseOutput': grpc.unary_unary_rpc_method_handler(
                     servicer.LeaseOutput,
-                    request_deserializer=walletkit__pb2.LeaseOutputRequest.FromString,
-                    response_serializer=walletkit__pb2.LeaseOutputResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputResponse.SerializeToString,
             ),
             'ReleaseOutput': grpc.unary_unary_rpc_method_handler(
                     servicer.ReleaseOutput,
-                    request_deserializer=walletkit__pb2.ReleaseOutputRequest.FromString,
-                    response_serializer=walletkit__pb2.ReleaseOutputResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputResponse.SerializeToString,
             ),
             'ListLeases': grpc.unary_unary_rpc_method_handler(
                     servicer.ListLeases,
-                    request_deserializer=walletkit__pb2.ListLeasesRequest.FromString,
-                    response_serializer=walletkit__pb2.ListLeasesResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesResponse.SerializeToString,
             ),
             'DeriveNextKey': grpc.unary_unary_rpc_method_handler(
                     servicer.DeriveNextKey,
-                    request_deserializer=walletkit__pb2.KeyReq.FromString,
-                    response_serializer=signer__pb2.KeyDescriptor.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.KeyReq.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.SerializeToString,
             ),
             'DeriveKey': grpc.unary_unary_rpc_method_handler(
                     servicer.DeriveKey,
-                    request_deserializer=signer__pb2.KeyLocator.FromString,
-                    response_serializer=signer__pb2.KeyDescriptor.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyLocator.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.SerializeToString,
             ),
             'NextAddr': grpc.unary_unary_rpc_method_handler(
                     servicer.NextAddr,
-                    request_deserializer=walletkit__pb2.AddrRequest.FromString,
-                    response_serializer=walletkit__pb2.AddrResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.AddrRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.AddrResponse.SerializeToString,
             ),
             'ListAccounts': grpc.unary_unary_rpc_method_handler(
                     servicer.ListAccounts,
-                    request_deserializer=walletkit__pb2.ListAccountsRequest.FromString,
-                    response_serializer=walletkit__pb2.ListAccountsResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.SerializeToString,
             ),
             'ImportAccount': grpc.unary_unary_rpc_method_handler(
                     servicer.ImportAccount,
-                    request_deserializer=walletkit__pb2.ImportAccountRequest.FromString,
-                    response_serializer=walletkit__pb2.ImportAccountResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountResponse.SerializeToString,
             ),
             'ImportPublicKey': grpc.unary_unary_rpc_method_handler(
                     servicer.ImportPublicKey,
-                    request_deserializer=walletkit__pb2.ImportPublicKeyRequest.FromString,
-                    response_serializer=walletkit__pb2.ImportPublicKeyResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyResponse.SerializeToString,
             ),
             'PublishTransaction': grpc.unary_unary_rpc_method_handler(
                     servicer.PublishTransaction,
-                    request_deserializer=walletkit__pb2.Transaction.FromString,
-                    response_serializer=walletkit__pb2.PublishResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.Transaction.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PublishResponse.SerializeToString,
             ),
             'SendOutputs': grpc.unary_unary_rpc_method_handler(
                     servicer.SendOutputs,
-                    request_deserializer=walletkit__pb2.SendOutputsRequest.FromString,
-                    response_serializer=walletkit__pb2.SendOutputsResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsResponse.SerializeToString,
             ),
             'EstimateFee': grpc.unary_unary_rpc_method_handler(
                     servicer.EstimateFee,
-                    request_deserializer=walletkit__pb2.EstimateFeeRequest.FromString,
-                    response_serializer=walletkit__pb2.EstimateFeeResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeResponse.SerializeToString,
             ),
             'PendingSweeps': grpc.unary_unary_rpc_method_handler(
                     servicer.PendingSweeps,
-                    request_deserializer=walletkit__pb2.PendingSweepsRequest.FromString,
-                    response_serializer=walletkit__pb2.PendingSweepsResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsResponse.SerializeToString,
             ),
             'BumpFee': grpc.unary_unary_rpc_method_handler(
                     servicer.BumpFee,
-                    request_deserializer=walletkit__pb2.BumpFeeRequest.FromString,
-                    response_serializer=walletkit__pb2.BumpFeeResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeResponse.SerializeToString,
             ),
             'ListSweeps': grpc.unary_unary_rpc_method_handler(
                     servicer.ListSweeps,
-                    request_deserializer=walletkit__pb2.ListSweepsRequest.FromString,
-                    response_serializer=walletkit__pb2.ListSweepsResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsResponse.SerializeToString,
             ),
             'LabelTransaction': grpc.unary_unary_rpc_method_handler(
                     servicer.LabelTransaction,
-                    request_deserializer=walletkit__pb2.LabelTransactionRequest.FromString,
-                    response_serializer=walletkit__pb2.LabelTransactionResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionResponse.SerializeToString,
             ),
             'FundPsbt': grpc.unary_unary_rpc_method_handler(
                     servicer.FundPsbt,
-                    request_deserializer=walletkit__pb2.FundPsbtRequest.FromString,
-                    response_serializer=walletkit__pb2.FundPsbtResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtResponse.SerializeToString,
             ),
             'FinalizePsbt': grpc.unary_unary_rpc_method_handler(
                     servicer.FinalizePsbt,
-                    request_deserializer=walletkit__pb2.FinalizePsbtRequest.FromString,
-                    response_serializer=walletkit__pb2.FinalizePsbtResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -501,8 +501,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ListUnspent',
-            walletkit__pb2.ListUnspentRequest.SerializeToString,
-            walletkit__pb2.ListUnspentResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListUnspentResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -518,8 +518,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/LeaseOutput',
-            walletkit__pb2.LeaseOutputRequest.SerializeToString,
-            walletkit__pb2.LeaseOutputResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.LeaseOutputResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -535,8 +535,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ReleaseOutput',
-            walletkit__pb2.ReleaseOutputRequest.SerializeToString,
-            walletkit__pb2.ReleaseOutputResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ReleaseOutputResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -552,8 +552,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ListLeases',
-            walletkit__pb2.ListLeasesRequest.SerializeToString,
-            walletkit__pb2.ListLeasesResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListLeasesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -569,8 +569,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/DeriveNextKey',
-            walletkit__pb2.KeyReq.SerializeToString,
-            signer__pb2.KeyDescriptor.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.KeyReq.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -586,8 +586,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/DeriveKey',
-            signer__pb2.KeyLocator.SerializeToString,
-            signer__pb2.KeyDescriptor.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.KeyLocator.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.KeyDescriptor.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -603,8 +603,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/NextAddr',
-            walletkit__pb2.AddrRequest.SerializeToString,
-            walletkit__pb2.AddrResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.AddrRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.AddrResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -620,8 +620,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ListAccounts',
-            walletkit__pb2.ListAccountsRequest.SerializeToString,
-            walletkit__pb2.ListAccountsResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -637,8 +637,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ImportAccount',
-            walletkit__pb2.ImportAccountRequest.SerializeToString,
-            walletkit__pb2.ImportAccountResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -654,8 +654,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ImportPublicKey',
-            walletkit__pb2.ImportPublicKeyRequest.SerializeToString,
-            walletkit__pb2.ImportPublicKeyResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ImportPublicKeyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -671,8 +671,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/PublishTransaction',
-            walletkit__pb2.Transaction.SerializeToString,
-            walletkit__pb2.PublishResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.Transaction.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.PublishResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -688,8 +688,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/SendOutputs',
-            walletkit__pb2.SendOutputsRequest.SerializeToString,
-            walletkit__pb2.SendOutputsResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.SendOutputsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -705,8 +705,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/EstimateFee',
-            walletkit__pb2.EstimateFeeRequest.SerializeToString,
-            walletkit__pb2.EstimateFeeResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.EstimateFeeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -722,8 +722,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/PendingSweeps',
-            walletkit__pb2.PendingSweepsRequest.SerializeToString,
-            walletkit__pb2.PendingSweepsResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.PendingSweepsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -739,8 +739,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/BumpFee',
-            walletkit__pb2.BumpFeeRequest.SerializeToString,
-            walletkit__pb2.BumpFeeResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.BumpFeeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -756,8 +756,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ListSweeps',
-            walletkit__pb2.ListSweepsRequest.SerializeToString,
-            walletkit__pb2.ListSweepsResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.ListSweepsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -773,8 +773,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/LabelTransaction',
-            walletkit__pb2.LabelTransactionRequest.SerializeToString,
-            walletkit__pb2.LabelTransactionResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.LabelTransactionResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -790,8 +790,8 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/FundPsbt',
-            walletkit__pb2.FundPsbtRequest.SerializeToString,
-            walletkit__pb2.FundPsbtResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.FundPsbtResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -807,7 +807,7 @@ class WalletKit(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/FinalizePsbt',
-            walletkit__pb2.FinalizePsbtRequest.SerializeToString,
-            walletkit__pb2.FinalizePsbtResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.FinalizePsbtResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

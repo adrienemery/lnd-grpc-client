@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import verrpc_pb2 as verrpc__pb2
+from lndgrpc.compiled import verrpc_pb2 as lndgrpc_dot_compiled_dot_verrpc__pb2
 
 
 class VersionerStub(object):
@@ -18,8 +18,8 @@ class VersionerStub(object):
         """
         self.GetVersion = channel.unary_unary(
                 '/verrpc.Versioner/GetVersion',
-                request_serializer=verrpc__pb2.VersionRequest.SerializeToString,
-                response_deserializer=verrpc__pb2.Version.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_verrpc__pb2.VersionRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_verrpc__pb2.Version.FromString,
                 )
 
 
@@ -42,8 +42,8 @@ def add_VersionerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetVersion': grpc.unary_unary_rpc_method_handler(
                     servicer.GetVersion,
-                    request_deserializer=verrpc__pb2.VersionRequest.FromString,
-                    response_serializer=verrpc__pb2.Version.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_verrpc__pb2.VersionRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_verrpc__pb2.Version.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -69,7 +69,7 @@ class Versioner(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/verrpc.Versioner/GetVersion',
-            verrpc__pb2.VersionRequest.SerializeToString,
-            verrpc__pb2.Version.FromString,
+            lndgrpc_dot_compiled_dot_verrpc__pb2.VersionRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_verrpc__pb2.Version.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

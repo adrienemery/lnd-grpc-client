@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import signer_pb2 as signer__pb2
+from lndgrpc.compiled import signer_pb2 as lndgrpc_dot_compiled_dot_signer__pb2
 
 
 class SignerStub(object):
@@ -18,28 +18,28 @@ class SignerStub(object):
         """
         self.SignOutputRaw = channel.unary_unary(
                 '/signrpc.Signer/SignOutputRaw',
-                request_serializer=signer__pb2.SignReq.SerializeToString,
-                response_deserializer=signer__pb2.SignResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SignReq.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SignResp.FromString,
                 )
         self.ComputeInputScript = channel.unary_unary(
                 '/signrpc.Signer/ComputeInputScript',
-                request_serializer=signer__pb2.SignReq.SerializeToString,
-                response_deserializer=signer__pb2.InputScriptResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SignReq.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.InputScriptResp.FromString,
                 )
         self.SignMessage = channel.unary_unary(
                 '/signrpc.Signer/SignMessage',
-                request_serializer=signer__pb2.SignMessageReq.SerializeToString,
-                response_deserializer=signer__pb2.SignMessageResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SignMessageReq.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SignMessageResp.FromString,
                 )
         self.VerifyMessage = channel.unary_unary(
                 '/signrpc.Signer/VerifyMessage',
-                request_serializer=signer__pb2.VerifyMessageReq.SerializeToString,
-                response_deserializer=signer__pb2.VerifyMessageResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageReq.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageResp.FromString,
                 )
         self.DeriveSharedKey = channel.unary_unary(
                 '/signrpc.Signer/DeriveSharedKey',
-                request_serializer=signer__pb2.SharedKeyRequest.SerializeToString,
-                response_deserializer=signer__pb2.SharedKeyResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyResponse.FromString,
                 )
 
 
@@ -124,28 +124,28 @@ def add_SignerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SignOutputRaw': grpc.unary_unary_rpc_method_handler(
                     servicer.SignOutputRaw,
-                    request_deserializer=signer__pb2.SignReq.FromString,
-                    response_serializer=signer__pb2.SignResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SignReq.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SignResp.SerializeToString,
             ),
             'ComputeInputScript': grpc.unary_unary_rpc_method_handler(
                     servicer.ComputeInputScript,
-                    request_deserializer=signer__pb2.SignReq.FromString,
-                    response_serializer=signer__pb2.InputScriptResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SignReq.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.InputScriptResp.SerializeToString,
             ),
             'SignMessage': grpc.unary_unary_rpc_method_handler(
                     servicer.SignMessage,
-                    request_deserializer=signer__pb2.SignMessageReq.FromString,
-                    response_serializer=signer__pb2.SignMessageResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SignMessageReq.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SignMessageResp.SerializeToString,
             ),
             'VerifyMessage': grpc.unary_unary_rpc_method_handler(
                     servicer.VerifyMessage,
-                    request_deserializer=signer__pb2.VerifyMessageReq.FromString,
-                    response_serializer=signer__pb2.VerifyMessageResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageReq.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageResp.SerializeToString,
             ),
             'DeriveSharedKey': grpc.unary_unary_rpc_method_handler(
                     servicer.DeriveSharedKey,
-                    request_deserializer=signer__pb2.SharedKeyRequest.FromString,
-                    response_serializer=signer__pb2.SharedKeyResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -171,8 +171,8 @@ class Signer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/signrpc.Signer/SignOutputRaw',
-            signer__pb2.SignReq.SerializeToString,
-            signer__pb2.SignResp.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SignReq.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SignResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -188,8 +188,8 @@ class Signer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/signrpc.Signer/ComputeInputScript',
-            signer__pb2.SignReq.SerializeToString,
-            signer__pb2.InputScriptResp.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SignReq.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.InputScriptResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -205,8 +205,8 @@ class Signer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/signrpc.Signer/SignMessage',
-            signer__pb2.SignMessageReq.SerializeToString,
-            signer__pb2.SignMessageResp.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SignMessageReq.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SignMessageResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -222,8 +222,8 @@ class Signer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/signrpc.Signer/VerifyMessage',
-            signer__pb2.VerifyMessageReq.SerializeToString,
-            signer__pb2.VerifyMessageResp.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageReq.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.VerifyMessageResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -239,7 +239,7 @@ class Signer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/signrpc.Signer/DeriveSharedKey',
-            signer__pb2.SharedKeyRequest.SerializeToString,
-            signer__pb2.SharedKeyResponse.FromString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_signer__pb2.SharedKeyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

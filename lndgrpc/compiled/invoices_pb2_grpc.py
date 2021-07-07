@@ -2,8 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import invoices_pb2 as invoices__pb2
-from lndgrpc import rpc_pb2 as rpc__pb2
+from lndgrpc.compiled import invoices_pb2 as lndgrpc_dot_compiled_dot_invoices__pb2
+from lndgrpc.compiled import rpc_pb2 as lndgrpc_dot_compiled_dot_rpc__pb2
 
 
 class InvoicesStub(object):
@@ -19,23 +19,23 @@ class InvoicesStub(object):
         """
         self.SubscribeSingleInvoice = channel.unary_stream(
                 '/invoicesrpc.Invoices/SubscribeSingleInvoice',
-                request_serializer=invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
-                response_deserializer=rpc__pb2.Invoice.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.FromString,
                 )
         self.CancelInvoice = channel.unary_unary(
                 '/invoicesrpc.Invoices/CancelInvoice',
-                request_serializer=invoices__pb2.CancelInvoiceMsg.SerializeToString,
-                response_deserializer=invoices__pb2.CancelInvoiceResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceMsg.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceResp.FromString,
                 )
         self.AddHoldInvoice = channel.unary_unary(
                 '/invoicesrpc.Invoices/AddHoldInvoice',
-                request_serializer=invoices__pb2.AddHoldInvoiceRequest.SerializeToString,
-                response_deserializer=invoices__pb2.AddHoldInvoiceResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceResp.FromString,
                 )
         self.SettleInvoice = channel.unary_unary(
                 '/invoicesrpc.Invoices/SettleInvoice',
-                request_serializer=invoices__pb2.SettleInvoiceMsg.SerializeToString,
-                response_deserializer=invoices__pb2.SettleInvoiceResp.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.FromString,
                 )
 
 
@@ -87,23 +87,23 @@ def add_InvoicesServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SubscribeSingleInvoice': grpc.unary_stream_rpc_method_handler(
                     servicer.SubscribeSingleInvoice,
-                    request_deserializer=invoices__pb2.SubscribeSingleInvoiceRequest.FromString,
-                    response_serializer=rpc__pb2.Invoice.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.SerializeToString,
             ),
             'CancelInvoice': grpc.unary_unary_rpc_method_handler(
                     servicer.CancelInvoice,
-                    request_deserializer=invoices__pb2.CancelInvoiceMsg.FromString,
-                    response_serializer=invoices__pb2.CancelInvoiceResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceMsg.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceResp.SerializeToString,
             ),
             'AddHoldInvoice': grpc.unary_unary_rpc_method_handler(
                     servicer.AddHoldInvoice,
-                    request_deserializer=invoices__pb2.AddHoldInvoiceRequest.FromString,
-                    response_serializer=invoices__pb2.AddHoldInvoiceResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceResp.SerializeToString,
             ),
             'SettleInvoice': grpc.unary_unary_rpc_method_handler(
                     servicer.SettleInvoice,
-                    request_deserializer=invoices__pb2.SettleInvoiceMsg.FromString,
-                    response_serializer=invoices__pb2.SettleInvoiceResp.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -129,8 +129,8 @@ class Invoices(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/invoicesrpc.Invoices/SubscribeSingleInvoice',
-            invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
-            rpc__pb2.Invoice.FromString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -146,8 +146,8 @@ class Invoices(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/invoicesrpc.Invoices/CancelInvoice',
-            invoices__pb2.CancelInvoiceMsg.SerializeToString,
-            invoices__pb2.CancelInvoiceResp.FromString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceMsg.SerializeToString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.CancelInvoiceResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -163,8 +163,8 @@ class Invoices(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/invoicesrpc.Invoices/AddHoldInvoice',
-            invoices__pb2.AddHoldInvoiceRequest.SerializeToString,
-            invoices__pb2.AddHoldInvoiceResp.FromString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.AddHoldInvoiceResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -180,7 +180,7 @@ class Invoices(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/invoicesrpc.Invoices/SettleInvoice',
-            invoices__pb2.SettleInvoiceMsg.SerializeToString,
-            invoices__pb2.SettleInvoiceResp.FromString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.SerializeToString,
+            lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

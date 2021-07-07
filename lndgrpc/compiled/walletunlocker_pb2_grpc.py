@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import walletunlocker_pb2 as walletunlocker__pb2
+from lndgrpc.compiled import walletunlocker_pb2 as lndgrpc_dot_compiled_dot_walletunlocker__pb2
 
 
 class WalletUnlockerStub(object):
@@ -35,23 +35,23 @@ class WalletUnlockerStub(object):
         """
         self.GenSeed = channel.unary_unary(
                 '/lnrpc.WalletUnlocker/GenSeed',
-                request_serializer=walletunlocker__pb2.GenSeedRequest.SerializeToString,
-                response_deserializer=walletunlocker__pb2.GenSeedResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedResponse.FromString,
                 )
         self.InitWallet = channel.unary_unary(
                 '/lnrpc.WalletUnlocker/InitWallet',
-                request_serializer=walletunlocker__pb2.InitWalletRequest.SerializeToString,
-                response_deserializer=walletunlocker__pb2.InitWalletResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletResponse.FromString,
                 )
         self.UnlockWallet = channel.unary_unary(
                 '/lnrpc.WalletUnlocker/UnlockWallet',
-                request_serializer=walletunlocker__pb2.UnlockWalletRequest.SerializeToString,
-                response_deserializer=walletunlocker__pb2.UnlockWalletResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletResponse.FromString,
                 )
         self.ChangePassword = channel.unary_unary(
                 '/lnrpc.WalletUnlocker/ChangePassword',
-                request_serializer=walletunlocker__pb2.ChangePasswordRequest.SerializeToString,
-                response_deserializer=walletunlocker__pb2.ChangePasswordResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordResponse.FromString,
                 )
 
 
@@ -134,23 +134,23 @@ def add_WalletUnlockerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GenSeed': grpc.unary_unary_rpc_method_handler(
                     servicer.GenSeed,
-                    request_deserializer=walletunlocker__pb2.GenSeedRequest.FromString,
-                    response_serializer=walletunlocker__pb2.GenSeedResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedResponse.SerializeToString,
             ),
             'InitWallet': grpc.unary_unary_rpc_method_handler(
                     servicer.InitWallet,
-                    request_deserializer=walletunlocker__pb2.InitWalletRequest.FromString,
-                    response_serializer=walletunlocker__pb2.InitWalletResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletResponse.SerializeToString,
             ),
             'UnlockWallet': grpc.unary_unary_rpc_method_handler(
                     servicer.UnlockWallet,
-                    request_deserializer=walletunlocker__pb2.UnlockWalletRequest.FromString,
-                    response_serializer=walletunlocker__pb2.UnlockWalletResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletResponse.SerializeToString,
             ),
             'ChangePassword': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangePassword,
-                    request_deserializer=walletunlocker__pb2.ChangePasswordRequest.FromString,
-                    response_serializer=walletunlocker__pb2.ChangePasswordResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -193,8 +193,8 @@ class WalletUnlocker(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lnrpc.WalletUnlocker/GenSeed',
-            walletunlocker__pb2.GenSeedRequest.SerializeToString,
-            walletunlocker__pb2.GenSeedResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.GenSeedResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -210,8 +210,8 @@ class WalletUnlocker(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lnrpc.WalletUnlocker/InitWallet',
-            walletunlocker__pb2.InitWalletRequest.SerializeToString,
-            walletunlocker__pb2.InitWalletResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.InitWalletResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -227,8 +227,8 @@ class WalletUnlocker(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lnrpc.WalletUnlocker/UnlockWallet',
-            walletunlocker__pb2.UnlockWalletRequest.SerializeToString,
-            walletunlocker__pb2.UnlockWalletResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.UnlockWalletResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -244,7 +244,7 @@ class WalletUnlocker(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/lnrpc.WalletUnlocker/ChangePassword',
-            walletunlocker__pb2.ChangePasswordRequest.SerializeToString,
-            walletunlocker__pb2.ChangePasswordResponse.FromString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletunlocker__pb2.ChangePasswordResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

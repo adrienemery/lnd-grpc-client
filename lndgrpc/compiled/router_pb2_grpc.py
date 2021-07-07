@@ -2,8 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lndgrpc import router_pb2 as router__pb2
-from lndgrpc import rpc_pb2 as rpc__pb2
+from lndgrpc.compiled import router_pb2 as lndgrpc_dot_compiled_dot_router__pb2
+from lndgrpc.compiled import rpc_pb2 as lndgrpc_dot_compiled_dot_rpc__pb2
 
 
 class RouterStub(object):
@@ -19,88 +19,88 @@ class RouterStub(object):
         """
         self.SendPaymentV2 = channel.unary_stream(
                 '/routerrpc.Router/SendPaymentV2',
-                request_serializer=router__pb2.SendPaymentRequest.SerializeToString,
-                response_deserializer=rpc__pb2.Payment.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_rpc__pb2.Payment.FromString,
                 )
         self.TrackPaymentV2 = channel.unary_stream(
                 '/routerrpc.Router/TrackPaymentV2',
-                request_serializer=router__pb2.TrackPaymentRequest.SerializeToString,
-                response_deserializer=rpc__pb2.Payment.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_rpc__pb2.Payment.FromString,
                 )
         self.EstimateRouteFee = channel.unary_unary(
                 '/routerrpc.Router/EstimateRouteFee',
-                request_serializer=router__pb2.RouteFeeRequest.SerializeToString,
-                response_deserializer=router__pb2.RouteFeeResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.RouteFeeRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.RouteFeeResponse.FromString,
                 )
         self.SendToRoute = channel.unary_unary(
                 '/routerrpc.Router/SendToRoute',
-                request_serializer=router__pb2.SendToRouteRequest.SerializeToString,
-                response_deserializer=router__pb2.SendToRouteResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteResponse.FromString,
                 )
         self.SendToRouteV2 = channel.unary_unary(
                 '/routerrpc.Router/SendToRouteV2',
-                request_serializer=router__pb2.SendToRouteRequest.SerializeToString,
-                response_deserializer=rpc__pb2.HTLCAttempt.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_rpc__pb2.HTLCAttempt.FromString,
                 )
         self.ResetMissionControl = channel.unary_unary(
                 '/routerrpc.Router/ResetMissionControl',
-                request_serializer=router__pb2.ResetMissionControlRequest.SerializeToString,
-                response_deserializer=router__pb2.ResetMissionControlResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlResponse.FromString,
                 )
         self.QueryMissionControl = channel.unary_unary(
                 '/routerrpc.Router/QueryMissionControl',
-                request_serializer=router__pb2.QueryMissionControlRequest.SerializeToString,
-                response_deserializer=router__pb2.QueryMissionControlResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlResponse.FromString,
                 )
         self.XImportMissionControl = channel.unary_unary(
                 '/routerrpc.Router/XImportMissionControl',
-                request_serializer=router__pb2.XImportMissionControlRequest.SerializeToString,
-                response_deserializer=router__pb2.XImportMissionControlResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlResponse.FromString,
                 )
         self.GetMissionControlConfig = channel.unary_unary(
                 '/routerrpc.Router/GetMissionControlConfig',
-                request_serializer=router__pb2.GetMissionControlConfigRequest.SerializeToString,
-                response_deserializer=router__pb2.GetMissionControlConfigResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigResponse.FromString,
                 )
         self.SetMissionControlConfig = channel.unary_unary(
                 '/routerrpc.Router/SetMissionControlConfig',
-                request_serializer=router__pb2.SetMissionControlConfigRequest.SerializeToString,
-                response_deserializer=router__pb2.SetMissionControlConfigResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigResponse.FromString,
                 )
         self.QueryProbability = channel.unary_unary(
                 '/routerrpc.Router/QueryProbability',
-                request_serializer=router__pb2.QueryProbabilityRequest.SerializeToString,
-                response_deserializer=router__pb2.QueryProbabilityResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityResponse.FromString,
                 )
         self.BuildRoute = channel.unary_unary(
                 '/routerrpc.Router/BuildRoute',
-                request_serializer=router__pb2.BuildRouteRequest.SerializeToString,
-                response_deserializer=router__pb2.BuildRouteResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.BuildRouteRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.BuildRouteResponse.FromString,
                 )
         self.SubscribeHtlcEvents = channel.unary_stream(
                 '/routerrpc.Router/SubscribeHtlcEvents',
-                request_serializer=router__pb2.SubscribeHtlcEventsRequest.SerializeToString,
-                response_deserializer=router__pb2.HtlcEvent.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SubscribeHtlcEventsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.HtlcEvent.FromString,
                 )
         self.SendPayment = channel.unary_stream(
                 '/routerrpc.Router/SendPayment',
-                request_serializer=router__pb2.SendPaymentRequest.SerializeToString,
-                response_deserializer=router__pb2.PaymentStatus.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.FromString,
                 )
         self.TrackPayment = channel.unary_stream(
                 '/routerrpc.Router/TrackPayment',
-                request_serializer=router__pb2.TrackPaymentRequest.SerializeToString,
-                response_deserializer=router__pb2.PaymentStatus.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.FromString,
                 )
         self.HtlcInterceptor = channel.stream_stream(
                 '/routerrpc.Router/HtlcInterceptor',
-                request_serializer=router__pb2.ForwardHtlcInterceptResponse.SerializeToString,
-                response_deserializer=router__pb2.ForwardHtlcInterceptRequest.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptResponse.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptRequest.FromString,
                 )
         self.UpdateChanStatus = channel.unary_unary(
                 '/routerrpc.Router/UpdateChanStatus',
-                request_serializer=router__pb2.UpdateChanStatusRequest.SerializeToString,
-                response_deserializer=router__pb2.UpdateChanStatusResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusResponse.FromString,
                 )
 
 
@@ -281,88 +281,88 @@ def add_RouterServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SendPaymentV2': grpc.unary_stream_rpc_method_handler(
                     servicer.SendPaymentV2,
-                    request_deserializer=router__pb2.SendPaymentRequest.FromString,
-                    response_serializer=rpc__pb2.Payment.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_rpc__pb2.Payment.SerializeToString,
             ),
             'TrackPaymentV2': grpc.unary_stream_rpc_method_handler(
                     servicer.TrackPaymentV2,
-                    request_deserializer=router__pb2.TrackPaymentRequest.FromString,
-                    response_serializer=rpc__pb2.Payment.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_rpc__pb2.Payment.SerializeToString,
             ),
             'EstimateRouteFee': grpc.unary_unary_rpc_method_handler(
                     servicer.EstimateRouteFee,
-                    request_deserializer=router__pb2.RouteFeeRequest.FromString,
-                    response_serializer=router__pb2.RouteFeeResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.RouteFeeRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.RouteFeeResponse.SerializeToString,
             ),
             'SendToRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.SendToRoute,
-                    request_deserializer=router__pb2.SendToRouteRequest.FromString,
-                    response_serializer=router__pb2.SendToRouteResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteResponse.SerializeToString,
             ),
             'SendToRouteV2': grpc.unary_unary_rpc_method_handler(
                     servicer.SendToRouteV2,
-                    request_deserializer=router__pb2.SendToRouteRequest.FromString,
-                    response_serializer=rpc__pb2.HTLCAttempt.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_rpc__pb2.HTLCAttempt.SerializeToString,
             ),
             'ResetMissionControl': grpc.unary_unary_rpc_method_handler(
                     servicer.ResetMissionControl,
-                    request_deserializer=router__pb2.ResetMissionControlRequest.FromString,
-                    response_serializer=router__pb2.ResetMissionControlResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlResponse.SerializeToString,
             ),
             'QueryMissionControl': grpc.unary_unary_rpc_method_handler(
                     servicer.QueryMissionControl,
-                    request_deserializer=router__pb2.QueryMissionControlRequest.FromString,
-                    response_serializer=router__pb2.QueryMissionControlResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlResponse.SerializeToString,
             ),
             'XImportMissionControl': grpc.unary_unary_rpc_method_handler(
                     servicer.XImportMissionControl,
-                    request_deserializer=router__pb2.XImportMissionControlRequest.FromString,
-                    response_serializer=router__pb2.XImportMissionControlResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlResponse.SerializeToString,
             ),
             'GetMissionControlConfig': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMissionControlConfig,
-                    request_deserializer=router__pb2.GetMissionControlConfigRequest.FromString,
-                    response_serializer=router__pb2.GetMissionControlConfigResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigResponse.SerializeToString,
             ),
             'SetMissionControlConfig': grpc.unary_unary_rpc_method_handler(
                     servicer.SetMissionControlConfig,
-                    request_deserializer=router__pb2.SetMissionControlConfigRequest.FromString,
-                    response_serializer=router__pb2.SetMissionControlConfigResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigResponse.SerializeToString,
             ),
             'QueryProbability': grpc.unary_unary_rpc_method_handler(
                     servicer.QueryProbability,
-                    request_deserializer=router__pb2.QueryProbabilityRequest.FromString,
-                    response_serializer=router__pb2.QueryProbabilityResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityResponse.SerializeToString,
             ),
             'BuildRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.BuildRoute,
-                    request_deserializer=router__pb2.BuildRouteRequest.FromString,
-                    response_serializer=router__pb2.BuildRouteResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.BuildRouteRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.BuildRouteResponse.SerializeToString,
             ),
             'SubscribeHtlcEvents': grpc.unary_stream_rpc_method_handler(
                     servicer.SubscribeHtlcEvents,
-                    request_deserializer=router__pb2.SubscribeHtlcEventsRequest.FromString,
-                    response_serializer=router__pb2.HtlcEvent.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SubscribeHtlcEventsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.HtlcEvent.SerializeToString,
             ),
             'SendPayment': grpc.unary_stream_rpc_method_handler(
                     servicer.SendPayment,
-                    request_deserializer=router__pb2.SendPaymentRequest.FromString,
-                    response_serializer=router__pb2.PaymentStatus.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.SerializeToString,
             ),
             'TrackPayment': grpc.unary_stream_rpc_method_handler(
                     servicer.TrackPayment,
-                    request_deserializer=router__pb2.TrackPaymentRequest.FromString,
-                    response_serializer=router__pb2.PaymentStatus.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.SerializeToString,
             ),
             'HtlcInterceptor': grpc.stream_stream_rpc_method_handler(
                     servicer.HtlcInterceptor,
-                    request_deserializer=router__pb2.ForwardHtlcInterceptResponse.FromString,
-                    response_serializer=router__pb2.ForwardHtlcInterceptRequest.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptResponse.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptRequest.SerializeToString,
             ),
             'UpdateChanStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateChanStatus,
-                    request_deserializer=router__pb2.UpdateChanStatusRequest.FromString,
-                    response_serializer=router__pb2.UpdateChanStatusResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -388,8 +388,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/routerrpc.Router/SendPaymentV2',
-            router__pb2.SendPaymentRequest.SerializeToString,
-            rpc__pb2.Payment.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_rpc__pb2.Payment.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -405,8 +405,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/routerrpc.Router/TrackPaymentV2',
-            router__pb2.TrackPaymentRequest.SerializeToString,
-            rpc__pb2.Payment.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_rpc__pb2.Payment.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -422,8 +422,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/EstimateRouteFee',
-            router__pb2.RouteFeeRequest.SerializeToString,
-            router__pb2.RouteFeeResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.RouteFeeRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.RouteFeeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -439,8 +439,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/SendToRoute',
-            router__pb2.SendToRouteRequest.SerializeToString,
-            router__pb2.SendToRouteResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.SendToRouteResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -456,8 +456,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/SendToRouteV2',
-            router__pb2.SendToRouteRequest.SerializeToString,
-            rpc__pb2.HTLCAttempt.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SendToRouteRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_rpc__pb2.HTLCAttempt.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -473,8 +473,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/ResetMissionControl',
-            router__pb2.ResetMissionControlRequest.SerializeToString,
-            router__pb2.ResetMissionControlResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.ResetMissionControlResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -490,8 +490,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/QueryMissionControl',
-            router__pb2.QueryMissionControlRequest.SerializeToString,
-            router__pb2.QueryMissionControlResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.QueryMissionControlResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -507,8 +507,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/XImportMissionControl',
-            router__pb2.XImportMissionControlRequest.SerializeToString,
-            router__pb2.XImportMissionControlResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.XImportMissionControlResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -524,8 +524,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/GetMissionControlConfig',
-            router__pb2.GetMissionControlConfigRequest.SerializeToString,
-            router__pb2.GetMissionControlConfigResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.GetMissionControlConfigResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -541,8 +541,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/SetMissionControlConfig',
-            router__pb2.SetMissionControlConfigRequest.SerializeToString,
-            router__pb2.SetMissionControlConfigResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.SetMissionControlConfigResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -558,8 +558,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/QueryProbability',
-            router__pb2.QueryProbabilityRequest.SerializeToString,
-            router__pb2.QueryProbabilityResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.QueryProbabilityResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -575,8 +575,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/BuildRoute',
-            router__pb2.BuildRouteRequest.SerializeToString,
-            router__pb2.BuildRouteResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.BuildRouteRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.BuildRouteResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -592,8 +592,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/routerrpc.Router/SubscribeHtlcEvents',
-            router__pb2.SubscribeHtlcEventsRequest.SerializeToString,
-            router__pb2.HtlcEvent.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SubscribeHtlcEventsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.HtlcEvent.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -609,8 +609,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/routerrpc.Router/SendPayment',
-            router__pb2.SendPaymentRequest.SerializeToString,
-            router__pb2.PaymentStatus.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.SendPaymentRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -626,8 +626,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/routerrpc.Router/TrackPayment',
-            router__pb2.TrackPaymentRequest.SerializeToString,
-            router__pb2.PaymentStatus.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.TrackPaymentRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.PaymentStatus.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -643,8 +643,8 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.stream_stream(request_iterator, target, '/routerrpc.Router/HtlcInterceptor',
-            router__pb2.ForwardHtlcInterceptResponse.SerializeToString,
-            router__pb2.ForwardHtlcInterceptRequest.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptResponse.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.ForwardHtlcInterceptRequest.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -660,7 +660,7 @@ class Router(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/routerrpc.Router/UpdateChanStatus',
-            router__pb2.UpdateChanStatusRequest.SerializeToString,
-            router__pb2.UpdateChanStatusResponse.FromString,
+            lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_router__pb2.UpdateChanStatusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

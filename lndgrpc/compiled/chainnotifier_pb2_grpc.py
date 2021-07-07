@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import chainnotifier_pb2 as chainnotifier__pb2
+from lndgrpc.compiled import chainnotifier_pb2 as lndgrpc_dot_compiled_dot_chainnotifier__pb2
 
 
 class ChainNotifierStub(object):
@@ -18,18 +18,18 @@ class ChainNotifierStub(object):
         """
         self.RegisterConfirmationsNtfn = channel.unary_stream(
                 '/chainrpc.ChainNotifier/RegisterConfirmationsNtfn',
-                request_serializer=chainnotifier__pb2.ConfRequest.SerializeToString,
-                response_deserializer=chainnotifier__pb2.ConfEvent.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfEvent.FromString,
                 )
         self.RegisterSpendNtfn = channel.unary_stream(
                 '/chainrpc.ChainNotifier/RegisterSpendNtfn',
-                request_serializer=chainnotifier__pb2.SpendRequest.SerializeToString,
-                response_deserializer=chainnotifier__pb2.SpendEvent.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendEvent.FromString,
                 )
         self.RegisterBlockEpochNtfn = channel.unary_stream(
                 '/chainrpc.ChainNotifier/RegisterBlockEpochNtfn',
-                request_serializer=chainnotifier__pb2.BlockEpoch.SerializeToString,
-                response_deserializer=chainnotifier__pb2.BlockEpoch.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.FromString,
                 )
 
 
@@ -86,18 +86,18 @@ def add_ChainNotifierServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RegisterConfirmationsNtfn': grpc.unary_stream_rpc_method_handler(
                     servicer.RegisterConfirmationsNtfn,
-                    request_deserializer=chainnotifier__pb2.ConfRequest.FromString,
-                    response_serializer=chainnotifier__pb2.ConfEvent.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfEvent.SerializeToString,
             ),
             'RegisterSpendNtfn': grpc.unary_stream_rpc_method_handler(
                     servicer.RegisterSpendNtfn,
-                    request_deserializer=chainnotifier__pb2.SpendRequest.FromString,
-                    response_serializer=chainnotifier__pb2.SpendEvent.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendEvent.SerializeToString,
             ),
             'RegisterBlockEpochNtfn': grpc.unary_stream_rpc_method_handler(
                     servicer.RegisterBlockEpochNtfn,
-                    request_deserializer=chainnotifier__pb2.BlockEpoch.FromString,
-                    response_serializer=chainnotifier__pb2.BlockEpoch.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -123,8 +123,8 @@ class ChainNotifier(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/chainrpc.ChainNotifier/RegisterConfirmationsNtfn',
-            chainnotifier__pb2.ConfRequest.SerializeToString,
-            chainnotifier__pb2.ConfEvent.FromString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.ConfEvent.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -140,8 +140,8 @@ class ChainNotifier(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/chainrpc.ChainNotifier/RegisterSpendNtfn',
-            chainnotifier__pb2.SpendRequest.SerializeToString,
-            chainnotifier__pb2.SpendEvent.FromString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.SpendEvent.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -157,7 +157,7 @@ class ChainNotifier(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/chainrpc.ChainNotifier/RegisterBlockEpochNtfn',
-            chainnotifier__pb2.BlockEpoch.SerializeToString,
-            chainnotifier__pb2.BlockEpoch.FromString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.SerializeToString,
+            lndgrpc_dot_compiled_dot_chainnotifier__pb2.BlockEpoch.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

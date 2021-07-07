@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import wtclient_pb2 as wtclient__pb2
+from lndgrpc.compiled import wtclient_pb2 as lndgrpc_dot_compiled_dot_wtclient__pb2
 
 
 class WatchtowerClientStub(object):
@@ -18,33 +18,33 @@ class WatchtowerClientStub(object):
         """
         self.AddTower = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/AddTower',
-                request_serializer=wtclient__pb2.AddTowerRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.AddTowerResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerResponse.FromString,
                 )
         self.RemoveTower = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/RemoveTower',
-                request_serializer=wtclient__pb2.RemoveTowerRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.RemoveTowerResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerResponse.FromString,
                 )
         self.ListTowers = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/ListTowers',
-                request_serializer=wtclient__pb2.ListTowersRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.ListTowersResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersResponse.FromString,
                 )
         self.GetTowerInfo = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/GetTowerInfo',
-                request_serializer=wtclient__pb2.GetTowerInfoRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.Tower.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.GetTowerInfoRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.Tower.FromString,
                 )
         self.Stats = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/Stats',
-                request_serializer=wtclient__pb2.StatsRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.StatsResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.StatsRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.StatsResponse.FromString,
                 )
         self.Policy = channel.unary_unary(
                 '/wtclientrpc.WatchtowerClient/Policy',
-                request_serializer=wtclient__pb2.PolicyRequest.SerializeToString,
-                response_deserializer=wtclient__pb2.PolicyResponse.FromString,
+                request_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyResponse.FromString,
                 )
 
 
@@ -108,33 +108,33 @@ def add_WatchtowerClientServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'AddTower': grpc.unary_unary_rpc_method_handler(
                     servicer.AddTower,
-                    request_deserializer=wtclient__pb2.AddTowerRequest.FromString,
-                    response_serializer=wtclient__pb2.AddTowerResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerResponse.SerializeToString,
             ),
             'RemoveTower': grpc.unary_unary_rpc_method_handler(
                     servicer.RemoveTower,
-                    request_deserializer=wtclient__pb2.RemoveTowerRequest.FromString,
-                    response_serializer=wtclient__pb2.RemoveTowerResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerResponse.SerializeToString,
             ),
             'ListTowers': grpc.unary_unary_rpc_method_handler(
                     servicer.ListTowers,
-                    request_deserializer=wtclient__pb2.ListTowersRequest.FromString,
-                    response_serializer=wtclient__pb2.ListTowersResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersResponse.SerializeToString,
             ),
             'GetTowerInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetTowerInfo,
-                    request_deserializer=wtclient__pb2.GetTowerInfoRequest.FromString,
-                    response_serializer=wtclient__pb2.Tower.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.GetTowerInfoRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.Tower.SerializeToString,
             ),
             'Stats': grpc.unary_unary_rpc_method_handler(
                     servicer.Stats,
-                    request_deserializer=wtclient__pb2.StatsRequest.FromString,
-                    response_serializer=wtclient__pb2.StatsResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.StatsRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.StatsResponse.SerializeToString,
             ),
             'Policy': grpc.unary_unary_rpc_method_handler(
                     servicer.Policy,
-                    request_deserializer=wtclient__pb2.PolicyRequest.FromString,
-                    response_serializer=wtclient__pb2.PolicyResponse.SerializeToString,
+                    request_deserializer=lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -160,8 +160,8 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/AddTower',
-            wtclient__pb2.AddTowerRequest.SerializeToString,
-            wtclient__pb2.AddTowerResponse.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.AddTowerResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -177,8 +177,8 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/RemoveTower',
-            wtclient__pb2.RemoveTowerRequest.SerializeToString,
-            wtclient__pb2.RemoveTowerResponse.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.RemoveTowerResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -194,8 +194,8 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/ListTowers',
-            wtclient__pb2.ListTowersRequest.SerializeToString,
-            wtclient__pb2.ListTowersResponse.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.ListTowersResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -211,8 +211,8 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/GetTowerInfo',
-            wtclient__pb2.GetTowerInfoRequest.SerializeToString,
-            wtclient__pb2.Tower.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.GetTowerInfoRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.Tower.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -228,8 +228,8 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/Stats',
-            wtclient__pb2.StatsRequest.SerializeToString,
-            wtclient__pb2.StatsResponse.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.StatsRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.StatsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -245,7 +245,7 @@ class WatchtowerClient(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/wtclientrpc.WatchtowerClient/Policy',
-            wtclient__pb2.PolicyRequest.SerializeToString,
-            wtclient__pb2.PolicyResponse.FromString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_wtclient__pb2.PolicyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

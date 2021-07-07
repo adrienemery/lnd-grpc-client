@@ -2,36 +2,53 @@ import binascii
 import platform
 import os
 import grpc
-from . import (
-    rpc_pb2, rpc_pb2_grpc,
-    router_pb2, router_pb2_grpc,
-    verrpc_pb2, verrpc_pb2_grpc,
-    signer_pb2, signer_pb2_grpc,
-    walletkit_pb2, walletkit_pb2_grpc,
-    walletunlocker_pb2, walletunlocker_pb2_grpc,
-    invoices_pb2, invoices_pb2_grpc
+# from . import (
+#     rpc_pb2, rpc_pb2_grpc,
+#     router_pb2, router_pb2_grpc,
+#     verrpc_pb2, verrpc_pb2_grpc,
+#     signer_pb2, signer_pb2_grpc,
+#     walletkit_pb2, walletkit_pb2_grpc,
+#     walletunlocker_pb2, walletunlocker_pb2_grpc,
+#     invoices_pb2, invoices_pb2_grpc
+# )
+
+from lndgrpc.compiled import (
+    rpc_pb2 as ln,
+    rpc_pb2_grpc as lnrpc,
+    router_pb2 as router,
+    router_pb2_grpc as routerrpc,
+    verrpc_pb2 as ver,
+    verrpc_pb2_grpc as verrpc,
+    walletkit_pb2 as walletkit,
+    walletkit_pb2_grpc as walletkitrpc,
+    signer_pb2 as signer,
+    signer_pb2_grpc as signerrpc,
+    walletunlocker_pb2 as walletunlocker,
+    walletunlocker_pb2_grpc as walletunlockerrpc,
+    invoices_pb2 as invoices,
+    invoices_pb2_grpc as invoicesrpc,
 )
 
-ln = rpc_pb2
-lnrpc = rpc_pb2_grpc
+# ln = rpc_pb2
+# lnrpc = rpc_pb2_grpc
 
-router = router_pb2
-routerrpc = router_pb2_grpc
+# router = router_pb2
+# routerrpc = router_pb2_grpc
 
-ver = verrpc_pb2
-verrpc = verrpc_pb2_grpc
+# ver = verrpc_pb2
+# verrpc = verrpc_pb2_grpc
 
-walletkit = walletkit_pb2
-walletkitrpc = walletkit_pb2_grpc
+# walletkit = walletkit_pb2
+# walletkitrpc = walletkit_pb2_grpc
 
-signer = signer_pb2
-signerrpc = signer_pb2_grpc
+# signer = signer_pb2
+# signerrpc = signer_pb2_grpc
 
-walletunlocker = walletunlocker_pb2
-walletunlockerrpc = walletunlocker_pb2_grpc
+# walletunlocker = walletunlocker_pb2
+# walletunlockerrpc = walletunlocker_pb2_grpc
 
-invoices = invoices_pb2
-invoicesrpc = invoices_pb2_grpc
+# invoices = invoices_pb2
+# invoicesrpc = invoices_pb2_grpc
 
 system = platform.system().lower()
 
