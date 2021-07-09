@@ -29,27 +29,6 @@ from lndgrpc.compiled import (
     invoices_pb2_grpc as invoicesrpc,
 )
 
-# ln = rpc_pb2
-# lnrpc = rpc_pb2_grpc
-
-# router = router_pb2
-# routerrpc = router_pb2_grpc
-
-# ver = verrpc_pb2
-# verrpc = verrpc_pb2_grpc
-
-# walletkit = walletkit_pb2
-# walletkitrpc = walletkit_pb2_grpc
-
-# signer = signer_pb2
-# signerrpc = signer_pb2_grpc
-
-# walletunlocker = walletunlocker_pb2
-# walletunlockerrpc = walletunlocker_pb2_grpc
-
-# invoices = invoices_pb2
-# invoicesrpc = invoices_pb2_grpc
-
 system = platform.system().lower()
 
 if system == 'linux':
@@ -86,7 +65,7 @@ def get_cert(filepath=None):
     return cert
 
 
-def get_macaroon(admin=False, network='mainnet', filepath=None):
+def get_macaroon(network='mainnet', filepath=None):
     """Read and decode macaroon from file
 
     The macaroon is decoded into a hex string and returned.
@@ -131,11 +110,9 @@ class BaseClient(object):
 
     def __init__(self, ip_address='127.0.0.1:10009', network='mainnet', admin=False, cert=None,
                  cert_filepath=None, macaroon=None, macaroon_filepath=None):
-        if cert is None:
-            cert = get_cert(cert_filepath)
 
         if macaroon is None:
-            macaroon = get_macaroon(admin=admin, network=network, filepath=macaroon_filepath)
+            macaroon = get_macaroon(network=network, filepath=macaroon_filepath)
 
         if cert is None:
             cert = get_cert(cert_filepath)
