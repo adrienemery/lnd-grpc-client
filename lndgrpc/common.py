@@ -85,11 +85,13 @@ def generate_credentials(cert, macaroon):
     """Create composite channel credentials using cert and macaroon metatdata"""
     # create cert credentials from the tls.cert file
     cert_creds = grpc.ssl_channel_credentials(cert)
+    # cert_creds = grpc.ssl_channel_credentials()
 
     # build meta data credentials
     metadata_plugin = MacaroonMetadataPlugin(macaroon)
     auth_creds = grpc.metadata_call_credentials(metadata_plugin)
 
+    # TODO: look into ssl credentials
     # combine the cert credentials and the macaroon auth credentials
     # such that every call is properly encrypted and authenticated
     return grpc.composite_channel_credentials(cert_creds, auth_creds)
