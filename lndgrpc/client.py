@@ -321,9 +321,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def query_routes(self, pub_key, amt, num_routes=5):
+    def query_routes(self, pub_key, amt, **kwargs):
         """Query a route to a destination"""
-        request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, num_routes=num_routes)
+        request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, **kwargs)
         response = self._ln_stub.QueryRoutes(request)
         return response
 
