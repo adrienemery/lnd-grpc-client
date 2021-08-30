@@ -138,6 +138,35 @@ class LNDClient(BaseClient):
         response = self._router_stub.SendPayment(request)
         return response
 
+    @handle_rpc_errors
+    def reset_mission_control(self):
+        request = router.ResetMissionControlRequest()
+        response = self._router_stub.ResetMissionControl(request)
+        return response
+
+
+    # SIGNERRPC
+    @handle_rpc_errors
+    def signer_sign_message(self, msg, key_family, key_index):
+        key_loc = signer.KeyLocator(key_family=key_family,key_index=key_index)
+        request = signer.SignMessageReq(
+            msg=msg,
+            key_loc=key_loc
+        )
+        response = self._signer_stub.SignMessage(request)
+        return response
+
+    @handle_rpc_errors
+    def signer_verify_message(self, msg, signature, pubkey):
+        request = signer.VerifyMessageReq(
+            msg=msg,
+            signature=signature,
+            pubkey=pubkey
+        )
+        response = self._signer_stub.VerifyMessage(request)
+        return response
+
+
     # LIGHTNINGRPC
     @handle_rpc_errors
     def get_info(self):
@@ -192,9 +221,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def list_channels(self):
+    def list_channels(self, **kwargs):
         """List all open channels"""
-        response = self._ln_stub.ListChannels(ln.ListChannelsRequest())
+        response = self._ln_stub.ListChannels(ln.ListChannelsRequest(**kwargs))
         return response
 
     @handle_rpc_errors
@@ -355,13 +384,15 @@ class LNDClient(BaseClient):
         response = self._ln_stub.StopDaemon(request)
         return response
 
-    @handle_rpc_errors
+    ## TODO: This has been moved to a subsystem
+    # @handle_rpc_errors
     def sign_message(self, msg):
         """Sign a message with the node's private key"""
         request = ln.SignMessageRequest(msg=msg)
         response = self._ln_stub.SignMessage(request)
         return response
 
+    ## TODO: This has been moved to a subsystem
     @handle_rpc_errors
     def verify_message(self, msg, signature):
         """Verify a message signed with the signature"""
@@ -405,6 +436,14 @@ class LNDClient(BaseClient):
         """Send bitcoin on-chain to multiple addresses"""
         pass  # TODO
 
+
+    @handle_rpc_errors
+    def send_coins(self, address, amount, **kwargs):
+        """Send bitcoin on-chain to a single address"""
+        request = ln.SendCoinsRequest(addr=address, amount=amount, **kwargs)
+        response = self._ln_stub.SendCoins(request)
+        return response
+
     # INVOICES
     @handle_rpc_errors
     def subscribe_single_invoice(self, r_hash):
@@ -415,15 +454,3 @@ class LNDClient(BaseClient):
             return first
 
 
-    @handle_rpc_errors
-    def send_on_chain(self, address, amount, sat_ber_byte=None, target_conf=None):
-        """Send bitcoin on-chain to a single address"""
-        optional_kwargs = {}
-        if sat_ber_byte is not None:
-            optional_kwargs['sat_ber_byte'] = sat_ber_byte
-        if target_conf is not None:
-            optional_kwargs['target_conf'] = target_conf
-
-        request = ln.SendCoinsRequest(addr=address, amount=amount, **optional_kwargs)
-        response = self._ln_stub.SendCoins(request)
-        return response

@@ -2,15 +2,6 @@ import binascii
 import platform
 import os
 import grpc
-# from . import (
-#     rpc_pb2, rpc_pb2_grpc,
-#     router_pb2, router_pb2_grpc,
-#     verrpc_pb2, verrpc_pb2_grpc,
-#     signer_pb2, signer_pb2_grpc,
-#     walletkit_pb2, walletkit_pb2_grpc,
-#     walletunlocker_pb2, walletunlocker_pb2_grpc,
-#     invoices_pb2, invoices_pb2_grpc
-# )
 
 from lndgrpc.compiled import (
     rpc_pb2 as ln,
@@ -91,7 +82,6 @@ def generate_credentials(cert, macaroon):
     metadata_plugin = MacaroonMetadataPlugin(macaroon)
     auth_creds = grpc.metadata_call_credentials(metadata_plugin)
 
-    # TODO: look into ssl credentials
     # combine the cert credentials and the macaroon auth credentials
     # such that every call is properly encrypted and authenticated
     return grpc.composite_channel_credentials(cert_creds, auth_creds)

@@ -7,7 +7,7 @@ from time import sleep
 from datetime import datetime, timedelta
 
 # Pip installed Modules
-from lndgrpc import LNDClient
+from lndgrpc import AsyncLNDClient
 from protobuf_to_dict import protobuf_to_dict
 
 credential_path = os.getenv("LND_CRED_PATH", None)
@@ -23,14 +23,10 @@ node_ip = os.getenv("LND_NODE_IP")
 tls = str(credential_path.joinpath("tls.cert").absolute())
 
 
-lnd = LNDClient(
+lnd = AsyncLNDClient(
 	f"{node_ip}:10009",
 	macaroon_filepath=mac,
 	cert_filepath=tls
 )
 
 lnd.get_info()
-
-lnd.new_address()
-
-lnd.wallet_balance()
