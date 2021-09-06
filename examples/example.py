@@ -31,6 +31,10 @@ lnd = LNDClient(
 
 lnd.get_info()
 
+
+for i in lnd.channel_acceptor():
+	print(i)
+
 lnd.new_address()
 
 lnd.wallet_balance()

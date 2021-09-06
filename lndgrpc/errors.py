@@ -24,8 +24,29 @@ def handle_rpc_errors(fnc):
             # running, but the RPC server is not active yet (only
             # WalletUnlocker server active) and most likely this
             # is because of an encrypted wallet.
+            exc.code().value
+            exc.details()
             if exc.code() == grpc.StatusCode.UNIMPLEMENTED:
-                raise WalletEncryptedError from None
+                # raise WalletEncryptedError from None
+                print("unimplemented")
+                raise exc
+            elif exc.code() == grpc.StatusCode.UNAVAILABLE:
+                print("unavailable")
+                raise exc
+            elif exc.code() == grpc.StatusCode.UNKNOWN and exc.details() == "wallet locked, unlock it to enable full RPC access":
+                print("WALLET IS LOCKED!")
+                raise exc
+            elif exc.code() == grpc.StatusCode.UNKNOWN:
+                print("unknown")
+                print(f"ERROR MESSAGE: {exc.details()}")
+            elif exc.code() == grpc.StatusCode.NOT_FOUND:
+                print("NOT FOUND")
+                print(f"ERROR MESSAGE: {exc.details()}")
             else:
                 raise exc
+                return exc
+        except Exception as exc:
+            print("unknown exception")
+            print(exc)
+
     return wrapper

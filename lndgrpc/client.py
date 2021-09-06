@@ -444,6 +444,14 @@ class LNDClient(BaseClient):
         response = self._ln_stub.SendCoins(request)
         return response
 
+    @handle_rpc_errors
+    def channel_acceptor(self, **kwargs):
+        """Bi-directional streaming api to accept or reject channels"""
+        # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
+        request = ln.ChannelAcceptResponse(**kwargs)
+        response = self._ln_stub.ChannelAcceptor(request)
+        return response        
+
     # INVOICES
     @handle_rpc_errors
     def subscribe_single_invoice(self, r_hash):
