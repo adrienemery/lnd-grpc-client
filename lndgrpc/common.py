@@ -73,10 +73,12 @@ def get_macaroon(network='mainnet', filepath=None):
 
 
 def generate_credentials(cert, macaroon):
-    """Create composite channel credentials using cert and macaroon metatdata"""
+    """Create composite channel credentials using cert and macaroon metadata"""
     # create cert credentials from the tls.cert file
-    cert_creds = grpc.ssl_channel_credentials(cert)
-    # cert_creds = grpc.ssl_channel_credentials()
+    if os.getenv("LND_HTTPS_TLS"):
+        cert_creds = grpc.ssl_channel_credentials()
+    else:
+        cert_creds = grpc.ssl_channel_credentials(cert)
 
     # build meta data credentials
     metadata_plugin = MacaroonMetadataPlugin(macaroon)

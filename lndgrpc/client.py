@@ -447,10 +447,28 @@ class LNDClient(BaseClient):
     @handle_rpc_errors
     def channel_acceptor(self, **kwargs):
         """Bi-directional streaming api to accept or reject channels"""
+        from time import sleep
+        def request_generator():
+                # Initialization code here.
+                while True:
+                    # Parameters here can be set as arguments to the generator.
+                    # print(a)
+                    print("test")
+                    request = ln.ChannelAcceptResponse(
+                        accept=False,
+                        error="try again later, walalalololo",
+                        # pending_chan_id
+                    )
+                    print(request.pending_chan_id)
+                    print(request.error)
+                    sleep(5)
+                    yield request
         # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
-        request = ln.ChannelAcceptResponse(**kwargs)
-        response = self._ln_stub.ChannelAcceptor(request)
-        return response        
+        # request = ln.ChannelAcceptResponse(**kwargs)
+        request_iterable = request_generator()
+        for response in self._ln_stub.ChannelAcceptor(request_iterable):
+            print(response)
+        return response
 
     # INVOICES
     @handle_rpc_errors

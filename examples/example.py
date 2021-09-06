@@ -30,7 +30,7 @@ lnd = LNDClient(
 )
 
 lnd.get_info()
-
+lnd.channel_acceptor()
 
 for i in lnd.channel_acceptor():
 	print(i)
