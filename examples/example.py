@@ -26,7 +26,7 @@ tls = str(credential_path.joinpath("tls.cert").absolute())
 lnd = LNDClient(
 	f"{node_ip}:10009",
 	macaroon_filepath=mac,
-	cert_filepath=tls
+	no_tls=True
 )
 
 lnd.get_info()

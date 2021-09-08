@@ -2,6 +2,8 @@ import binascii
 import platform
 import os
 import grpc
+import sys
+
 
 from lndgrpc.compiled import (
     rpc_pb2 as ln,
@@ -56,16 +58,14 @@ def get_cert(filepath=None):
     return cert
 
 
-def get_macaroon(network='mainnet', filepath=None):
+def get_macaroon(filepath=None):
     """Read and decode macaroon from file
 
     The macaroon is decoded into a hex string and returned.
     """
     if filepath is None:
-        if admin:
-            filepath = os.path.expanduser(ADMIN_MACAROON_BASE_FILEPATH.format(network))
-        else:
-            filepath = os.path.expanduser(READ_ONLY_MACAROON_BASE_FILEPATH.format(network))
+        print("Must specify macaroon_filepath")
+        sys.exit(1)
 
     with open(filepath, 'rb') as f:
         macaroon_bytes = f.read()
@@ -75,10 +75,10 @@ def get_macaroon(network='mainnet', filepath=None):
 def generate_credentials(cert, macaroon):
     """Create composite channel credentials using cert and macaroon metadata"""
     # create cert credentials from the tls.cert file
-    if os.getenv("LND_HTTPS_TLS"):
-        cert_creds = grpc.ssl_channel_credentials()
-    else:
-        cert_creds = grpc.ssl_channel_credentials(cert)
+    # if os.getenv("LND_HTTPS_TLS"):
+    #     cert_creds = grpc.ssl_channel_credentials()
+    # else:
+    cert_creds = grpc.ssl_channel_credentials(cert)
 
     # build meta data credentials
     metadata_plugin = MacaroonMetadataPlugin(macaroon)
@@ -93,7 +93,7 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
     """Metadata plugin to include macaroon in metadata of each RPC request"""
 
     def __init__(self, macaroon):
-        self.macaroon = macaroon
+        self.macaroon = macaroo
 
     def __call__(self, context, callback):
         callback([('macaroon', self.macaroon)], None)
@@ -102,17 +102,21 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
 class BaseClient(object):
     grpc_module = grpc
 
-    def __init__(self, ip_address='127.0.0.1:10009', network='mainnet', admin=False, cert=None,
-                 cert_filepath=None, macaroon=None, macaroon_filepath=None):
-
+    def __init__(
+        self,
+        ip_address='127.0.0.1:10009',
+        cert=None,
+        cert_filepath=None,
+        no_tls=False,
+        macaroon=None,
+        macaroon_filepath=None
+    ):
         if macaroon is None:
-            macaroon = get_macaroon(network=network, filepath=macaroon_filepath)
+            macaroon = get_macaroon(filepath=macaroon_filepath)
 
-        if cert is None:
+        if cert is None and no_tls == False:
             cert = get_cert(cert_filepath)
 
-        self.admin = admin
-        self.network = network
         self._credentials = generate_credentials(cert, macaroon)
         self.ip_address = ip_address
 
