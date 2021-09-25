@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z%github.com/lightningnetwork/lnd/lnrpc',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n#lndgrpc/compiled/stateservice.proto\x12\x05lnrpc\"\x17\n\x15SubscribeStateRequest\";\n\x16SubscribeStateResponse\x12!\n\x05state\x18\x01 \x01(\x0e\x32\x12.lnrpc.WalletState\"\x11\n\x0fGetStateRequest\"5\n\x10GetStateResponse\x12!\n\x05state\x18\x01 \x01(\x0e\x32\x12.lnrpc.WalletState*`\n\x0bWalletState\x12\x10\n\x0cNON_EXISTING\x10\x00\x12\n\n\x06LOCKED\x10\x01\x12\x0c\n\x08UNLOCKED\x10\x02\x12\x0e\n\nRPC_ACTIVE\x10\x03\x12\x15\n\x10WAITING_TO_START\x10\xff\x01\x32\x95\x01\n\x05State\x12O\n\x0eSubscribeState\x12\x1c.lnrpc.SubscribeStateRequest\x1a\x1d.lnrpc.SubscribeStateResponse0\x01\x12;\n\x08GetState\x12\x16.lnrpc.GetStateRequest\x1a\x17.lnrpc.GetStateResponseB\'Z%github.com/lightningnetwork/lnd/lnrpcb\x06proto3'
+  serialized_pb=b'\n#lndgrpc/compiled/stateservice.proto\x12\x05lnrpc\"\x17\n\x15SubscribeStateRequest\";\n\x16SubscribeStateResponse\x12!\n\x05state\x18\x01 \x01(\x0e\x32\x12.lnrpc.WalletState\"\x11\n\x0fGetStateRequest\"5\n\x10GetStateResponse\x12!\n\x05state\x18\x01 \x01(\x0e\x32\x12.lnrpc.WalletState*s\n\x0bWalletState\x12\x10\n\x0cNON_EXISTING\x10\x00\x12\n\n\x06LOCKED\x10\x01\x12\x0c\n\x08UNLOCKED\x10\x02\x12\x0e\n\nRPC_ACTIVE\x10\x03\x12\x11\n\rSERVER_ACTIVE\x10\x04\x12\x15\n\x10WAITING_TO_START\x10\xff\x01\x32\x95\x01\n\x05State\x12O\n\x0eSubscribeState\x12\x1c.lnrpc.SubscribeStateRequest\x1a\x1d.lnrpc.SubscribeStateResponse0\x01\x12;\n\x08GetState\x12\x16.lnrpc.GetStateRequest\x1a\x17.lnrpc.GetStateResponseB\'Z%github.com/lightningnetwork/lnd/lnrpcb\x06proto3'
 )
 
 _WALLETSTATE = _descriptor.EnumDescriptor(
@@ -51,7 +51,12 @@ _WALLETSTATE = _descriptor.EnumDescriptor(
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='WAITING_TO_START', index=4, number=255,
+      name='SERVER_ACTIVE', index=4, number=4,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='WAITING_TO_START', index=5, number=255,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
@@ -59,7 +64,7 @@ _WALLETSTATE = _descriptor.EnumDescriptor(
   containing_type=None,
   serialized_options=None,
   serialized_start=206,
-  serialized_end=302,
+  serialized_end=321,
 )
 _sym_db.RegisterEnumDescriptor(_WALLETSTATE)
 
@@ -68,6 +73,7 @@ NON_EXISTING = 0
 LOCKED = 1
 UNLOCKED = 2
 RPC_ACTIVE = 3
+SERVER_ACTIVE = 4
 WAITING_TO_START = 255
 
 
@@ -232,8 +238,8 @@ _STATE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=305,
-  serialized_end=454,
+  serialized_start=324,
+  serialized_end=473,
   methods=[
   _descriptor.MethodDescriptor(
     name='SubscribeState',

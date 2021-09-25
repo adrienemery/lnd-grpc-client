@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "lndgrpc/compiled/rpc.proto";
+import "lndgrpc/compiled/lightning.proto";
 
 package routerrpc;
 
@@ -607,6 +607,8 @@ message ForwardFailEvent {
 }
 
 message SettleEvent {
+    // The revealed preimage.
+    bytes preimage = 1;
 }
 
 message LinkFailEvent {

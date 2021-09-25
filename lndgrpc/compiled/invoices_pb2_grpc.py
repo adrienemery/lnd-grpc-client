@@ -3,7 +3,7 @@
 import grpc
 
 from lndgrpc.compiled import invoices_pb2 as lndgrpc_dot_compiled_dot_invoices__pb2
-from lndgrpc.compiled import rpc_pb2 as lndgrpc_dot_compiled_dot_rpc__pb2
+from lndgrpc.compiled import lightning_pb2 as lndgrpc_dot_compiled_dot_lightning__pb2
 
 
 class InvoicesStub(object):
@@ -20,7 +20,7 @@ class InvoicesStub(object):
         self.SubscribeSingleInvoice = channel.unary_stream(
                 '/invoicesrpc.Invoices/SubscribeSingleInvoice',
                 request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
-                response_deserializer=lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.FromString,
+                response_deserializer=lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.FromString,
                 )
         self.CancelInvoice = channel.unary_unary(
                 '/invoicesrpc.Invoices/CancelInvoice',
@@ -88,7 +88,7 @@ def add_InvoicesServicer_to_server(servicer, server):
             'SubscribeSingleInvoice': grpc.unary_stream_rpc_method_handler(
                     servicer.SubscribeSingleInvoice,
                     request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.FromString,
-                    response_serializer=lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.SerializeToString,
+                    response_serializer=lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.SerializeToString,
             ),
             'CancelInvoice': grpc.unary_unary_rpc_method_handler(
                     servicer.CancelInvoice,
@@ -130,7 +130,7 @@ class Invoices(object):
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/invoicesrpc.Invoices/SubscribeSingleInvoice',
             lndgrpc_dot_compiled_dot_invoices__pb2.SubscribeSingleInvoiceRequest.SerializeToString,
-            lndgrpc_dot_compiled_dot_rpc__pb2.Invoice.FromString,
+            lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

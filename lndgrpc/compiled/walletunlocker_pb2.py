@@ -11,7 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from lndgrpc.compiled import rpc_pb2 as lndgrpc_dot_compiled_dot_rpc__pb2
+from lndgrpc.compiled import lightning_pb2 as lndgrpc_dot_compiled_dot_lightning__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,9 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z%github.com/lightningnetwork/lnd/lnrpc',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n%lndgrpc/compiled/walletunlocker.proto\x12\x05lnrpc\x1a\x1alndgrpc/compiled/rpc.proto\"A\n\x0eGenSeedRequest\x12\x19\n\x11\x61\x65zeed_passphrase\x18\x01 \x01(\x0c\x12\x14\n\x0cseed_entropy\x18\x02 \x01(\x0c\"H\n\x0fGenSeedResponse\x12\x1c\n\x14\x63ipher_seed_mnemonic\x18\x01 \x03(\t\x12\x17\n\x0f\x65nciphered_seed\x18\x02 \x01(\x0c\"\xca\x01\n\x11InitWalletRequest\x12\x17\n\x0fwallet_password\x18\x01 \x01(\x0c\x12\x1c\n\x14\x63ipher_seed_mnemonic\x18\x02 \x03(\t\x12\x19\n\x11\x61\x65zeed_passphrase\x18\x03 \x01(\x0c\x12\x17\n\x0frecovery_window\x18\x04 \x01(\x05\x12\x32\n\x0f\x63hannel_backups\x18\x05 \x01(\x0b\x32\x19.lnrpc.ChanBackupSnapshot\x12\x16\n\x0estateless_init\x18\x06 \x01(\x08\",\n\x12InitWalletResponse\x12\x16\n\x0e\x61\x64min_macaroon\x18\x01 \x01(\x0c\"\x93\x01\n\x13UnlockWalletRequest\x12\x17\n\x0fwallet_password\x18\x01 \x01(\x0c\x12\x17\n\x0frecovery_window\x18\x02 \x01(\x05\x12\x32\n\x0f\x63hannel_backups\x18\x03 \x01(\x0b\x32\x19.lnrpc.ChanBackupSnapshot\x12\x16\n\x0estateless_init\x18\x04 \x01(\x08\"\x16\n\x14UnlockWalletResponse\"~\n\x15\x43hangePasswordRequest\x12\x18\n\x10\x63urrent_password\x18\x01 \x01(\x0c\x12\x14\n\x0cnew_password\x18\x02 \x01(\x0c\x12\x16\n\x0estateless_init\x18\x03 \x01(\x08\x12\x1d\n\x15new_macaroon_root_key\x18\x04 \x01(\x08\"0\n\x16\x43hangePasswordResponse\x12\x16\n\x0e\x61\x64min_macaroon\x18\x01 \x01(\x0c\x32\xa5\x02\n\x0eWalletUnlocker\x12\x38\n\x07GenSeed\x12\x15.lnrpc.GenSeedRequest\x1a\x16.lnrpc.GenSeedResponse\x12\x41\n\nInitWallet\x12\x18.lnrpc.InitWalletRequest\x1a\x19.lnrpc.InitWalletResponse\x12G\n\x0cUnlockWallet\x12\x1a.lnrpc.UnlockWalletRequest\x1a\x1b.lnrpc.UnlockWalletResponse\x12M\n\x0e\x43hangePassword\x12\x1c.lnrpc.ChangePasswordRequest\x1a\x1d.lnrpc.ChangePasswordResponseB\'Z%github.com/lightningnetwork/lnd/lnrpcb\x06proto3'
+  serialized_pb=b'\n%lndgrpc/compiled/walletunlocker.proto\x12\x05lnrpc\x1a lndgrpc/compiled/lightning.proto\"A\n\x0eGenSeedRequest\x12\x19\n\x11\x61\x65zeed_passphrase\x18\x01 \x01(\x0c\x12\x14\n\x0cseed_entropy\x18\x02 \x01(\x0c\"H\n\x0fGenSeedResponse\x12\x1c\n\x14\x63ipher_seed_mnemonic\x18\x01 \x03(\t\x12\x17\n\x0f\x65nciphered_seed\x18\x02 \x01(\x0c\"\x97\x02\n\x11InitWalletRequest\x12\x17\n\x0fwallet_password\x18\x01 \x01(\x0c\x12\x1c\n\x14\x63ipher_seed_mnemonic\x18\x02 \x03(\t\x12\x19\n\x11\x61\x65zeed_passphrase\x18\x03 \x01(\x0c\x12\x17\n\x0frecovery_window\x18\x04 \x01(\x05\x12\x32\n\x0f\x63hannel_backups\x18\x05 \x01(\x0b\x32\x19.lnrpc.ChanBackupSnapshot\x12\x16\n\x0estateless_init\x18\x06 \x01(\x08\x12\x1b\n\x13\x65xtended_master_key\x18\x07 \x01(\t\x12.\n&extended_master_key_birthday_timestamp\x18\x08 \x01(\x04\",\n\x12InitWalletResponse\x12\x16\n\x0e\x61\x64min_macaroon\x18\x01 \x01(\x0c\"\x93\x01\n\x13UnlockWalletRequest\x12\x17\n\x0fwallet_password\x18\x01 \x01(\x0c\x12\x17\n\x0frecovery_window\x18\x02 \x01(\x05\x12\x32\n\x0f\x63hannel_backups\x18\x03 \x01(\x0b\x32\x19.lnrpc.ChanBackupSnapshot\x12\x16\n\x0estateless_init\x18\x04 \x01(\x08\"\x16\n\x14UnlockWalletResponse\"~\n\x15\x43hangePasswordRequest\x12\x18\n\x10\x63urrent_password\x18\x01 \x01(\x0c\x12\x14\n\x0cnew_password\x18\x02 \x01(\x0c\x12\x16\n\x0estateless_init\x18\x03 \x01(\x08\x12\x1d\n\x15new_macaroon_root_key\x18\x04 \x01(\x08\"0\n\x16\x43hangePasswordResponse\x12\x16\n\x0e\x61\x64min_macaroon\x18\x01 \x01(\x0c\x32\xa5\x02\n\x0eWalletUnlocker\x12\x38\n\x07GenSeed\x12\x15.lnrpc.GenSeedRequest\x1a\x16.lnrpc.GenSeedResponse\x12\x41\n\nInitWallet\x12\x18.lnrpc.InitWalletRequest\x1a\x19.lnrpc.InitWalletResponse\x12G\n\x0cUnlockWallet\x12\x1a.lnrpc.UnlockWalletRequest\x1a\x1b.lnrpc.UnlockWalletResponse\x12M\n\x0e\x43hangePassword\x12\x1c.lnrpc.ChangePasswordRequest\x1a\x1d.lnrpc.ChangePasswordResponseB\'Z%github.com/lightningnetwork/lnd/lnrpcb\x06proto3'
   ,
-  dependencies=[lndgrpc_dot_compiled_dot_rpc__pb2.DESCRIPTOR,])
+  dependencies=[lndgrpc_dot_compiled_dot_lightning__pb2.DESCRIPTOR,])
 
 
 
@@ -61,8 +61,8 @@ _GENSEEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=76,
-  serialized_end=141,
+  serialized_start=82,
+  serialized_end=147,
 )
 
 
@@ -100,8 +100,8 @@ _GENSEEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=143,
-  serialized_end=215,
+  serialized_start=149,
+  serialized_end=221,
 )
 
 
@@ -155,6 +155,20 @@ _INITWALLETREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='extended_master_key', full_name='lnrpc.InitWalletRequest.extended_master_key', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='extended_master_key_birthday_timestamp', full_name='lnrpc.InitWalletRequest.extended_master_key_birthday_timestamp', index=7,
+      number=8, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -167,8 +181,8 @@ _INITWALLETREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=218,
-  serialized_end=420,
+  serialized_start=224,
+  serialized_end=503,
 )
 
 
@@ -199,8 +213,8 @@ _INITWALLETRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=422,
-  serialized_end=466,
+  serialized_start=505,
+  serialized_end=549,
 )
 
 
@@ -252,8 +266,8 @@ _UNLOCKWALLETREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=469,
-  serialized_end=616,
+  serialized_start=552,
+  serialized_end=699,
 )
 
 
@@ -277,8 +291,8 @@ _UNLOCKWALLETRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=618,
-  serialized_end=640,
+  serialized_start=701,
+  serialized_end=723,
 )
 
 
@@ -330,8 +344,8 @@ _CHANGEPASSWORDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=642,
-  serialized_end=768,
+  serialized_start=725,
+  serialized_end=851,
 )
 
 
@@ -362,12 +376,12 @@ _CHANGEPASSWORDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=770,
-  serialized_end=818,
+  serialized_start=853,
+  serialized_end=901,
 )
 
-_INITWALLETREQUEST.fields_by_name['channel_backups'].message_type = lndgrpc_dot_compiled_dot_rpc__pb2._CHANBACKUPSNAPSHOT
-_UNLOCKWALLETREQUEST.fields_by_name['channel_backups'].message_type = lndgrpc_dot_compiled_dot_rpc__pb2._CHANBACKUPSNAPSHOT
+_INITWALLETREQUEST.fields_by_name['channel_backups'].message_type = lndgrpc_dot_compiled_dot_lightning__pb2._CHANBACKUPSNAPSHOT
+_UNLOCKWALLETREQUEST.fields_by_name['channel_backups'].message_type = lndgrpc_dot_compiled_dot_lightning__pb2._CHANBACKUPSNAPSHOT
 DESCRIPTOR.message_types_by_name['GenSeedRequest'] = _GENSEEDREQUEST
 DESCRIPTOR.message_types_by_name['GenSeedResponse'] = _GENSEEDRESPONSE
 DESCRIPTOR.message_types_by_name['InitWalletRequest'] = _INITWALLETREQUEST
@@ -444,8 +458,8 @@ _WALLETUNLOCKER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=821,
-  serialized_end=1114,
+  serialized_start=904,
+  serialized_end=1197,
   methods=[
   _descriptor.MethodDescriptor(
     name='GenSeed',

@@ -6,8 +6,8 @@ import sys
 
 
 from lndgrpc.compiled import (
-    rpc_pb2 as ln,
-    rpc_pb2_grpc as lnrpc,
+    lightning_pb2 as ln,
+    lightning_pb2_grpc as lnrpc,
     router_pb2 as router,
     router_pb2_grpc as routerrpc,
     verrpc_pb2 as ver,
