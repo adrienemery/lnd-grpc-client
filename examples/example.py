@@ -22,11 +22,13 @@ else:
 node_ip = os.getenv("LND_NODE_IP")
 tls = str(credential_path.joinpath("tls.cert").absolute())
 
+lnd_ip_port = f"{node_ip}:10009"
 
 lnd = LNDClient(
-	f"{node_ip}:10009",
+	lnd_ip_port,
 	macaroon_filepath=mac,
-	no_tls=True
+	cert_filepath=tls
+	# no_tls=True
 )
 
 lnd.get_info()

@@ -51,7 +51,7 @@ class LNDClient(BaseClient):
     @handle_rpc_errors
     def list_unspent(self, min_confs=0,max_confs=100000, **kwargs):
         # Default to these min/max for convenience
-        request = walletkit.ListUnspentRequest(min_confs=0, max_confs=100000, **kwargs)
+        request = walletkit.ListUnspentRequest(min_confs=min_confs, max_confs=max_confs, **kwargs)
         response = self._walletkit_stub.ListUnspent(request)
         return response
 

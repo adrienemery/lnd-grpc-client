@@ -93,7 +93,7 @@ class MacaroonMetadataPlugin(grpc.AuthMetadataPlugin):
     """Metadata plugin to include macaroon in metadata of each RPC request"""
 
     def __init__(self, macaroon):
-        self.macaroon = macaroo
+        self.macaroon = macaroon
 
     def __call__(self, context, callback):
         callback([('macaroon', self.macaroon)], None)
