@@ -1,6 +1,6 @@
 from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient, invoices
 from .errors import handle_rpc_errors
-
+from datetime import datetime
 
 class LNDClient(BaseClient):
 
@@ -236,10 +236,16 @@ class LNDClient(BaseClient):
             **kwargs
         )
         last_response = None
-        for response in self._ln_stub.OpenChannel(request):
-            print(response)
-            last_response = response
-        return response
+        start = datetime.now().timestamp()
+        for r in self._ln_stub.OpenChannel(request, timeout=5):
+            last_response = r
+            print(last_response)
+            if datetime.now().timestamp() > 5:
+                return last_response
+            
+        #     print(response)
+        #     last_response = response
+        # return response
 
     @handle_rpc_errors
     def list_invoices(self, **kwargs):

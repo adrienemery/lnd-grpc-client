@@ -31,6 +31,13 @@ lnd = LNDClient(
 	# no_tls=True
 )
 
+lnd = LNDClient(
+	lnd_ip_port,
+	macaroon_filepath=mac,
+	# cert_filepath=tls
+	no_tls=True
+)
+
 lnd.get_info()
 lnd.channel_acceptor()
 

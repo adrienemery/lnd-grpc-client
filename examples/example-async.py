@@ -5,6 +5,7 @@ import os
 import base64
 from time import sleep
 from datetime import datetime, timedelta
+import asyncio
 
 # Pip installed Modules
 from lndgrpc import AsyncLNDClient
@@ -29,4 +30,4 @@ lnd = AsyncLNDClient(
 	cert_filepath=tls
 )
 
-lnd.get_info()
+asyncio.run(lnd.get_info())

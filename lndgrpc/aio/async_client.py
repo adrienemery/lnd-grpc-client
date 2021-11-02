@@ -39,15 +39,15 @@ class AsyncLNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    async def open_channel(self, node_pubkey, local_funding_amount=None, push_sat=None, private=False):
+    async def open_channel(self, node_pubkey, local_funding_amount, sat_per_vbyte, **kwargs):
         """Open a channel to an existing peer"""
         request = ln.OpenChannelRequest(
-            node_pubkey_string=node_pubkey,
+            node_pubkey=bytes.fromhex(node_pubkey),
             local_funding_amount=local_funding_amount,
-            push_sat=push_sat,
-            private=private
+            # sat_per_vbyte=sat_per_vbyte,
+            **kwargs
         )
-        response = await self._ln_stub.OpenChannel(request)
+        response = [ print(x.psbt_fund.psbt) async for x in self._ln_stub.OpenChannel(request)]
         return response
 
     @handle_rpc_errors
