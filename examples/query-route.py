@@ -35,17 +35,12 @@ lnd = LNDClient(
 
 mypk = lnd.get_info().identity_pubkey
 
+ignored = []
+
 # from is a python keyword, so we gotta do something fancy here with kwargs
 kwargs = {}
-kwargs["from"] = bytes.fromhex("03bec0f5799c4ae2d0fa8943f089324bddd6cbbbb6178f7ac2f2588696280e6587")
-kwargs["to"] = bytes.fromhex("02ad6fb8d693dc1e4569bcedefadf5f72a931ae027dc0f0c544b34c1c6f3b9a02b")
-ignored = [
-    ln.NodePair(**kwargs),
-]
-
-kwargs = {}
-kwargs["from"] = bytes.fromhex("03bec0f5799c4ae2d0fa8943f089324bddd6cbbbb6178f7ac2f2588696280e6587")
-kwargs["to"] = bytes.fromhex("037659a0ac8eb3b8d0a720114efc861d3a940382dcfa1403746b4f8f6b2e8810ba")
+kwargs["from"] = bytes.fromhex("0360a41eb8c3fe09782ef6c984acbb003b0e1ebc4fe10ae01bab0e80d76618c8f4")
+kwargs["to"] = bytes.fromhex("03037dc08e9ac63b82581f79b662a4d0ceca8a8ca162b1af3551595b8f2d97b70a")
 ignored.append(ln.NodePair(**kwargs))
 
 fee_limit = ln.FeeLimit(fixed=11)
@@ -65,8 +60,8 @@ for i in range(10,1000,5):
         # source_pub_key=,
         ignored_pairs=ignored,
         cltv_limit=144,
-        outgoing_chan_id=695801744448487425,
-        last_hop_pubkey=bytes.fromhex("03f9dc7982e336c1d4115459d59f40589db9db1a70adf741ed96584b79f60612cb"),
+        # outgoing_chan_id=695801744448487425,
+        last_hop_pubkey=bytes.fromhex("037659a0ac8eb3b8d0a720114efc861d3a940382dcfa1403746b4f8f6b2e8810ba"),
     )
     try:
         print(r.routes[0].total_fees)

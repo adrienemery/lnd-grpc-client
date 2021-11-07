@@ -1,4 +1,4 @@
-pk = ""
+pk = "0219426a5b641ed05ee639bfda80c1e0199182944977686d1dd1ea2dcb89e5dd55"
 
 node_info = ln.lnd.get_node_info(pk, include_channels=False)
 all_addresses = node_info.node.addresses
