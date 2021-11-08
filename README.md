@@ -11,7 +11,7 @@ This is a wrapper around the default grpc interface that handles setting up cred
 
 ## Installation
 ```bash
-pip install py-lnd-grpc
+pip install lnd-grpc-client
 
 # Test it is working
 # Set these values as needed!
@@ -62,6 +62,12 @@ print('Listening for invoices...')
 for invoice in lnd.subscribe_invoices():
     print(invoice)
 ```
+
+## Advanced Usage
+Go in the `examples` folder for some advanced examples including:
+- WIP: Open channel using PSBT
+- Keysend Payments
+- Reconnect to your peers
 
 ### Async
 
