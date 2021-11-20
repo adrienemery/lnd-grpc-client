@@ -10,7 +10,7 @@ from hashlib import sha256
 import secrets
 
 # Pip installed Modules
-from lndgrpc import LNDClient
+from lndgrpc.client import LNDClient
 from lndgrpc.client import ln
 from protobuf_to_dict import protobuf_to_dict
 
@@ -21,7 +21,7 @@ if credential_path == None:
 else:
 	credential_path = Path(credential_path)
 	mac = str(credential_path.joinpath("admin.macaroon").absolute())
-	
+
 
 node_ip = os.getenv("LND_NODE_IP")
 tls = str(credential_path.joinpath("tls.cert").absolute())
