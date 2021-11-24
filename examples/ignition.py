@@ -58,7 +58,6 @@ FINAL_PAYMENT = True
 
 file = 'PATHTO/pubkey.txt'
 
-########ITEMS TO CHANGE#################
 
 
 
@@ -108,7 +107,7 @@ for idx, pubkeyInfo in enumerate(pubkeysReorderedForIgnition):
                 channelInfo = channel
                 if pubkey == pubkeysReorderedForIgnition[-1].split(',')[0]:
                     outgoing_chan_id = channelID
-                exit
+                break
 
         if hasChannel:
             #Check if Channel is disabled
