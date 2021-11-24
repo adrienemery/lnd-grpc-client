@@ -73,7 +73,7 @@ for idx, pubkeyInfo in enumerate(pubkeys):
             reorder_id = idx + 1 % len(pubkeys)
             pubkeysReorderedForIgnition = pubkeys[reorder_id:len(pubkeys)] + pubkeys[:reorder_id]
             #print("\n".join(map(str, pubkeysReorderedForIgnition)))
-            exit
+            break
 
 #Check whether each Channel has a channel with the node
 
