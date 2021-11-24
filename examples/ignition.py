@@ -12,33 +12,59 @@ import secrets
 from yachalk import chalk
 
 
-
 # Pip installed Modules
 from lndgrpc.client import LNDClient
 from lndgrpc.client import ln
 from protobuf_to_dict import protobuf_to_dict
 
-TLS_FILEPATH = os.path.expanduser('/Users/ziggie/working_freetime/lnd-grpc-client/lnd_credentials/tls.cert')
-ADMIN_MACAROON_BASE_FILEPATH = '/Users/ziggie/working_freetime/lnd-grpc-client/lnd_credentials/admin.macaroon'
-READ_ONLY_MACAROON_BASE_FILEPATH = '/Users/ziggie/working_freetime/lnd-grpc-client/lnd_credentials/readonly.macaroon'
-NODE_IP = "192.168.178.22"
+credential_path = os.getenv("LND_CRED_PATH", None)
+if credential_path == None:
+	credential_path = Path.home().joinpath(".lnd")
+	mac = str(credential_path.joinpath("data/chain/bitcoin/mainnet/admin.macaroon").absolute())
+else:
+	credential_path = Path(credential_path)
+	mac = str(credential_path.joinpath("admin.macaroon").absolute())
 
+
+node_ip = os.getenv("LND_NODE_IP")
+node_port = os.getenv("LND_NODE_PORT")
+tls = str(credential_path.joinpath("tls.cert").absolute())
+
+lnd_ip_port = f"{node_ip}:{node_port}"
 
 lnd = LNDClient(
-	f"{NODE_IP}:10009",
-    macaroon_filepath=ADMIN_MACAROON_BASE_FILEPATH,
-    cert_filepath=TLS_FILEPATH
+	lnd_ip_port,
+	macaroon_filepath=mac,
+	cert_filepath=tls
+	# no_tls=True
 )
 
 mypk = lnd.get_info().identity_pubkey
 myalias = lnd.get_info().alias
+pubkeysReorderedForIgnition = []
+
+########ITEMS TO CHANGE#################
+#CHANGE THE AMOUNT
+AMOUNT_SATS = 1
+#IF FALSE, Payment will only queried
+FINAL_PAYMENT = True
+
+#This script parses a pubkey txt file with the following structures pubkey,@telegramname
+#02b2d5b1e3167287ea4d1835e5272d99f7beb8c283f7a27d15198270630d3eb23a,@hippiesabotage
+#034997db2fa4563a86b0a06103944ad8eb5c2ff013e58afaa90f3de8a7bfd2b6d6,@ECB
+#02826f50035eca93c7ebfbad4f9621a8eb201f4e28f994db5b6b5af32a65efb6b9,@Anathos
+#0258adfbecc79c65f5d32ff0d7e9da6dc5e765140a8e8de7ed5ca0c6a4f6d37fb3,@altbierjupp
+#02bc320249b608a53a76cf3cbd448fdd3ab8f3766f96e8649c2edc26cf03bf8277,@spast
+
+file = 'PATHTO/pubkey.txt'
+
+########ITEMS TO CHANGE#################
 
 
-file = '/Users/ziggie/working_freetime/lnd-grpc-client/pubkey.txt'
+
 with open(file) as file:
     pubkeys = file.read().splitlines()
 
-pubkeysReorderedForIgnition = []
 #First Reorder Pubkeys so that my node is the first
 for idx, pubkeyInfo in enumerate(pubkeys):
         # pubkeys formatis <pubkey>,<telegram username> to be able to mimic the manual pubkey overview with usernames
@@ -47,7 +73,7 @@ for idx, pubkeyInfo in enumerate(pubkeys):
         if pubkey[0] == mypk:
             reorder_id = idx + 1 % len(pubkeys)
             pubkeysReorderedForIgnition = pubkeys[reorder_id:len(pubkeys)] + pubkeys[:reorder_id]
-            print("\n".join(map(str, pubkeysReorderedForIgnition)))
+            #print("\n".join(map(str, pubkeysReorderedForIgnition)))
             exit
 
 #Check whether each Channel has a channel with the node
@@ -107,8 +133,32 @@ for idx, pubkeyInfo in enumerate(pubkeysReorderedForIgnition):
     except Exception as error:
         print(error)
 
-if True:
+if rofIgnitionPossible:
 
-    amt_msat = 1000
-    route = lnd.build_route(amt_msat,outgoing_chan_id,hop_pubkeys)
-    print(route)
+	print(chalk.green("Ignition in 3 2 1: 🚀"))
+
+	route = lnd.build_route(AMOUNT_SATS*1000,outgoing_chan_id,hop_pubkeys).route
+
+
+
+	inv = lnd.add_invoice(AMOUNT_SATS,"rebalance")
+	pr = lnd.decode_pay_req(inv.payment_request)
+
+
+	if FINAL_PAYMENT:
+		route.hops[-1].mpp_record.total_amt_msat = pr.num_msat
+		route.hops[-1].mpp_record.payment_addr = pr.payment_addr
+
+
+	payment = lnd.send_to_route(
+	    pay_hash = bytes.fromhex(pr.payment_hash),
+	    route=route
+	)
+	#print(payment.status)
+	if (int(payment.status) == 2):
+		print(chalk.red("FAILED 🚑 ❌"))
+		print(chalk.red(payment.failure))
+		print(chalk.red(payment.route))
+	elif (int(payment.status) == 1):
+		print(chalk.green("SUCCESS 🍻"))
+		print(chalk.green(payment.route))
