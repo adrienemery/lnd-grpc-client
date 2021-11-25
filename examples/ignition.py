@@ -39,15 +39,11 @@ lnd = LNDClient(
 	# no_tls=True
 )
 
+
 mypk = lnd.get_info().identity_pubkey
 myalias = lnd.get_info().alias
-pubkeysReorderedForIgnition = []
 
-########ITEMS TO CHANGE#################
-#CHANGE THE AMOUNT
-AMOUNT_SATS = 1
-#IF FALSE, Payment will only queried
-FINAL_PAYMENT = True
+
 
 #This script parses a pubkey txt file with the following structures pubkey,@telegramname
 #02b2d5b1e3167287ea4d1835e5272d99f7beb8c283f7a27d15198270630d3eb23a,@hippiesabotage
@@ -56,30 +52,46 @@ FINAL_PAYMENT = True
 #0258adfbecc79c65f5d32ff0d7e9da6dc5e765140a8e8de7ed5ca0c6a4f6d37fb3,@altbierjupp
 #02bc320249b608a53a76cf3cbd448fdd3ab8f3766f96e8649c2edc26cf03bf8277,@spast
 
+pubkeys = []
+
 file = 'PATHTO/pubkey.txt'
-
-
-
-
 with open(file) as file:
-    pubkeys = file.read().splitlines()
+	for line in file:
+		if line[0] != '#':
+			pubkeys.append(line.rstrip())
+
+pubkeysReorderedForIgnition = []
+
+
+
+AMOUNT_SATS = 10000
+FINAL_PAYMENT = True
+MAX_FEES_SATS = 1
+
+
 
 #First Reorder Pubkeys so that my node is the first
 for idx, pubkeyInfo in enumerate(pubkeys):
-        # pubkeys formatis <pubkey>,<telegram username> to be able to mimic the manual pubkey overview with usernames
-        pubkey = pubkeyInfo.split(',')
-        #print(pubkey)
-        if pubkey[0] == mypk:
-            reorder_id = idx + 1 % len(pubkeys)
-            pubkeysReorderedForIgnition = pubkeys[reorder_id:len(pubkeys)] + pubkeys[:reorder_id]
-            #print("\n".join(map(str, pubkeysReorderedForIgnition)))
-            break
+    # pubkeys formatis <pubkey>,<telegram username> to be able to mimic the manual pubkey overview with usernames
+    pubkey = pubkeyInfo.split(',')
+    #print(pubkey)#
+    if (pubkeyInfo == ' '):
+        break
+    if pubkey[0] == mypk:
+		#print(mypk)
+        reorder_id = idx + 1 % len(pubkeys)
+        pubkeysReorderedForIgnition = pubkeys[reorder_id:len(pubkeys)] + pubkeys[:reorder_id]
+        #print("\n".join(map(str, pubkeysReorderedForIgnition)))
+
 
 #Check whether each Channel has a channel with the node
 
 rofIgnitionPossible = True
 outgoing_chan_id = 0
 hop_pubkeys = []
+
+
+
 
 print(chalk.bold("Channel Overview about the ROF"))
 print("="*50)
@@ -93,6 +105,7 @@ for idx, pubkeyInfo in enumerate(pubkeysReorderedForIgnition):
         channelTo = pubkeysReorderedForIgnition[(idx+1) % (len(pubkeysReorderedForIgnition))].split(',')[0]
         channelToAlias = pubkeysReorderedForIgnition[(idx+1) % (len(pubkeysReorderedForIgnition))].split(',')[1]
         nodeResponse = lnd.get_node_info(pubkey[0])
+
 
         hasChannel = False
         channelID = 0
@@ -114,11 +127,22 @@ for idx, pubkeyInfo in enumerate(pubkeysReorderedForIgnition):
             chanResponse = lnd.get_chan_info(channelID)
             node1Disabled = chanResponse.node1_policy.disabled
             node2Disabled = chanResponse.node2_policy.disabled
+            node_basefee_msat = 0
+            node_feerate_ppm = 0
+            if pubkey[0] == chanResponse.node1_pub:
+                node_basefee_msat = chanResponse.node1_policy.fee_base_msat
+                node_feerate_ppm      = chanResponse.node1_policy.fee_rate_milli_msat
+            elif pubkey[0] == chanResponse.node2_pub:
+                node_basefee_msat = chanResponse.node2_policy.fee_base_msat
+                node_feerate_ppm      = chanResponse.node2_policy.fee_rate_milli_msat
+
             if not node1Disabled and not node2Disabled:
                 print(chalk.green("Channel exist ✅ :\n%s opened to  %s ChannelID  %s  " % (pubkey[1],channelToAlias, channelID)))
+                print(chalk.blue.italic("Fees: Basefee (msat): %s | Feerate (ppm) %s  " % (node_basefee_msat,node_feerate_ppm)))
                 print("-"*50)
             else:
                 print(chalk.yellow("Channel exist ❗️ but Disabled, Try Reconnect to Peer :\n%s opened to  %s ChannelID  %s  " % (pubkey[1],channelToAlias, channelID)))
+                print(chalk.blue.italic("Fees: Basefee (msat): %s | Feerate (ppm) %s  " % (node_basefee_msat,node_feerate_ppm)))
                 print("-"*50)
         else:
             rofIgnitionPossible = False
@@ -144,20 +168,40 @@ if rofIgnitionPossible:
 	pr = lnd.decode_pay_req(inv.payment_request)
 
 
+
 	if FINAL_PAYMENT:
+
+		if route.total_fees_msat > MAX_FEES_SATS:
+			print(chalk.red("Route is too expensive ❌ Fee: %s your MAX_FEE: %s" % (route.total_fees_msat,MAX_FEES_SATS)))
+			print(chalk.red.bold("Increase FEE GIGACHAD 🐋!!! OR Wait for GOSSIP poor PLEB !"))
+			sys.exit()
+
 		route.hops[-1].mpp_record.total_amt_msat = pr.num_msat
 		route.hops[-1].mpp_record.payment_addr = pr.payment_addr
 
 
-	payment = lnd.send_to_route(
-	    pay_hash = bytes.fromhex(pr.payment_hash),
-	    route=route
-	)
-	#print(payment.status)
-	if (int(payment.status) == 2):
-		print(chalk.red("FAILED 🚑 ❌"))
-		print(chalk.red(payment.failure))
-		print(chalk.red(payment.route))
-	elif (int(payment.status) == 1):
-		print(chalk.green("SUCCESS 🍻"))
-		print(chalk.green(payment.route))
+		payment = lnd.send_to_route(
+			  pay_hash=bytes.fromhex(pr.payment_hash),
+			  route=route
+			  )
+		#print(payment.status)
+		if (int(payment.status) == 2):
+			print(chalk.red("FAILED 🚑 ❌"))
+			print(chalk.red(payment.failure))
+		elif (int(payment.status) == 1):
+			print(chalk.green("SUCCESS 🍻"))
+			print(chalk.green(payment.route))
+
+	else:
+		#Only Query Route
+		payment = lnd.send_to_route(
+		  pay_hash=bytes.fromhex(pr.payment_hash),
+		  route=route
+		  )
+		if (int(payment.status) == 2):
+
+			if payment.failure.code == 1:
+				print(chalk.green("There is a ROUTE set FINAL_PAYMENT=TRUE to send paymennt"))
+			else:
+				print(chalk.red("FAILED 🚑 ❌"))
+				print(chalk.red(payment.failure))
