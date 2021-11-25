@@ -99,6 +99,8 @@ channels = [
 			},
 			]
 
+FEE_PER_VBYTE = 1 # Fee for the batchopening TX
+
 #Get Nodeinfo and then connect to nodes
 
 for channel in channels:
@@ -141,7 +143,7 @@ if not ALL_PEERS_AVAILABLE:
 
 if ALL_PEERS_AVAILABLE or OPENING_WITH_ALL_AVAIABLE_PEERS:
     try:
-        pending_channels = lnd.batch_open_channel(channels=final_channels,sat_per_vbyte=1,label='')
+        pending_channels = lnd.batch_open_channel(channels=final_channels,sat_per_vbyte=FEE_PER_VBYTE,label='')
         for channel in pending_channels:
             print(chalk.yellow('TXID: %s Output: %s' % (hex_string_to_bytes(channel.txid),channel.output_index)))
     except:
