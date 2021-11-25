@@ -91,13 +91,13 @@ channels = [
                 'push_sat' : 0,
                 'private' : False,
             },
-			{
+	    {
                 'node_pubkey' : '025ca7f267ac5b3a225451df7c018a873990bf6ab7c4b7a2f639e41a29939e65a4',
-			    'local_funding_amount' : 25_000,
-			    'push_sat' : 0,
-			    'private' : True,
-			},
-			]
+		'local_funding_amount' : 25_000,
+		'push_sat' : 0,
+		'private' : True,
+	    },
+	]
 
 #Get Nodeinfo and then connect to nodes
 
