@@ -1,6 +1,7 @@
 from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient, invoices
 from .errors import handle_rpc_errors
 from datetime import datetime
+import binascii
 
 class LNDClient(BaseClient):
 
@@ -97,20 +98,28 @@ class LNDClient(BaseClient):
     def get_version(self, **kwargs):
         request = ver.VersionRequest()
         response = self._version_stub.GetVersion(request)
-        return response   
+        return response
 
     # ROUTERRPC
     @handle_rpc_errors
     def build_route(self, amt_msat, oid, hop_pubkeys, **kwargs):
         hop_pubkeys_bytes = [ bytes.fromhex(pk) for pk in hop_pubkeys ]
-        print(hop_pubkeys_bytes)
+        hop_pubkeys_check = [ binascii.hexlify(pk).decode('utf8') for pk in hop_pubkeys_bytes ]
+        #print(hop_pubkeys_bytes)
+        #print("\n".join(map(str, hop_pubkeys_check)))
+
         request = router.BuildRouteRequest(
             amt_msat=amt_msat,
             outgoing_chan_id=oid,
             hop_pubkeys=hop_pubkeys_bytes,
+            final_cltv_delta=400,
             **kwargs
         )
-        response = self._router_stub.BuildRoute(request)
+        try:
+            response = self._router_stub.BuildRoute(request)
+        except Exception as error:
+            print(error)
+
         return response
 
     @handle_rpc_errors
@@ -242,7 +251,7 @@ class LNDClient(BaseClient):
             print(last_response)
             if datetime.now().timestamp() > 5:
                 return last_response
-            
+
         #     print(response)
         #     last_response = response
         # return response
@@ -259,8 +268,8 @@ class LNDClient(BaseClient):
             yield invoice
 
     @handle_rpc_errors
-    def add_invoice(self, value, memo='', **kwargs):
-        request = ln.Invoice(value=value, memo=memo, **kwargs)
+    def add_invoice(self, value, memo=''):
+        request = ln.Invoice(value=value, memo=memo)
         response = self._ln_stub.AddInvoice(request)
         return response
 
@@ -485,4 +494,20 @@ class LNDClient(BaseClient):
         for first in response:
             return first
 
+    #Open Batch Channels
+    @handle_rpc_errors
+    def batch_open_channel(self,channels, sat_per_vbyte, label ,**kwargs):
+        """BatchOpenChannel attempts to open multiple single-funded channels in a single transaction in an atomic way."""
+        #Convert Channel Pubkey into bytes
+        for channel in channels:
+            channel['node_pubkey']=bytes.fromhex(channel['node_pubkey'])
 
+        request = ln.BatchOpenChannelRequest(
+        channels=channels,
+        sat_per_vbyte=sat_per_vbyte,
+        label=label,
+        )
+
+        response =  self._ln_stub.BatchOpenChannel(request)
+
+        return response.pending_channels
