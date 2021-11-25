@@ -254,6 +254,12 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
+    def funding_state_step(self, shim_register=None, shim_cancel=None, psbt_verify=None, psbt_finalize=None):
+        request = ln.FundingTransitionMsg(shim_register=shim_register, shim_cancel=shim_cancel, psbt_verify=psbt_verify, psbt_finalize=psbt_finalize)
+        response = self._ln_stub.FundingStateStep(request)
+        return response
+
+    @handle_rpc_errors
     def subscribe_invoices(self):
         for invoice in self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription()):
             yield invoice
