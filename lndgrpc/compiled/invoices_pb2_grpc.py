@@ -37,6 +37,11 @@ class InvoicesStub(object):
                 request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.SerializeToString,
                 response_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.FromString,
                 )
+        self.LookupInvoiceV2 = channel.unary_unary(
+                '/invoicesrpc.Invoices/LookupInvoiceV2',
+                request_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.LookupInvoiceMsg.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.FromString,
+                )
 
 
 class InvoicesServicer(object):
@@ -82,6 +87,15 @@ class InvoicesServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def LookupInvoiceV2(self, request, context):
+        """
+        LookupInvoiceV2 attempts to look up at invoice. An invoice can be refrenced
+        using either its payment hash, payment address, or set ID.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_InvoicesServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -104,6 +118,11 @@ def add_InvoicesServicer_to_server(servicer, server):
                     servicer.SettleInvoice,
                     request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.FromString,
                     response_serializer=lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.SerializeToString,
+            ),
+            'LookupInvoiceV2': grpc.unary_unary_rpc_method_handler(
+                    servicer.LookupInvoiceV2,
+                    request_deserializer=lndgrpc_dot_compiled_dot_invoices__pb2.LookupInvoiceMsg.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -182,5 +201,22 @@ class Invoices(object):
         return grpc.experimental.unary_unary(request, target, '/invoicesrpc.Invoices/SettleInvoice',
             lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceMsg.SerializeToString,
             lndgrpc_dot_compiled_dot_invoices__pb2.SettleInvoiceResp.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def LookupInvoiceV2(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/invoicesrpc.Invoices/LookupInvoiceV2',
+            lndgrpc_dot_compiled_dot_invoices__pb2.LookupInvoiceMsg.SerializeToString,
+            lndgrpc_dot_compiled_dot_lightning__pb2.Invoice.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
