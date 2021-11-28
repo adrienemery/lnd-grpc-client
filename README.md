@@ -1,4 +1,4 @@
-# lndgrpc
+# lnd-grpc-client
 A python grpc client for LND (Lightning Network Daemon) ⚡⚡⚡
 
 This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. 
@@ -6,7 +6,7 @@ This is a wrapper around the default grpc interface that handles setting up cred
 ## Dependencies
 - Python 3.6+
 - Working LND lightning node, take note of its ip address.
-- Copy your admin.macaroon and tls.cert files from your node to a directoy on your machine. 
+- Copy your admin.macaroon and tls.cert files from your node to a directory on your machine. 
 
 
 ## Installation
@@ -42,15 +42,69 @@ python3 -m lndgrpc
 # lndgrpc package is installed... Wow it works!
 ```
 
+### Create Example ENV File
+Make a folder for holding your TLS cert and macaroons, and create a file named `node-env` which contains what is necessary to connect to your node
+IN BASH
+```
+mkdir -p /home/you-user-name/creds/your-node-alias
+cd /home/you-user-name/creds/your-node-alias
+nano node-env
+```
+
+IN NANO
+```
+# Lightning Node Vars
+export CRED_PATH=/home/you-user-name/creds/your-node-alias/lnd
+export LND_NODE_IP=192.168.4.69
+```
+
+IN BASH
+```
+mkdir lnd
+cd lnd
+*copy your tls.cert and admin.macaroon in to this folder*
+```
+
+HOW TO USE
+IN BASH
+```
+cd /home/you-user-name/creds/your-node-alias
+source node-env
+# THIS ADDS WHAT IS IN THE FILE AS AN ENVIRONMENT VARIABLE SO IT IS AVAILABLE WHEN YOU ARE WRITING SCRIPTS
+```
+
+
 ## Basic Usage
 The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
 
 ```python
+import os
+from pathlib import Path
+
 from lndgrpc import LNDClient
+
+credential_path = os.getenv("LND_CRED_PATH", None)
+if credential_path == None:
+	credential_path = Path.home().joinpath(".lnd")
+	mac = str(credential_path.joinpath("data/chain/bitcoin/mainnet/admin.macaroon").absolute())
+else:
+	credential_path = Path(credential_path)
+	mac = str(credential_path.joinpath("admin.macaroon").absolute())
+	
+
+node_ip = os.getenv("LND_NODE_IP")
+tls = str(credential_path.joinpath("tls.cert").absolute())
+
+lnd_ip_port = f"{node_ip}:10009"
 
 # pass in the ip-address with RPC port and network ('mainnet', 'testnet', 'simnet')
 # the client defaults to 127.0.0.1:10009 and mainnet if no args provided
-lnd = LNDClient("127.0.0.1:10009", network='simnet')
+lnd = LNDClient(
+	lnd_ip_port,
+	macaroon_filepath=mac,
+	cert_filepath=tls
+	# no_tls=True
+)
 
 # Unlock you wallet
 lnd.unlock_wallet(wallet_password=b"your_wallet_password")
