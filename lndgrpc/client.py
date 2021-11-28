@@ -227,6 +227,13 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
+    def abandon_channel(self, **kwargs):
+        """ ***danger*** Abandon a channel"""
+        response = self._ln_stub.AbandonChannel(ln.AbandonChannelRequest(**kwargs))
+        return response
+
+
+    @handle_rpc_errors
     def open_channel(self, node_pubkey, local_funding_amount, sat_per_byte, **kwargs):
         """Open a channel to an existing peer"""
         request = ln.OpenChannelRequest(
@@ -238,6 +245,7 @@ class LNDClient(BaseClient):
         last_response = None
         start = datetime.now().timestamp()
         for r in self._ln_stub.OpenChannel(request, timeout=5):
+            return r
             last_response = r
             print(last_response)
             if datetime.now().timestamp() > 5:
