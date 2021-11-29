@@ -104,7 +104,7 @@ class LNDClient(BaseClient):
     @handle_rpc_errors
     def build_route(self, amt_msat, oid, hop_pubkeys, **kwargs):
         hop_pubkeys_bytes = [ bytes.fromhex(pk) for pk in hop_pubkeys ]
-        hop_pubkeys_check = [ binascii.hexlify(pk).decode('utf8') for pk in hop_pubkeys_bytes ]
+        hop_pubkeys_check = [ pk.hex() for pk in hop_pubkeys_bytes ]
         #print(hop_pubkeys_bytes)
         #print("\n".join(map(str, hop_pubkeys_check)))
 
@@ -268,8 +268,8 @@ class LNDClient(BaseClient):
             yield invoice
 
     @handle_rpc_errors
-    def add_invoice(self, value, memo=''):
-        request = ln.Invoice(value=value, memo=memo)
+    def add_invoice(self, value, memo='', **kwargs):
+        request = ln.Invoice(value=value, memo=memo, **kwargs)
         response = self._ln_stub.AddInvoice(request)
         return response
 
@@ -503,10 +503,11 @@ class LNDClient(BaseClient):
             channel['node_pubkey']=bytes.fromhex(channel['node_pubkey'])
 
         request = ln.BatchOpenChannelRequest(
-        channels=channels,
-        sat_per_vbyte=sat_per_vbyte,
-        label=label,
-        )
+            channels=channels,
+            sat_per_vbyte=sat_per_vbyte,
+            label=label,
+            **kwargs
+            )
 
         response =  self._ln_stub.BatchOpenChannel(request)
 

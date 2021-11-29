@@ -17,7 +17,7 @@ from yachalk import chalk
 
 
 # Pip installed Modules
-from lndgrpc.client import LNDClient
+from lndgrpc import LNDClient
 from lndgrpc.client import ln
 from protobuf_to_dict import protobuf_to_dict
 
@@ -45,9 +45,6 @@ lnd = LNDClient(
 
 
 
-def hex_string_to_bytes(hex_string):
-        decode_hex = codecs.getdecoder("hex_codec")
-        return decode_hex(hex_string)[0]
 
 ALL_PEERS_AVAILABLE  = True
 OPENING_WITH_ALL_AVAIABLE_PEERS = False
@@ -145,6 +142,6 @@ if ALL_PEERS_AVAILABLE or OPENING_WITH_ALL_AVAIABLE_PEERS:
     try:
         pending_channels = lnd.batch_open_channel(channels=final_channels,sat_per_vbyte=FEE_PER_VBYTE,label='')
         for channel in pending_channels:
-            print(chalk.yellow('TXID: %s Output: %s' % (hex_string_to_bytes(channel.txid),channel.output_index)))
+            print(chalk.yellow('TXID: %s Output: %s' % (bytes.fromhex(channel.txid),channel.output_index)))
     except:
         print(chalk.red("Error occured See non colour output"))

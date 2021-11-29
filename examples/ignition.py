@@ -13,7 +13,7 @@ from yachalk import chalk
 
 
 # Pip installed Modules
-from lndgrpc.client import LNDClient
+from lndgrpc import LNDClient
 from lndgrpc.client import ln
 from protobuf_to_dict import protobuf_to_dict
 
@@ -40,6 +40,7 @@ lnd = LNDClient(
 )
 
 
+
 mypk = lnd.get_info().identity_pubkey
 myalias = lnd.get_info().alias
 
@@ -54,11 +55,13 @@ myalias = lnd.get_info().alias
 
 pubkeys = []
 
-file = 'PATHTO/pubkey.txt'
+file = '/Users/ziggie/working_freetime/lnd-grpc-client/pubkey_ROF1.txt'
 with open(file) as file:
 	for line in file:
 		if line[0] != '#':
 			pubkeys.append(line.rstrip())
+
+
 
 pubkeysReorderedForIgnition = []
 
@@ -130,20 +133,27 @@ for idx, pubkeyInfo in enumerate(pubkeysReorderedForIgnition):
             node_basefee_msat = 0
             node_feerate_ppm = 0
             if pubkey[0] == chanResponse.node1_pub:
+                local_disabled = chanResponse.node1_policy.disabled
+                remote_disabled = chanResponse.node2_policy.disabled
                 node_basefee_msat = chanResponse.node1_policy.fee_base_msat
                 node_feerate_ppm      = chanResponse.node1_policy.fee_rate_milli_msat
             elif pubkey[0] == chanResponse.node2_pub:
+                local_disabled = chanResponse.node2_policy.disabled
+                remote_disabled = chanResponse.node1_policy.disabled
                 node_basefee_msat = chanResponse.node2_policy.fee_base_msat
                 node_feerate_ppm      = chanResponse.node2_policy.fee_rate_milli_msat
 
-            if not node1Disabled and not node2Disabled:
+            if not local_disabled:
                 print(chalk.green("Channel exist ✅ :\n%s opened to  %s ChannelID  %s  " % (pubkey[1],channelToAlias, channelID)))
                 print(chalk.blue.italic("Fees: Basefee (msat): %s | Feerate (ppm) %s  " % (node_basefee_msat,node_feerate_ppm)))
                 print("-"*50)
             else:
                 print(chalk.yellow("Channel exist ❗️ but Disabled, Try Reconnect to Peer :\n%s opened to  %s ChannelID  %s  " % (pubkey[1],channelToAlias, channelID)))
+                print(chalk.yellow("Node To Forward Payment %s Disable: %s" % (pubkey[1],local_disabled)))
+                #print(chalk.yellow("Node %s Disable: %s" % (channelToAlias,remote_disabled)))
                 print(chalk.blue.italic("Fees: Basefee (msat): %s | Feerate (ppm) %s  " % (node_basefee_msat,node_feerate_ppm)))
                 print("-"*50)
+                rofIgnitionPossible = False
         else:
             rofIgnitionPossible = False
             print(chalk.red("Channel STILL NOT OPEN  🆘 :\n%s has to open with %s" % (pubkey[1],channelToAlias)))
