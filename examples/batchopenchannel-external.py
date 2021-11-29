@@ -38,26 +38,47 @@ lnd = LNDClient(
 
 batch_list = [
     # {
-    #     "pk":"0390cc12f782259427bdc45a283705f4c20ccbdff064ed43f6b74fefcafe9eb1f7",
-    #     "url": "4ktdvcvhuytnj3hermy3fiqtj5b7lzspjzdhsgg6xafc6tjrvik6q4ad.onion:9735",
+    #     "pk": "028d1db1af4ba4982e4dd71c6e4167065602021f34006c9bef683dc57d053df4e9",
+    #     "url": "7p3j2yumw5cvxyg3eyjcqkjhsqyfaukydep7vfd76whrc5hjlizsmfid.onion:9735",
+    #     "amount": 1_000_000
+    # },
+    # {
+    #     "pk": "027ce055380348d7812d2ae7745701c9f93e70c1adeb2657f053f91df4f2843c71",
+    #     "url": "yi6ccghmivsydduxb2wnogyx2chz347bgu3kvqefea7rnhfi5iifqcyd.onion:9735",
     #     "amount": 1_000_000
     # },
     {
-        "pk": "03c608c491495bdf9305344728ce42170f12c5c84be6278bfa25dc04479ca988b6",
-        "url": "m7haegyzvhx5rd7wqf5lfs2gc3aqxdn2trowwbqp6hybyf4l4s67jdad.onion:9735",
+        "pk": "02ae53b0661195617ba1063e053ee238a24e80b90e371ebf2038de00aeb196bfd7",
+        "url": "zp4rwdr2efjl534bp7qwblrjfaz5thwban5xbf6vf6nncbv56ksxowyd.onion:9735",
         "amount": 1_000_000
     },
     {
-        "pk": "035b1ff29e8db1ba8f2a4f4f95db239b54069cb949b8cde329418e2a83da4f1b30",
-        "url": "a3ufedotixjimo7g62c7m7zijbtmcalx33xl53ifzcyuogu3v3ceppyd.onion:9735",
+        "pk": "031f2669adab71548fad4432277a0d90233e3bc07ac29cfb0b3e01bd3fb26cb9fa",
+        "url": "i4hkz4tgek4urajnkghf5pdyncpbso72lxdkapanrxt54mtr54t5xvqd.onion:9735",
         "amount": 1_000_000
     },
     {
-        "pk": "03aa49c1e98ff4f216d886c09da9961c516aca22812c108af1b187896ded89807e",
-        "url": "m3keajflswtfq3bw4kzvxtbru7r4z4cp5stlreppdllhp5a7vuvjzqyd.onion:9735",
+        "pk": "022926ac1f1f472e669b1802488f5acfa75adf2020cec28e199e4c61f6485e8b41",
+        "url": "tui6tgdlxznkk3uymvat3omb7e7636vdokrxnfkorfjbstvq5mdyjnyd.onion:9735",
         "amount": 1_000_000
-    }
+    },
+    {
+        "pk": "03c5528c628681aa17ab9e117aa3ee6f06c750dfb17df758ecabcd68f1567ad8c1",
+        "url": "zacadqiqgi43tdv4ztjet2fh22f72ol2tokotp5cqdbszgx6tpyqdxad.onion:9735",
+        "amount": 2_169_420
+    },
+    {
+        "pk": "025f1456582e70c4c06b61d5c8ed3ce229e6d0db538be337a2dc6d163b0ebc05a5",
+        "url": "52.86.210.65:9735",
+        "amount": 1_000_000
+    },
+    # {
+    #     "pk": "034b025cd658515f37bb125b6ef040f428b0ce678253c805358e9db60c40d9f96a",
+    #     "url": "ohcwnk5p5neseibf7dukxtbji6ytzh2jo7yki6wds76jiwv3sigabwyd.onion:9735",
+    #     "amount": 1_000_000
+    # },  
 ]
+
 
 num_channels = len(batch_list)
 
@@ -85,6 +106,7 @@ for node in batch_list[:-1]:
         funding_shim=shim,
     )
     print(f"Send {r.psbt_fund.funding_amount} sats to address: {r.psbt_fund.funding_address}")
+
 
 pending_cid = secrets.token_bytes(32)
 pending_cids.append(pending_cid)
@@ -137,3 +159,19 @@ lnd.funding_state_step(psbt_finalize=final)
 for cid in pending_cids:
     cancel_shim = ln.FundingShimCancel(pending_chan_id=cid)
     lnd.funding_state_step(shim_cancel=cancel_shim)
+
+
+
+psbt_shim = ln.PsbtShim(
+    pending_chan_id=pending_cid,
+    no_publish=False
+)
+shim = ln.FundingShim(
+    psbt_shim=psbt_shim
+)
+r = lnd.open_channel(
+    node_pubkey=batch_list[0]["pk"],
+    local_funding_amount=20000,
+    sat_per_byte=0,
+    funding_shim=shim,
+)

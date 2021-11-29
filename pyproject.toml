@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lnd-grpc-client"
-version = "0.3.27"
+version = "0.3.28"
 description = "An rpc client for LND (lightning network deamon)"
 authors = ["Kornpow <test@email.com>"]
 readme = "README.md"
@@ -17,3 +17,4 @@ googleapis-common-protos = "^1.53.0"
 grpcio = "^1.37.0"
 grpcio-tools = "^1.37.0"
 protobuf3-to-dict = "^0.1.5"
+yachalk = "^0.1.5"
