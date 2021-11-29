@@ -104,3 +104,7 @@ ENV/
 .idea/
 
 .pytest_cache/
+
+#
+lnd_credentials/
+pubkey.txt
