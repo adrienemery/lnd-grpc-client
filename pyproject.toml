@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lnd-grpc-client"
-version = "0.3.28"
+version = "0.3.29"
 description = "An rpc client for LND (lightning network deamon)"
 authors = ["Kornpow <test@email.com>"]
 readme = "README.md"
@@ -8,6 +8,7 @@ license = "MIT"
 packages = [
     { include = "lndgrpc" },
 ]
+exclude = ["lndgrpc/googleapis/*"]
 
 [tool.poetry.dependencies]
 python = ">3.6"

@@ -3,7 +3,7 @@ import platform
 import os
 import grpc
 import sys
-
+from pathlib import Path
 
 from lndgrpc.compiled import (
     lightning_pb2 as ln,
@@ -104,13 +104,34 @@ class BaseClient(object):
 
     def __init__(
         self,
-        ip_address='127.0.0.1:10009',
+        ip_address=None,
         cert=None,
         cert_filepath=None,
         no_tls=False,
         macaroon=None,
         macaroon_filepath=None
     ):
+        # Handle either passing in credentials_paths, or environment variable paths
+        if macaroon_filepath is None:
+            credential_path = os.getenv("LND_CRED_PATH", None)
+            if credential_path == None:
+                credential_path = Path.home().joinpath(".lnd")
+                macaroon_filepath = str(credential_path.joinpath("data/chain/bitcoin/mainnet/admin.macaroon").absolute())
+            else:
+                credential_path = Path(credential_path)
+                macaroon_filepath = str(credential_path.joinpath("admin.macaroon").absolute())
+
+        if cert_filepath is None:
+            credential_path = os.getenv("LND_CRED_PATH", None)
+            credential_path = Path(credential_path)
+            cert_filepath = str(credential_path.joinpath("tls.cert").absolute())
+
+        if ip_address is None:
+            node_ip = os.getenv("LND_NODE_IP")
+            node_port = os.getenv("LND_NODE_PORT")
+            lnd_ip_port = f"{node_ip}:{node_port}"
+
+        # handle passing in credentials and cert directly
         if macaroon is None:
             macaroon = get_macaroon(filepath=macaroon_filepath)
 
