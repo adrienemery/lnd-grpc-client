@@ -24,15 +24,17 @@ else:
 	
 
 node_ip = os.getenv("LND_NODE_IP")
+node_port = os.getenv("LND_NODE_PORT")
 tls = str(credential_path.joinpath("tls.cert").absolute())
 
+lnd_ip_port = f"{node_ip}:{node_port}"
 
 lnd = LNDClient(
-	f"{node_ip}:10009",
+	lnd_ip_port,
 	macaroon_filepath=mac,
 	cert_filepath=tls
+	# no_tls=True
 )
-
 # Create hop/route hints if the node only has private channels
 hint1 = ln.HopHint(
 	node_id="031015a7839468a3c266d662d5bb21ea4cea24226936e2864a7ca4f2c3939836e0",

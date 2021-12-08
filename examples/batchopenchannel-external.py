@@ -24,9 +24,10 @@ else:
 	
 
 node_ip = os.getenv("LND_NODE_IP")
+node_port = os.getenv("LND_NODE_PORT")
 tls = str(credential_path.joinpath("tls.cert").absolute())
 
-lnd_ip_port = f"{node_ip}:10009"
+lnd_ip_port = f"{node_ip}:{node_port}"
 
 lnd = LNDClient(
 	lnd_ip_port,
@@ -34,7 +35,6 @@ lnd = LNDClient(
 	cert_filepath=tls
 	# no_tls=True
 )
-
 
 batch_list = [
     # {
