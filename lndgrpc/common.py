@@ -151,7 +151,10 @@ class BaseClient(object):
         To ensure the channel is usable we create a new one for each request.
         """
         channel = self.grpc_module.secure_channel(
-            self.ip_address, self._credentials, options=[('grpc.max_receive_message_length', 1024*1024*50)]
+            self.ip_address,
+            self._credentials, 
+            # timeout=30,
+            options=[('grpc.max_receive_message_length', 1024*1024*50), ("grpc.max_connection_idle_ms", 30000)]
         )
         return lnrpc.LightningStub(channel)
 

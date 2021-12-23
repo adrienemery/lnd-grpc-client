@@ -35,7 +35,12 @@ lnd = LNDClient(
 lnd.get_info().alias
 
 lnd.get_info()
+
+# BOB
 lnd.channel_acceptor()
+
+# ALICE
+lnd.open_channel("021f6eddff4d7fb17c949e6fcc1b7aa45130543db6a8841f7c9c8ec17b11ced4dd",1000000,1)
 
 for i in lnd.channel_acceptor():
 	print(i)

@@ -253,7 +253,7 @@ class LNDClient(BaseClient):
         )
         last_response = None
         start = datetime.now().timestamp()
-        for r in self._ln_stub.OpenChannel(request, timeout=5):
+        for r in self._ln_stub.OpenChannel(request, timeout=30):
             return r
             last_response = r
             print(last_response)
@@ -480,14 +480,20 @@ class LNDClient(BaseClient):
         def request_generator():
                 # Initialization code here.
                 while True:
+                    i = input("\nEnter a number or 'q' to quit: \n")
+                    if i == "q":
+                        break
                     # Parameters here can be set as arguments to the generator.
+                    # print("a: ")
                     # print(a)
                     print("test")
+                    print(i)
                     request = ln.ChannelAcceptResponse(
                         accept=False,
                         error="try again later, walalalololo",
-                        # pending_chan_id
+                        pending_chan_id=request.pending_chan_id
                     )
+                    print()
                     print(request.pending_chan_id)
                     print(request.error)
                     sleep(5)
@@ -495,8 +501,15 @@ class LNDClient(BaseClient):
         # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
         # request = ln.ChannelAcceptResponse(**kwargs)
         request_iterable = request_generator()
-        for response in self._ln_stub.ChannelAcceptor(request_iterable):
+        it = self._ln_stub.ChannelAcceptor(request_iterable)
+
+        for response in it:
             print(response)
+            print(dir(response))
+            print("pending cid: ")
+            print(response.pending_chan_id.hex())
+            print("pubkey: ")
+            print(response.node_pubkey)
         return response
 
     # INVOICES
