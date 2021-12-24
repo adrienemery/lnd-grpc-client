@@ -372,7 +372,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def get_node_info(self, pub_key, include_channels=True):
+    def get_node_info(self, pub_key, include_channels=False):
         """Get information on a specific node"""
         request = ln.NodeInfoRequest(pub_key=pub_key, include_channels=include_channels)
         response = self._ln_stub.GetNodeInfo(request)
@@ -477,39 +477,53 @@ class LNDClient(BaseClient):
     def channel_acceptor(self, **kwargs):
         """Bi-directional streaming api to accept or reject channels"""
         from time import sleep
+        import secrets
         def request_generator():
                 # Initialization code here.
+                # go = 1
+                # while go:
+                #     go = 0
+                # request = input("\nEnter a number or 'q' to quit: \n")
+                # if request == "q":
+                #     break
+                # Parameters here can be set as arguments to the generator.
+                # print("a: ")
+                # print(a)
                 while True:
-                    i = input("\nEnter a number or 'q' to quit: \n")
-                    if i == "q":
-                        break
-                    # Parameters here can be set as arguments to the generator.
-                    # print("a: ")
-                    # print(a)
-                    print("test")
-                    print(i)
-                    request = ln.ChannelAcceptResponse(
-                        accept=False,
-                        error="try again later, walalalololo",
-                        pending_chan_id=request.pending_chan_id
-                    )
-                    print()
-                    print(request.pending_chan_id)
-                    print(request.error)
-                    sleep(5)
-                    yield request
+                    try:
+                        print("test")
+                        # print(request)
+                        # print(type(request))
+                        request = input("\nEnter channel id: \n")
+                        response = ln.ChannelAcceptResponse(
+                            accept=False,
+                            error="get your BOS score up, simple pleb",
+                            pending_chan_id=bytes.fromhex(request)
+                        )
+                        # print(request.pending_chan_id)
+                        print(response.error)
+                        # sleep(5)
+                        print("Before yield...")
+                        yield response
+                    except Exception as e:
+                        print(e)
+                        response = ln.ChannelAcceptResponse(
+                            accept=False,
+                            error="get your BOS score up, simple pleb",
+                            pending_chan_id=secrets.token_bytes(32)
+                        )
+                        yield response
         # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
         # request = ln.ChannelAcceptResponse(**kwargs)
         request_iterable = request_generator()
         it = self._ln_stub.ChannelAcceptor(request_iterable)
 
         for response in it:
-            print(response)
-            print(dir(response))
-            print("pending cid: ")
-            print(response.pending_chan_id.hex())
-            print("pubkey: ")
-            print(response.node_pubkey)
+            print(type(response))
+            print(f"pending cid: {response.pending_chan_id.hex()}")
+            print(f"pubkey: {response.node_pubkey.hex()}")
+
+            # self.get_node_info(response.node_pubkey.hex(), include_channels=False).node.alias
         return response
 
     # INVOICES

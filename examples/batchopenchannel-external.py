@@ -9,6 +9,8 @@ import random
 import secrets
 import asyncio
 
+import csv
+
 from lndgrpc import LNDClient, AsyncLNDClient
 from lndgrpc.common import ln
 
@@ -41,109 +43,8 @@ batch_list = [
         "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
         "url": "172.18.0.5:9735",
         "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
-    {
-        "pk": "02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",
-        "url": "172.18.0.5:9735",
-        "amount": 1_000_000
-    },
+    } for i in range(0,100)
 ]
-
 
 num_channels = len(batch_list)
 
@@ -152,6 +53,7 @@ for node in batch_list:
     lnd.connect_peer(node["pk"], node["url"])
 
 pending_cids = []
+output_csv = []
 
 # Do one thing for all but last node
 for node in batch_list[:-1]:
@@ -171,7 +73,7 @@ for node in batch_list[:-1]:
         funding_shim=shim,
     )
     print(f"Send {r.psbt_fund.funding_amount} sats to address: {r.psbt_fund.funding_address}")
-
+    output_csv.append((r.psbt_fund.funding_address,r.psbt_fund.funding_amount,"fund"))
 
 pending_cid = secrets.token_bytes(32)
 pending_cids.append(pending_cid)
@@ -189,6 +91,15 @@ r = lnd.open_channel(
     funding_shim=shim,
 )
 print(f"Send {r.psbt_fund.funding_amount} sats to address: {r.psbt_fund.funding_address}")
+output_csv.append((r.psbt_fund.funding_address,r.psbt_fund.funding_amount,"fund"))
+
+
+with open('multi-open.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL, dialect='excel')
+    # for addr, amt, msg in output_csv:
+    for a in output_csv:
+        spamwriter.writerow(a)
+
 
 # *** Create the funding transaction in Sparrow Wallet, and save as a PSBT ***
 

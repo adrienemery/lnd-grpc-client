@@ -36,11 +36,9 @@ lnd.get_info().alias
 
 lnd.get_info()
 
-# BOB
-lnd.channel_acceptor()
 
 # ALICE
-lnd.open_channel("021f6eddff4d7fb17c949e6fcc1b7aa45130543db6a8841f7c9c8ec17b11ced4dd",1000000,1)
+lnd.channel_acceptor()
 
-for i in lnd.channel_acceptor():
-	print(i)
+# BOB
+lnd.open_channel("02d10ee0e69020791ceb98605f7f4b4ee4400b4ab1745480aabc2c1205bb7d0a7d",1000000,1)
