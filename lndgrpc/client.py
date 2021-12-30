@@ -183,12 +183,16 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def bake_macaroon(self, permissions, root_key_id):
+    def bake_macaroon(self, permissions, root_key_id, allow_external_permissions=False):
         new_permissions = []
         perm = ln.MacaroonPermission(entity="invoices",action="read")
         new_permissions.append(perm)
         response = self._ln_stub.BakeMacaroon(
-            ln.BakeMacaroonRequest(permissions=new_permissions, root_key_id=root_key_id)
+            ln.BakeMacaroonRequest(
+                permissions=new_permissions,
+                root_key_id=root_key_id,
+                allow_external_permissions=allow_external_permissions
+            )
         )
         return response
 
@@ -216,6 +220,12 @@ class LNDClient(BaseClient):
     def list_peers(self):
         """List all active, currently connected peers"""
         response = self._ln_stub.ListPeers(ln.ListPeersRequest())
+        return response
+
+    @handle_rpc_errors
+    def list_permissions(self):
+        """List all permissions available"""
+        response = self._ln_stub.ListPermissions(ln.ListPermissionsRequest())
         return response
 
     @handle_rpc_errors
