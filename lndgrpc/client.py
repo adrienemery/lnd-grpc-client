@@ -184,12 +184,9 @@ class LNDClient(BaseClient):
 
     @handle_rpc_errors
     def bake_macaroon(self, permissions, root_key_id, allow_external_permissions=False):
-        new_permissions = []
-        perm = ln.MacaroonPermission(entity="invoices",action="read")
-        new_permissions.append(perm)
         response = self._ln_stub.BakeMacaroon(
             ln.BakeMacaroonRequest(
-                permissions=new_permissions,
+                permissions=permissions,
                 root_key_id=root_key_id,
                 allow_external_permissions=allow_external_permissions
             )
