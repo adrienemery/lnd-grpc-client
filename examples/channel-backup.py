@@ -9,8 +9,12 @@ import random
 import secrets
 import asyncio
 
+import csv
+
 from lndgrpc import LNDClient, AsyncLNDClient
 from lndgrpc.common import ln
+
+
 
 credential_path = os.getenv("LND_CRED_PATH", None)
 if credential_path == None:
@@ -34,14 +38,14 @@ lnd = LNDClient(
 	# no_tls=True
 )
 
+cp = ln.ChannelPoint(funding_txid_str="mystring", output_index=1)
 
-for chan in lnd.list_channels().channels:
-	if chan.active:
-		continue
-	pk = chan.remote_pubkey
-	node_info = lnd.get_node_info(pk, include_channels=False)
-	alias = node_info.node.alias
-	all_addresses = node_info.node.addresses
-	for address in all_addresses:
-		lnd.connect_peer(pk, address.addr)
-	print(f"connected to: {alias}")
+backup = ln.ChannelBackup(chan_point=cp, chan_backup=b"")
+
+b = ln.ChannelBackups(chan_backups=[backup])
+
+a = ln.ChanBackupSnapshot(single_chan_backups=b)
+
+c = ln.MultiChanBackup()
+
+ln.
