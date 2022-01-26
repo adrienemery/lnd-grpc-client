@@ -1,24 +1,216 @@
-from .common import ln, BaseClient
+from .common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient, invoices
 from .errors import handle_rpc_errors
-
+from datetime import datetime
+import binascii
 
 class LNDClient(BaseClient):
 
+    #WALLETUNLOCKERRPC
     def unlock(self, password):
         """Unlock encrypted wallet at lnd startup"""
         request = ln.UnlockWalletRequest(wallet_password=password.encode())
         response = self._wallet_stub.UnlockWallet(request)
         return response
 
-    def init_wallet(self):
-        raise NotImplementedError
+    def init_wallet(self, **kwargs):
+        request = walletunlocker.InitWalletRequest(**kwargs)
+        response = self._walletunlocker_stub.InitWallet(request)
+        return response
 
-    def generate_seed(self):
-        raise NotImplementedError
+    def gen_seed(self, aezeed_passphrase, seed_entropy):
+        request = walletunlocker.GenSeedRequest(
+            aezeed_passphrase=aezeed_passphrase,
+            seed_entropy=seed_entropy
+        )
+        response = self._walletunlocker_stub.GenSeed(request)
+        return response
 
+    def change_password(self, current_password, new_password, stateless_init, new_macaroon_root_key):
+        request = walletunlocker.ChangePasswordRequest(
+            current_password=current_password,
+            new_password=new_password,
+            stateless_init=stateless_init,
+            new_macaroon_root_key=new_macaroon_root_key
+        )
+        response = self._walletunlocker_stub.ChangePassword(request)
+        return response
+    
+    @handle_rpc_errors
+    def unlock_wallet(self, **kwargs):
+        request = walletunlocker.UnlockWalletRequest(**kwargs)
+        try:
+            response = self._walletunlocker_stub.UnlockWallet(request)
+            return response
+        except Exception as e:
+            print(e)
+            print("Wallet might already be unlocked")
+
+
+    #WALLETRPC
+    @handle_rpc_errors
+    def next_addr(self, account=""):
+        request = walletkit.AddrRequest(account=account)
+        response = self._walletkit_stub.NextAddr(request)
+        return response
+
+    @handle_rpc_errors
+    def list_accounts(self, **kwargs):
+        request = walletkit.ListAccountsRequest(**kwargs)
+        response = self._walletkit_stub.ListAccounts(request)
+        return response
+
+    @handle_rpc_errors
+    def list_unspent(self, min_confs=0,max_confs=100000, **kwargs):
+        # Default to these min/max for convenience
+        request = walletkit.ListUnspentRequest(min_confs=min_confs, max_confs=max_confs, **kwargs)
+        response = self._walletkit_stub.ListUnspent(request)
+        return response
+
+    @handle_rpc_errors
+    def label_transaction(self, txid, label, overwrite=False):
+        """
+        Label an on-chain txn known to the wallet
+            txid: hex-string
+            label: string
+            overwrite: bool
+        """
+        request = walletkit.LabelTransactionRequest(txid=bytes.fromhex(txid)[::-1], label=label, overwrite=overwrite)
+        response = self._walletkit_stub.LabelTransaction(request)
+        return response
+
+    @handle_rpc_errors
+    def publish_transaction(self, tx_hex, label=""):
+        # Default to these min/max for convenience
+        request = walletkit.Transaction(tx_hex=tx_hex, label=label)
+        response = self._walletkit_stub.PublishTransaction(request)
+        return response
+
+    @handle_rpc_errors
+    def fund_psbt(self, psbt, raw, **kwargs):
+        # Default to these min/max for convenience
+        request = walletkit.FundPsbtRequest(psbt=psbt, raw=raw, **kwargs)
+        response = self._walletkit_stub.FundPsbt(request)
+        return response
+
+    @handle_rpc_errors
+    def finalize_psbt(self, signed_psbt, raw_final_tx):
+        # Default to these min/max for convenience
+        request = walletkit.FinalizePsbtRequest(
+            signed_psbt=signed_psbt,
+            raw_final_tx=raw_final_tx
+        )
+        response = self._walletkit_stub.FinalizePsbt(request)
+        return response
+
+
+    #VERRPC
+    @handle_rpc_errors
+    def get_version(self, **kwargs):
+        request = ver.VersionRequest()
+        response = self._version_stub.GetVersion(request)
+        return response
+
+    # ROUTERRPC
+    @handle_rpc_errors
+    def build_route(self, amt_msat, oid, hop_pubkeys, **kwargs):
+        hop_pubkeys_bytes = [ bytes.fromhex(pk) for pk in hop_pubkeys ]
+        hop_pubkeys_check = [ pk.hex() for pk in hop_pubkeys_bytes ]
+        #print(hop_pubkeys_bytes)
+        #print("\n".join(map(str, hop_pubkeys_check)))
+
+        request = router.BuildRouteRequest(
+            amt_msat=amt_msat,
+            outgoing_chan_id=oid,
+            hop_pubkeys=hop_pubkeys_bytes,
+            final_cltv_delta=400,
+            **kwargs
+        )
+        try:
+            response = self._router_stub.BuildRoute(request)
+        except Exception as error:
+            print(error)
+
+        return response
+
+    @handle_rpc_errors
+    def send_to_route(self, pay_hash, route):
+        request = router.SendToRouteRequest(
+            payment_hash=pay_hash,
+            route=route,
+        )
+
+        response = self._router_stub.SendToRouteV2(request)
+        return response
+
+    @handle_rpc_errors
+    def send_payment_v2(self, **kwargs):
+        request = router.SendPaymentRequest(**kwargs)
+        last_response = None
+        for response in self._router_stub.SendPaymentV2(request):
+            print(response)
+            last_response = response
+        return response
+
+    @handle_rpc_errors
+    def send_payment_v1(self, **kwargs):
+        request = router.SendPaymentRequest(**kwargs)
+        response = self._router_stub.SendPayment(request)
+        return response
+
+    @handle_rpc_errors
+    def reset_mission_control(self):
+        request = router.ResetMissionControlRequest()
+        response = self._router_stub.ResetMissionControl(request)
+        return response
+
+
+    # SIGNERRPC
+    @handle_rpc_errors
+    def signer_sign_message(self, msg, key_family, key_index):
+        key_loc = signer.KeyLocator(key_family=key_family,key_index=key_index)
+        request = signer.SignMessageReq(
+            msg=msg,
+            key_loc=key_loc
+        )
+        response = self._signer_stub.SignMessage(request)
+        return response
+
+    @handle_rpc_errors
+    def signer_verify_message(self, msg, signature, pubkey):
+        request = signer.VerifyMessageReq(
+            msg=msg,
+            signature=signature,
+            pubkey=pubkey
+        )
+        response = self._signer_stub.VerifyMessage(request)
+        return response
+
+
+    # LIGHTNINGRPC
     @handle_rpc_errors
     def get_info(self):
         response = self._ln_stub.GetInfo(ln.GetInfoRequest())
+        return response
+
+    @handle_rpc_errors
+    def bake_macaroon(self, permissions, root_key_id, allow_external_permissions=False):
+        response = self._ln_stub.BakeMacaroon(
+            ln.BakeMacaroonRequest(
+                permissions=permissions,
+                root_key_id=root_key_id,
+                allow_external_permissions=allow_external_permissions
+            )
+        )
+        return response
+
+    @handle_rpc_errors
+    def list_macaroon_ids(self):
+        response = self._ln_stub.ListMacaroonIDs(ln.ListMacaroonIDsRequest())
+        return response
+
+    @handle_rpc_errors
+    def forwarding_history(self, **kwargs):
+        response = self._ln_stub.ForwardingHistory(ln.ForwardingHistoryRequest(**kwargs))
         return response
 
     @handle_rpc_errors
@@ -38,27 +230,67 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def list_channels(self):
-        """List all open channels"""
-        response = self._ln_stub.ListChannels(ln.ListChannelsRequest())
+    def list_permissions(self):
+        """List all permissions available"""
+        response = self._ln_stub.ListPermissions(ln.ListPermissionsRequest())
         return response
 
     @handle_rpc_errors
-    def open_channel(self, node_pubkey, local_funding_amount=None, push_sat=None, private=False):
+    def get_transactions(self, start_height, end_height, **kwargs):
+        """List all open channels"""
+        request = ln.GetTransactionsRequest(
+            start_height=start_height,
+            end_height=end_height,
+            **kwargs,
+        )
+        response = self._ln_stub.GetTransactions(request)
+        return response
+
+    @handle_rpc_errors
+    def list_channels(self, **kwargs):
+        """List all open channels"""
+        response = self._ln_stub.ListChannels(ln.ListChannelsRequest(**kwargs))
+        return response
+
+    @handle_rpc_errors
+    def abandon_channel(self, **kwargs):
+        """ ***danger*** Abandon a channel"""
+        response = self._ln_stub.AbandonChannel(ln.AbandonChannelRequest(**kwargs))
+        return response
+
+
+    @handle_rpc_errors
+    def open_channel(self, node_pubkey, local_funding_amount, sat_per_byte, **kwargs):
         """Open a channel to an existing peer"""
         request = ln.OpenChannelRequest(
-            node_pubkey_string=node_pubkey,
+            node_pubkey=bytes.fromhex(node_pubkey),
             local_funding_amount=local_funding_amount,
-            push_sat=push_sat,
-            private=private
+            sat_per_byte=sat_per_byte,
+            **kwargs
         )
-        response = self._ln_stub.OpenChannel(request)
+        last_response = None
+        start = datetime.now().timestamp()
+        for r in self._ln_stub.OpenChannel(request, timeout=30):
+            return r
+            last_response = r
+            print(last_response)
+            if datetime.now().timestamp() > 5:
+                return last_response
+
+        #     print(response)
+        #     last_response = response
+        # return response
+
+    @handle_rpc_errors
+    def list_invoices(self, **kwargs):
+        request = ln.ListInvoiceRequest(**kwargs)
+        response = self._ln_stub.ListInvoices(request)
         return response
 
     @handle_rpc_errors
-    def list_invoices(self):
-        request = ln.ListInvoiceRequest()
-        response = self._ln_stub.ListInvoices(request)
+    def funding_state_step(self, shim_register=None, shim_cancel=None, psbt_verify=None, psbt_finalize=None):
+        request = ln.FundingTransitionMsg(shim_register=shim_register, shim_cancel=shim_cancel, psbt_verify=psbt_verify, psbt_finalize=psbt_finalize)
+        response = self._ln_stub.FundingStateStep(request)
         return response
 
     @handle_rpc_errors
@@ -67,8 +299,8 @@ class LNDClient(BaseClient):
             yield invoice
 
     @handle_rpc_errors
-    def add_invoice(self, value, memo=''):
-        request = ln.Invoice(value=value, memo=memo)
+    def add_invoice(self, value, memo='', **kwargs):
+        request = ln.Invoice(value=value, memo=memo, **kwargs)
         response = self._ln_stub.AddInvoice(request)
         return response
 
@@ -80,8 +312,10 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def connect_peer(self, pub_key, host, permanent=False):
+    def connect_peer(self, pub_key, host, ln_at_url=None, permanent=False):
         """Connect to a remote lnd peer"""
+        if ln_at_url:
+            pub_key, host = ln_at_url.split("@")
         ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
         request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
         response = self._ln_stub.ConnectPeer(request)
@@ -119,9 +353,10 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def send_payment(self, payment_request):
+    def send_payment(self, payment_request, fee_limit_msat, **kwargs):
         """Send a payment over lightning"""
-        request = ln.SendRequest(payment_request=payment_request)
+        fee_limit = ln.FeeLimit(fixed_msat=fee_limit_msat)
+        request = ln.SendRequest(payment_request=payment_request, fee_limit=fee_limit, **kwargs)
         response = self._ln_stub.SendPaymentSync(request)
         return response
 
@@ -133,9 +368,9 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def list_payments(self):
+    def list_payments(self, **kwargs):
         """List all outgoing payments"""
-        request = ln.ListPaymentsRequest()
+        request = ln.ListPaymentsRequest(**kwargs)
         response = self._ln_stub.ListPayments(request)
         return response
 
@@ -147,23 +382,23 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def get_channel_info(self, channel_id):
+    def get_chan_info(self, channel_id):
         """Get the state of a specific channel"""
         requset = ln.ChanInfoRequest(chan_id=channel_id)
         response = self._ln_stub.GetChanInfo(requset)
         return response
 
     @handle_rpc_errors
-    def get_node_info(self, pub_key):
+    def get_node_info(self, pub_key, include_channels=False):
         """Get information on a specific node"""
-        request = ln.NodeInfoRequest(pub_key=pub_key)
+        request = ln.NodeInfoRequest(pub_key=pub_key, include_channels=include_channels)
         response = self._ln_stub.GetNodeInfo(request)
         return response
 
     @handle_rpc_errors
-    def query_routes(self, pub_key, amt, num_routes=5):
+    def query_routes(self, pub_key, amt, **kwargs):
         """Query a route to a destination"""
-        request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, num_routes=num_routes)
+        request = ln.QueryRoutesRequest(pub_key=pub_key, amt=amt, **kwargs)
         response = self._ln_stub.QueryRoutes(request)
         return response
 
@@ -175,7 +410,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def decode_payment_request(self, payment_request):
+    def decode_pay_req(self, payment_request):
         """Decode a payment request"""
         request = ln.PayReqString(pay_req=payment_request)
         response = self._ln_stub.DecodePayReq(request)
@@ -195,13 +430,15 @@ class LNDClient(BaseClient):
         response = self._ln_stub.StopDaemon(request)
         return response
 
-    @handle_rpc_errors
+    ## TODO: This has been moved to a subsystem
+    # @handle_rpc_errors
     def sign_message(self, msg):
         """Sign a message with the node's private key"""
         request = ln.SignMessageRequest(msg=msg)
         response = self._ln_stub.SignMessage(request)
         return response
 
+    ## TODO: This has been moved to a subsystem
     @handle_rpc_errors
     def verify_message(self, msg, signature):
         """Verify a message signed with the signature"""
@@ -218,7 +455,7 @@ class LNDClient(BaseClient):
 
     @handle_rpc_errors
     def update_channel_policy(self, base_fee_msat=None, fee_rate=None, time_lock_delta=None,
-                              channel_point=None, all_channels=False):
+                              chan_point=None, all_channels=False):
         """Update the channel policy for all channels, or a single channel"""
         kwargs = {
             'global': all_channels
@@ -227,8 +464,12 @@ class LNDClient(BaseClient):
             kwargs['base_fee_msat'] = base_fee_msat
         if fee_rate:
             kwargs['fee_rate'] = fee_rate
-        if channel_point:
-            kwargs['channel_point'] = channel_point
+        if chan_point:
+            txid, out_index = chan_point.split(":")
+            txid_reversed = bytearray(bytes.fromhex(txid))
+            txid_reversed.reverse()
+            cp = ln.ChannelPoint(funding_txid_bytes=bytes(txid_reversed), output_index=int(out_index))
+            kwargs['chan_point'] = cp
         if time_lock_delta:
             kwargs['time_lock_delta'] = time_lock_delta
 
@@ -241,15 +482,91 @@ class LNDClient(BaseClient):
         """Send bitcoin on-chain to multiple addresses"""
         pass  # TODO
 
-    @handle_rpc_errors
-    def send_on_chain(self, address, amount, sat_ber_byte=None, target_conf=None):
-        """Send bitcoin on-chain to a single address"""
-        optional_kwargs = {}
-        if sat_ber_byte is not None:
-            optional_kwargs['sat_ber_byte'] = sat_ber_byte
-        if target_conf is not None:
-            optional_kwargs['target_conf'] = target_conf
 
-        request = ln.SendCoinsRequest(addr=address, amount=amount, **optional_kwargs)
+    @handle_rpc_errors
+    def send_coins(self, address, amount, **kwargs):
+        """Send bitcoin on-chain to a single address"""
+        request = ln.SendCoinsRequest(addr=address, amount=amount, **kwargs)
         response = self._ln_stub.SendCoins(request)
         return response
+
+    @handle_rpc_errors
+    def channel_acceptor(self, **kwargs):
+        """Bi-directional streaming api to accept or reject channels"""
+        from time import sleep
+        import secrets
+        def request_generator():
+                # Initialization code here.
+                # go = 1
+                # while go:
+                #     go = 0
+                # request = input("\nEnter a number or 'q' to quit: \n")
+                # if request == "q":
+                #     break
+                # Parameters here can be set as arguments to the generator.
+                # print("a: ")
+                # print(a)
+                while True:
+                    try:
+                        print("test")
+                        # print(request)
+                        # print(type(request))
+                        request = input("\nEnter channel id: \n")
+                        response = ln.ChannelAcceptResponse(
+                            accept=False,
+                            error="get your BOS score up, simple pleb",
+                            pending_chan_id=bytes.fromhex(request)
+                        )
+                        # print(request.pending_chan_id)
+                        print(response.error)
+                        # sleep(5)
+                        print("Before yield...")
+                        yield response
+                    except Exception as e:
+                        print(e)
+                        response = ln.ChannelAcceptResponse(
+                            accept=False,
+                            error="get your BOS score up, simple pleb",
+                            pending_chan_id=secrets.token_bytes(32)
+                        )
+                        yield response
+        # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
+        # request = ln.ChannelAcceptResponse(**kwargs)
+        request_iterable = request_generator()
+        it = self._ln_stub.ChannelAcceptor(request_iterable)
+
+        for response in it:
+            print(type(response))
+            print(f"pending cid: {response.pending_chan_id.hex()}")
+            print(f"pubkey: {response.node_pubkey.hex()}")
+
+            # self.get_node_info(response.node_pubkey.hex(), include_channels=False).node.alias
+        return response
+
+    # INVOICES
+    @handle_rpc_errors
+    def subscribe_single_invoice(self, r_hash):
+        """Subscribe to state of a single invoice"""
+        request = invoices.SubscribeSingleInvoiceRequest(r_hash=r_hash)
+        response = self._invoices_stub.SubscribeSingleInvoice(request)
+        for first in response:
+            return first
+
+    #Open Batch Channels
+    @handle_rpc_errors
+    def batch_open_channel(self,channels, sat_per_vbyte, label ,**kwargs):
+        """BatchOpenChannel attempts to open multiple single-funded channels in a single transaction in an atomic way."""
+        #Convert Channel Pubkey into bytes
+        for channel in channels:
+            channel['node_pubkey']=bytes.fromhex(channel['node_pubkey'])
+
+        request = ln.BatchOpenChannelRequest(
+            channels=channels,
+            sat_per_vbyte=sat_per_vbyte,
+            label=label,
+            **kwargs
+            )
+
+        response =  self._ln_stub.BatchOpenChannel(request)
+
+        return response.pending_channels
