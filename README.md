@@ -1,4 +1,20 @@
-# lndgrpc
+### ***This project is no longer maintained but there is an active fork being developed here: 
+https://github.com/kornpow/lnd-grpc-client
+
+
+
+
+
+
+
+
+-----------
+
+
+
+
+
+## lndgrpc
 A python grpc client for LND (Lightning Network Daemon) ⚡⚡⚡
 
 This is a wrapper around the default grpc interface that handles setting up credentials (including macaroons). An async client is also available to do fun async stuff like listening for invoices in the background. 
