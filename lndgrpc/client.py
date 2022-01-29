@@ -257,6 +257,38 @@ class LNDClient(BaseClient):
         response = self._ln_stub.AbandonChannel(ln.AbandonChannelRequest(**kwargs))
         return response
 
+    @handle_rpc_errors
+    def export_all_channel_backups(self):
+        """List all open channels"""
+        request = ln.ChanBackupExportRequest()
+        response = self._ln_stub.ExportAllChannelBackups(request)
+        return response
+
+    @handle_rpc_errors
+    def export_channel_backup(self, chan_point):
+        """List all open channels"""
+        request = ln.ExportChannelBackupRequest(
+            chan_point=chan_point
+        )
+        response = self._ln_stub.ExportChannelBackup(request)
+        return response
+
+    @handle_rpc_errors
+    def restore_channel_backups(self, chan_backups=None, multi_chan_backup=None):
+        """List all open channels"""
+        request = ln.RestoreChanBackupRequest(
+            chan_backups=chan_backups,
+            multi_chan_backup=multi_chan_backup
+        )
+        response = self._ln_stub.RestoreChannelBackups(request)
+        return response
+
+    @handle_rpc_errors
+    def get_recovery_info(self):
+        """List all open channels"""
+        request = ln.GetRecoveryInfoRequest()
+        response = self._ln_stub.GetRecoveryInfo(request)
+        return response
 
     @handle_rpc_errors
     def open_channel(self, node_pubkey, local_funding_amount, sat_per_byte, **kwargs):
@@ -328,7 +360,7 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def close_channel(self, channel_point, force=False, target_conf=None, sat_per_byte=None):
+    def close_channel(self, channel_point, force=False, sat_per_vbyte=None, **kwargs):
         """Close an existing channel"""
         funding_txid, output_index = channel_point.split(':')
         channel_point = ln.ChannelPoint(
@@ -338,8 +370,8 @@ class LNDClient(BaseClient):
         request = ln.CloseChannelRequest(
             channel_point=channel_point,
             force=force,
-            target_conf=target_conf,
-            sat_per_byte=sat_per_byte
+            sat_per_vbyte=sat_per_vbyte,
+            **kwargs
         )
         response = self._ln_stub.CloseChannel(request)
         return response

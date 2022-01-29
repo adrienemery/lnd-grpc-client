@@ -46,6 +46,12 @@ b = ln.ChannelBackups(chan_backups=[backup])
 
 a = ln.ChanBackupSnapshot(single_chan_backups=b)
 
-c = ln.MultiChanBackup()
+m = ln.MultiChanBackup(multi_chan_backup=c)
+a = ln.ChanBackupSnapshot(multi_chan_backup=c)
 
-ln.
+fp = "/home/skorn/.polar/networks/1/volumes/lnd/bob/data/chain/bitcoin/regtest/channel.backup"
+
+with open(fp, "rb") as f:
+	c = f.read()
+
+lnd.restore_channel_backups(multi_chan_backup=c)
