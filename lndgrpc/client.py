@@ -145,11 +145,10 @@ class LNDClient(BaseClient):
     @handle_rpc_errors
     def send_payment_v2(self, **kwargs):
         request = router.SendPaymentRequest(**kwargs)
-        last_response = None
+        responses = []
         for response in self._router_stub.SendPaymentV2(request):
-            print(response)
-            last_response = response
-        return response
+            responses.append(response)
+        return responses
 
     @handle_rpc_errors
     def send_payment_v1(self, **kwargs):
