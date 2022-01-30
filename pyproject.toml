@@ -5,6 +5,8 @@ description = "An rpc client for LND (lightning network deamon)"
 authors = ["Kornpow <test@email.com>"]
 readme = "README.md"
 license = "MIT"
+repository = "https://github.com/kornpow/lnd-grpc-client"
+homepage = "https://github.com/kornpow/lnd-grpc-client"
 packages = [
     { include = "lndgrpc" },
 ]
