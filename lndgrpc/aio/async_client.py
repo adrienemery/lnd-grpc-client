@@ -1,5 +1,4 @@
-import sys
-from lndgrpc.common import walletunlocker, ver, walletkit, signer, router, ln, BaseClient, invoices
+from lndgrpc.common import router, ln, BaseClient, invoices
 from lndgrpc.errors import handle_rpc_errors
 
 import aiogrpc
@@ -9,7 +8,6 @@ class AsyncLNDClient(BaseClient):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ip_address = 'ipv4:///' + self.ip_address
 
     @handle_rpc_errors
     async def get_info(self):
@@ -57,8 +55,14 @@ class AsyncLNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    async def subscribe_invoices(self):
-        await self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription())
+    async def subscribe_invoices(self, add_index=None, settle_index=None):
+        """ Open a stream of invoices """
+        request = ln.InvoiceSubscription(
+            add_index=add_index,
+            settle_index=settle_index,
+        )
+        async for response in self._ln_stub.SubscribeInvoices(request):
+            yield response
 
     @handle_rpc_errors
     async def add_invoice(self, value, memo=''):
