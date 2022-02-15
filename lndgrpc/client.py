@@ -526,52 +526,38 @@ class LNDClient(BaseClient):
         """Bi-directional streaming api to accept or reject channels"""
         from time import sleep
         import secrets
+        import traceback
+        cid = None
         def request_generator():
-                # Initialization code here.
-                # go = 1
-                # while go:
-                #     go = 0
-                # request = input("\nEnter a number or 'q' to quit: \n")
-                # if request == "q":
-                #     break
-                # Parameters here can be set as arguments to the generator.
-                # print("a: ")
-                # print(a)
                 while True:
+                    print("Request Generator")
+                    # global cid
+                    # global response_msg
                     try:
-                        print("test")
-                        # print(request)
-                        # print(type(request))
-                        request = input("\nEnter channel id: \n")
+                        print(cid)
+                        sleep(3)
                         response = ln.ChannelAcceptResponse(
                             accept=False,
                             error="get your BOS score up, simple pleb",
-                            pending_chan_id=bytes.fromhex(request)
+                            pending_chan_id=cid
                         )
-                        # print(request.pending_chan_id)
-                        print(response.error)
-                        # sleep(5)
                         print("Before yield...")
                         yield response
                     except Exception as e:
                         print(e)
-                        response = ln.ChannelAcceptResponse(
-                            accept=False,
-                            error="get your BOS score up, simple pleb",
-                            pending_chan_id=secrets.token_bytes(32)
-                        )
-                        yield response
-        # request = ln.ChannelAcceptResponse(accept=accept, pending_chan_id=pending_chan_id, **kwargs)
-        # request = ln.ChannelAcceptResponse(**kwargs)
+                        print(traceback.format_exc())
+
+
+        response_msg = None
         request_iterable = request_generator()
         it = self._ln_stub.ChannelAcceptor(request_iterable)
 
         for response in it:
-            print(type(response))
+            print("Response Iterator")
+            cid = response.pending_chan_id
+            reponse_msg = response
             print(f"pending cid: {response.pending_chan_id.hex()}")
             print(f"pubkey: {response.node_pubkey.hex()}")
-
-            # self.get_node_info(response.node_pubkey.hex(), include_channels=False).node.alias
         return response
 
     # INVOICES

@@ -34,7 +34,7 @@ lnd = LNDClient(
 
 lnd.get_info().alias
 
-lnd.get_info()
+# lnd.get_info()
 
 
 # ALICE
