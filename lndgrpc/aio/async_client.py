@@ -1,5 +1,5 @@
 import sys
-from lndgrpc.common import ln, BaseClient
+from lndgrpc.common import invoices, ln, BaseClient
 from lndgrpc.errors import handle_rpc_errors
 
 MAJOR = sys.version_info[0]
@@ -64,12 +64,42 @@ if MAJOR == 3 and MINOR >= 6:
 
         @handle_rpc_errors
         async def subscribe_invoices(self):
-            await self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription())
+            async for invoice in self._ln_stub.SubscribeInvoices(
+                ln.InvoiceSubscription()
+            ):
+                yield invoice
+
+        @handle_rpc_errors
+        async def subscribe_single_invoice(self, r_hash):
+            request = ln.PaymentHash(r_hash=r_hash)
+            async for invoice in self._invoices_stub.SubscribeSingleInvoice(
+                request
+            ):
+                yield invoice
 
         @handle_rpc_errors
         async def add_invoice(self, value, memo=''):
             request = ln.Invoice(value=value, memo=memo)
             response = await self._ln_stub.AddInvoice(request)
+            return response
+
+        @handle_rpc_errors
+        async def add_hold_invoice(self, hash, value=0, memo=''):
+            request = invoices.AddHoldInvoiceRequest(
+                hash=hash, value=value, memo=memo)
+            response = await self._invoices_stub.AddHoldInvoice(request)
+            return response
+
+        @handle_rpc_errors
+        async def settle_invoice(self, preimage):
+            request = invoices.SettleInvoiceMsg(preimage=preimage)
+            response = await self._invoices_stub.SettleInvoice(request)
+            return response
+
+        @handle_rpc_errors
+        async def cancel_invoice(self, payment_hash):
+            request = invoices.CancelInvoiceMsg(payment_hash=payment_hash)
+            response = await self._invoices_stub.CancelInvoice(request)
             return response
 
         @handle_rpc_errors
