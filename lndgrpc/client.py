@@ -325,8 +325,12 @@ class LNDClient(BaseClient):
         return response
 
     @handle_rpc_errors
-    def subscribe_invoices(self):
-        for invoice in self._ln_stub.SubscribeInvoices(ln.InvoiceSubscription()):
+    def subscribe_invoices(self, add_index=None, settle_index=None):
+        request = ln.InvoiceSubscription(
+            add_index=add_index,
+            settle_index=settle_index,
+        )
+        for invoice in self._ln_stub.SubscribeInvoices(request):
             yield invoice
 
     @handle_rpc_errors
