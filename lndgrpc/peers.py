@@ -3,5 +3,5 @@ from .errors import handle_rpc_errors
 from datetime import datetime
 import binascii
 
-class PeerRPC(BaseClient):
+class PeersRPC(BaseClient):
     pass
