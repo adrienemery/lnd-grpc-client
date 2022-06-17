@@ -162,6 +162,26 @@ class LNDClient(BaseClient):
         response = self._router_stub.ResetMissionControl(request)
         return response
 
+    @handle_rpc_errors
+    def update_chan_status(self, chan_point, action):
+        """
+        Router.UpdateChanStatus
+        Update
+        ENABLE 0
+        DISABLE 1
+        AUTO 2
+        """
+        funding_txid_str, output_index = chan_point.split(":")
+        output_index = int(output_index)
+        channel_point = ln.ChannelPoint(funding_txid_str=funding_txid_str, output_index=output_index)
+
+        request = router.UpdateChanStatusRequest(
+            chan_point=channel_point,
+            action=action
+        )
+        response = self._router_stub.UpdateChanStatus(request)
+        return response
+
 
     # SIGNERRPC
     @handle_rpc_errors
