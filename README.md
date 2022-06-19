@@ -177,6 +177,12 @@ cd ..
 ```
 
 
+Set environment variables
+```
+export APP_DIR=$HOME/Documents/lightning/lnd
+export CLIENT_DIR=$HOME/Documents/lightning/lnd-grpc-client
+```
+
 ```python
 from pathlib import Path
 import shutil
@@ -185,8 +191,8 @@ import sys
 import re
 import os
 
-lnd_dir = Path.home().joinpath("Documents/lightning/lnd")
-grpc_client_dir = Path.home().joinpath("Documents/lightning/lnd-grpc-client")
+lnd_dir = Path(os.getenv("APP_DIR"))
+grpc_client_dir = Path(os.getenv("CLIENT_DIR"))
 
 os.chdir(grpc_client_dir)
 
