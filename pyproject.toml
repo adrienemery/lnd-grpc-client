@@ -12,6 +12,9 @@ packages = [
 ]
 exclude = ["lndgrpc/googleapis/*"]
 
+[tool.poetry.scripts]
+lndgrpcclient_cli = "lndgrpc.client:cli"
+
 [tool.poetry.dependencies]
 python = ">3.6"
 protobuf = "^3.15.8"
