@@ -1,0 +1,9 @@
+export LND_NODE_IP=kungmeow.m.voltageapp.io
+export LND_NODE_PORT=10009
+
+# CASE 1: A folder with tls.cert, and admin.macaroon
+export LND_CRED_PATH=/home/user/creds/my_favorite_node/lnd
+
+# CASE 2: Running directly on a machine running LND
+export LND_ROOT_DIR=/home/user/.lnd
+export LND_NETWORK=mainnet

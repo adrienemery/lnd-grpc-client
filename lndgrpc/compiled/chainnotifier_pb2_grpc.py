@@ -44,9 +44,11 @@ class ChainNotifierServicer(object):
         registers an intent for a client to be notified once a confirmation request
         has reached its required number of confirmations on-chain.
 
-        A client can specify whether the confirmation request should be for a
-        particular transaction by its hash or for an output script by specifying a
-        zero hash.
+        A confirmation request must have a valid output script. It is also possible
+        to give a transaction ID. If the transaction ID is not set, a notification
+        is sent once the output script confirms. If the transaction ID is also set,
+        a notification is sent once the output script confirms in the given
+        transaction.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

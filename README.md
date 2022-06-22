@@ -42,8 +42,11 @@ python3 -m lndgrpc
 # lndgrpc package is installed... Wow it works!
 ```
 
-### Create Example ENV File
+### Create Node ENV File
 Make a folder for holding your TLS cert and macaroons, and create a file named `node-env` which contains what is necessary to connect to your node
+
+Example `node-env` is located at node-env.example
+
 IN BASH
 ```
 mkdir -p /home/you-user-name/creds/your-node-alias
@@ -72,6 +75,14 @@ IN BASH
 cd /home/you-user-name/creds/your-node-alias
 source node-env
 # THIS ADDS WHAT IS IN THE FILE AS AN ENVIRONMENT VARIABLE SO IT IS AVAILABLE WHEN YOU ARE WRITING SCRIPTS
+```
+
+
+## CLI Usage
+This package adds a CLI command to your PATH once installed:
+
+```bash
+lndgrpcclient_cli
 ```
 
 
@@ -177,54 +188,11 @@ cd ..
 ```
 
 
-```python
-from pathlib import Path
-import shutil
-import sh
-import sys
-import re
-import os
-
-lnd_dir = Path.home().joinpath("Documents/lightning/lnd")
-grpc_client_dir = Path.home().joinpath("Documents/lightning/lnd-grpc-client")
-
-os.chdir(grpc_client_dir)
-
-if not all([lnd_dir.exists(), grpc_client_dir.exists()]):
-    print("Error: Double check that the paths exist!")
-    sys.exit(1)
-
-for proto in list(lnd_dir.rglob("**/*.proto")):
-    print(proto)
-    shutil.copy(proto, grpc_client_dir.joinpath("lndgrpc/compiled/"))
-    print(f"Copied: {proto.name}")
-
-# Modify auctioneer.proto from auctioneerrpc/auctioneer.proto --> poolgrpc/compiled/auctioneer.proto
-for proto in list(grpc_client_dir.joinpath("lndgrpc/compiled/").rglob("*.proto")):
-    with open(proto, 'r+') as f:
-        text = f.read()
-        text = re.sub('lightning.proto', 'lndgrpc/compiled/lightning.proto', text)
-        text = re.sub('verrpc/verrpc.proto', 'lndgrpc/compiled/verrpc.proto', text)
-        text = re.sub('signrpc/signer.proto', 'lndgrpc/compiled/signer.proto', text)
-        f.seek(0)
-        f.write(text)
-        f.truncate()
-
-protos = list(Path(".").joinpath("lndgrpc/compiled/").glob("*.proto"))
-
-args = [
-    "-m",
-    "grpc_tools.protoc",
-    "--proto_path=lndgrpc/compiled/googleapis:.",
-    "--python_out=.",
-    "--grpc_python_out=.",
-]
-
-for protofile in protos:
-    args.append(str(protofile) )
-
-# Generate the compiled protofiles
-sh.python(args)
+Set environment variables
+```
+export APP_DIR=$HOME/Documents/lightning/lnd
+export CLIENT_DIR=$HOME/Documents/lightning/lnd-grpc-client
+python3 rebuild_protos.py
 ```
 
 ## Deploy to Test-PyPi
