@@ -127,25 +127,79 @@ class BaseClient(object):
         macaroon=None,
         macaroon_filepath=None
     ):
-        # Handle either passing in credentials_paths, or environment variable paths
-        if macaroon_filepath is None:
-            credential_path = os.getenv("LND_CRED_PATH", None)
-            if credential_path == None:
-                credential_path = Path.home().joinpath(".lnd")
-                macaroon_filepath = str(credential_path.joinpath("data/chain/bitcoin/mainnet/admin.macaroon").absolute())
-            else:
-                credential_path = Path(credential_path)
-                macaroon_filepath = str(credential_path.joinpath("admin.macaroon").absolute())
 
-        if cert_filepath is None:
-            credential_path = os.getenv("LND_CRED_PATH", None)
+# # CASE 1: A folder with tls.cert, and admin.macaroon
+# export LND_CRED_PATH=/home/user/creds/my_favorite_node/lnd
+
+# # CASE 2: Running directly on a machine running LND
+# export LND_ROOT_DIR=/home/user/.lnd
+# export LND_NETWORK=mainnet
+
+        credential_path = os.getenv("LND_CRED_PATH", None)
+        root_dir = os.getenv("LND_ROOT_DIR", None)
+        network = os.getenv("LND_NETWORK", None)
+        node_ip = os.getenv("LND_NODE_IP")
+        node_port = os.getenv("LND_NODE_PORT")
+        # Handle either passing in credentials_paths, or environment variable paths
+
+        # IF credential_path
+        # ELIF root_dir + network
+        # ELSE use passed in macaroon_filepath and cert_filepath
+        # ELSE use macaroon, and cert
+
+        if credential_path:
             credential_path = Path(credential_path)
+            macaroon_filepath = str(credential_path.joinpath("admin.macaroon").absolute())
             cert_filepath = str(credential_path.joinpath("tls.cert").absolute())
 
+        elif root_dir and network:
+            macaroon_filepath = str(root_dir.joinpath(f"data/chain/bitcoin/{network}/admin.macaroon").absolute())
+            cert_filepath = str(root_dir.joinpath("tls.cert").absolute())
+
+        elif (macaroon_filepath and cert_filepath) or (macaroon and cert):
+            pass
+        
+        else:
+            print("Missing credentials!")
+            sys.exit(1)
+
+
+
+        # if macaroon_filepath is None and macaroon is None:
+        #     if credential_path != None:
+
+
+        #     elif root_dir != None and != network != None:
+        #         if credential_path != None:
+        #         credential_path = Path(root_dir)
+        #         macaroon_filepath = str(credential_path.joinpath(f"data/chain/bitcoin/{network}/admin.macaroon").absolute())
+
+        #     else:
+        #         print("Must specify LND_CRED_PATH, or LND_ROOT_DIR + LND_NETWORK environment variables!")
+        #         sys.exit(1)
+
+
+        # if cert_filepath is None and cert is None:
+        #     credential_path = os.getenv("LND_CRED_PATH", None)
+        #     credential_path = Path(credential_path)
+        #     cert_filepath = str(credential_path.joinpath("tls.cert").absolute())
+
+        #     if credential_path != None:
+        #         credential_path = Path(credential_path)
+        #         cert_filepath = str(credential_path.joinpath("tls.cert").absolute())
+
+        #     elif root_dir != None and != network != None:
+        #         if credential_path != None:
+        #         credential_path = Path(root_dir)
+        #         macaroon_filepath = str(credential_path.joinpath(f"data/chain/bitcoin/{network}/admin.macaroon").absolute())
+
+        #     else:
+        #         print("Must specify LND_CRED_PATH, or LND_ROOT_DIR + LND_NETWORK environment variables!")
+        #         sys.exit(1)
+
+
         if ip_address is None:
-            node_ip = os.getenv("LND_NODE_IP")
-            node_port = os.getenv("LND_NODE_PORT")
-            lnd_ip_port = f"{node_ip}:{node_port}"
+            ip_address = f"{node_ip}:{node_port}"
 
         # handle passing in credentials and cert directly
         if macaroon is None:
