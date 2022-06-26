@@ -200,6 +200,20 @@ class LightningRPC(BaseClient):
         return response
 
     @handle_rpc_errors
+    def closed_channels(self):
+        """ClosedChannels"""
+        request = ln.ClosedChannelsRequest(
+            cooperative=True,
+            local_force=True,
+            remote_force=True,
+            breach=True,
+            funding_canceled=True,
+            abandoned=True
+        )
+        response = self._ln_stub.ClosedChannels(request)
+        return response
+
+    @handle_rpc_errors
     def pending_channels(self):
         """Display information pertaining to pending channels"""
         request = ln.PendingChannelsRequest()
