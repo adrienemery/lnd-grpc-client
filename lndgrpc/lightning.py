@@ -396,3 +396,11 @@ class LightningRPC(BaseClient):
             print(f"pending cid: {response.pending_chan_id.hex()}")
             print(f"pubkey: {response.node_pubkey.hex()}")
         return response
+
+
+    @handle_rpc_errors
+    def debug_level(self, show, level_spec):
+        """DebugLevel"""
+        request = ln.DebugLevelRequest(show=show, level_spec=level_spec)
+        response = self._ln_stub.DebugLevel(request)
+        return response

@@ -59,3 +59,12 @@ class WalletRPC(BaseClient):
         )
         response = self._walletkit_stub.FinalizePsbt(request)
         return response
+
+    @handle_rpc_errors
+    def estimate_fee(self, conf_target):
+        """
+        EstimateFee
+        """
+        request = walletkit.EstimateFeeRequest(conf_target=conf_target)
+        response = self._walletkit_stub.EstimateFee(request)
+        return response
