@@ -4,7 +4,6 @@ from datetime import datetime
 import binascii
 
 class InvoicesRPC(BaseClient):
-    # INVOICES
     @handle_rpc_errors
     def subscribe_single_invoice(self, r_hash):
         """Subscribe to state of a single invoice"""
@@ -13,21 +12,38 @@ class InvoicesRPC(BaseClient):
         for first in response:
             return first
 
-    #Open Batch Channels
     @handle_rpc_errors
-    def batch_open_channel(self,channels, sat_per_vbyte, label ,**kwargs):
-        """BatchOpenChannel attempts to open multiple single-funded channels in a single transaction in an atomic way."""
-        #Convert Channel Pubkey into bytes
-        for channel in channels:
-            channel['node_pubkey']=bytes.fromhex(channel['node_pubkey'])
+    def cancel_invoice(self, payment_hash):
+        """CancelInvoice"""
+        request = invoices.CancelInvoiceMsg(payment_hash=payment_hash)
+        response = self._invoices_stub.CancelInvoice(request)
+        return response
 
-        request = ln.BatchOpenChannelRequest(
-            channels=channels,
-            sat_per_vbyte=sat_per_vbyte,
-            label=label,
-            **kwargs
-            )
+    @handle_rpc_errors
+    def lookup_invoice_v2(self, payment_hash=None, payment_addr=None, set_id=None, lookup_modifier=None):
+        """LookupInvoiceV2"""
+        LookupInvoiceMsg
+        LookupInvoiceV2
+        request = invoices.LookupInvoiceMsg(
+            payment_hash=payment_hash,
+            payment_addr=payment_addr,
+            set_id=set_id,
+            lookup_modifier=lookup_modifier
+        )
+        response = self._invoices_stub.LookupInvoiceV2(request)
+        return response
 
-        response =  self._ln_stub.BatchOpenChannel(request)
+    @handle_rpc_errors
+    def settle_invoice(self, r_hash):
+        """SettleInvoice"""
+        # SettleInvoiceMsg
+        # SettleInvoice
+        pass
 
-        return response.pending_channels
+    @handle_rpc_errors
+    def settle_invoice(self, r_hash):
+        """AddHoldInvoice"""
+        # AddHoldInvoiceRequest
+        # AddHoldInvoice
+        pass
+

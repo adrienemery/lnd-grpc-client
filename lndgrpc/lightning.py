@@ -404,3 +404,21 @@ class LightningRPC(BaseClient):
         request = ln.DebugLevelRequest(show=show, level_spec=level_spec)
         response = self._ln_stub.DebugLevel(request)
         return response
+
+    @handle_rpc_errors
+    def batch_open_channel(self,channels, sat_per_vbyte, label ,**kwargs):
+        """BatchOpenChannel attempts to open multiple single-funded channels in a single transaction in an atomic way."""
+        #Convert Channel Pubkey into bytes
+        for channel in channels:
+            channel['node_pubkey']=bytes.fromhex(channel['node_pubkey'])
+
+        request = ln.BatchOpenChannelRequest(
+            channels=channels,
+            sat_per_vbyte=sat_per_vbyte,
+            label=label,
+            **kwargs
+            )
+
+        response =  self._ln_stub.BatchOpenChannel(request)
+
+        return response.pending_channels
