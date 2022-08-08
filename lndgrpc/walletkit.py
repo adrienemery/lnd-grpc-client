@@ -4,10 +4,36 @@ from datetime import datetime
 import binascii
 
 class WalletRPC(BaseClient):
-    #WALLETRPC
     @handle_rpc_errors
-    def next_addr(self, account=""):
-        request = walletkit.AddrRequest(account=account)
+    def bump_fee(self, outpoint, target_conf, sat_per_vbyte, force):
+        """
+        BumpFee
+        """
+        request = walletkit.BumpFeeRequest(
+            outpoint=outpoint,
+            target_conf=target_conf,
+            sat_per_vbyte=sat_per_vbyte
+        )
+        response = self._walletkit_stub.BumpFee(request)
+        return response
+
+    @handle_rpc_errors
+    def estimate_fee(self, conf_target):
+        """
+        EstimateFee
+        """
+        request = walletkit.EstimateFeeRequest(conf_target=conf_target)
+        response = self._walletkit_stub.EstimateFee(request)
+        return response
+
+
+    @handle_rpc_errors
+    def next_addr(self, account="", address_type=1, change=False):
+        request = walletkit.AddrRequest(
+            account=account,
+            type=address_type,
+            change=change
+        )
         response = self._walletkit_stub.NextAddr(request)
         return response
 
@@ -60,11 +86,39 @@ class WalletRPC(BaseClient):
         response = self._walletkit_stub.FinalizePsbt(request)
         return response
 
+
     @handle_rpc_errors
-    def estimate_fee(self, conf_target):
+    def list_sweeps(self, verbose=True):
         """
-        EstimateFee
+        ListSweeps
         """
-        request = walletkit.EstimateFeeRequest(conf_target=conf_target)
-        response = self._walletkit_stub.EstimateFee(request)
+        request = walletkit.ListSweepsRequest(verbose=verbose)
+        response = self._walletkit_stub.ListSweeps(request)
+        return response
+
+    @handle_rpc_errors
+    def pending_sweeps(self):
+        """
+        PendingSweeps
+        """
+        request = walletkit.PendingSweepsRequest()
+        response = self._walletkit_stub.PendingSweeps(request)
+        return response
+
+    @handle_rpc_errors
+    def list_leases(self):
+        """
+        ListLeases
+        """
+        request = walletkit.ListLeasesRequest()
+        response = self._walletkit_stub.ListLeases(request)
+        return response
+
+    @handle_rpc_errors
+    def required_reserve(self, additional_public_channels=0):
+        """
+        RequiredReserve
+        """
+        request = walletkit.RequiredReserveRequest(additional_public_channels=additional_public_channels)
+        response = self._walletkit_stub.RequiredReserve(request)
         return response
