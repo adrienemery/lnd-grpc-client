@@ -12,128 +12,90 @@ This is a wrapper around the default grpc interface that handles setting up cred
 ## Installation
 ```bash
 pip install lnd-grpc-client
-
-# Test it is working
-# Set these values as needed!
-export CRED_PATH=/path/to/macaroon/and/tls/cert
-export LND_NODE_IP=192.168.1.xx
-
-# This will run a get_info() request on your node, checking its connection.
-python3 -m lndgrpc
 ```
 
-
-
-### Environment Variables
-
-These environment variables are only used when testing node connectivity and/or correct module installation from the command line. This library is primarily used through Python scripting.
-
-```bash
-export CRED_PATH=/path/to/macaroon/and/tls/cert
-export LND_NODE_IP=192.168.1.xx
-
-python3 -m lndgrpc
-
-# You should expect to see:
-#
-# .....
-# .....
-# .....
-# lndgrpc package is installed... Wow it works!
-```
-
-### Create Node ENV File
-Make a folder for holding your TLS cert and macaroons, and create a file named `node-env` which contains what is necessary to connect to your node
-
-Example `node-env` is located at node-env.example
-
-IN BASH
-```
-mkdir -p /home/you-user-name/creds/your-node-alias
-cd /home/you-user-name/creds/your-node-alias
-nano node-env
-```
-
-IN NANO
-```
-# Lightning Node Vars
-export CRED_PATH=/home/you-user-name/creds/your-node-alias/lnd
-export LND_NODE_IP=192.168.4.69
-export LND_NODE_PORT=10009
-```
-
-IN BASH
-```
-mkdir lnd
-cd lnd
-*copy your tls.cert and admin.macaroon in to this folder*
-```
-
-HOW TO USE
-IN BASH
-```
-cd /home/you-user-name/creds/your-node-alias
-source node-env
-# THIS ADDS WHAT IS IN THE FILE AS AN ENVIRONMENT VARIABLE SO IT IS AVAILABLE WHEN YOU ARE WRITING SCRIPTS
-```
-
-
-## CLI Usage
+### CLI Usage
 This package adds a CLI command to your PATH once installed:
 
 ```bash
 lndgrpcclient_cli
 ```
 
+### Setup
 
-## Basic Usage
-The api mirrors the underlying lnd grpc api (http://api.lightning.community/) but methods will be in pep8 style. ie. `.GetInfo()` becomes `.get_info()`.
+```
+$ lndgrpcclient_cli environment
 
-```python
-import os
-from pathlib import Path
+Saving credentials!
+Enter your node's IP Address [127.0.0.1]: 86.75.309.69
+86.75.309.69
+Enter your node's Port [10009]: 
+10009
+Enter your node's Alias [default-node-alias]: my-cool-node
+my-cool-node
+Where do you want keep your node credentials? Macaroons and tls.cert? [/home/kornpow/Documents/lnd-creds/my-cool-node]: 
+Enter your macaroon filename [admin.macaroon]: 
+Build directory structure and save `node-env` file at location: /home/kornpow/Documents/lnd-creds/my-cool-node [True]: 1
+This environment file must be loaded to access your node!
 
-from lndgrpc import LNDClient
+export LND_CRED_PATH=/home/kornpow/Documents/lnd-creds/my-cool-node
+export LND_NODE_IP=86.75.309.69
+export LND_NODE_PORT=10009
+export LND_MACAROON=admin.macaroon
+Writing file....
+Wrote environment file to location: /home/kornpow/Documents/lnd-creds/my-cool-node/node-env
+Enable it by running: source /home/kornpow/Documents/lnd-creds/my-cool-node/node-env
+```
 
-credential_path = os.getenv("LND_CRED_PATH", None)
-if credential_path == None:
-	credential_path = Path.home().joinpath(".lnd")
-	mac = str(credential_path.joinpath("data/chain/bitcoin/mainnet/admin.macaroon").absolute())
-else:
-	credential_path = Path(credential_path)
-	mac = str(credential_path.joinpath("admin.macaroon").absolute())
-	
+```
+$ lndgrpcclient_cli credentials --input_format hex --credential_type macaroon
 
-node_ip = os.getenv("LND_NODE_IP")
-tls = str(credential_path.joinpath("tls.cert").absolute())
+Saving credentials to: /home/kornpow/Documents/lnd-creds/my-cool-node
+Enter your node's macaroon []: abcdef123456
+Enter your macaroon name: [admin]: readonly
+Enable this macaroon by running:
+ export LND_MACAROON=readonly.macaroon
+Wrote file: /home/kornpow/Documents/lnd-creds/my-cool-node/readonly.macaroon
+```
 
-lnd_ip_port = f"{node_ip}:10009"
+```
+$ lndgrpcclient_cli credentials --input_format hex --credential_type tls
 
-# pass in the ip-address with RPC port and network ('mainnet', 'testnet', 'simnet')
-# the client defaults to 127.0.0.1:10009 and mainnet if no args provided
-lnd = LNDClient(
-	lnd_ip_port,
-	macaroon_filepath=mac,
-	cert_filepath=tls
-	# no_tls=True
-)
+Saving credentials to: /home/kornpow/Documents/lnd-creds/my-cool-node
+Enter your node's tls []: abcdef1234
+Wrote file: /home/kornpow/Documents/lnd-creds/my-cool-node/tls.cert
+```
 
-# Unlock you wallet
-lnd.unlock_wallet(wallet_password=b"your_wallet_password")
 
-# Get general data about your node
-lnd.get_info()
+### Usage
+```
+$ lndgrpcclient_cli shell
 
-print('Listening for invoices...')
-for invoice in lnd.subscribe_invoices():
-    print(invoice)
+>>> lnd.get_info().block_hash
+'0000000000000000000873876975b2443cfcb93cd9b66c58ed6da922fe5f40b3'
+
+>>> lnd.get_node_info("0360a41eb8c3fe09782ef6c984acbb003b0e1ebc4fe10ae01bab0e80d76618c8f4").node.alias
+'kungmeow'
+
+>>> lnd.get_network_info()
+graph_diameter: 13
+avg_out_degree: 5.528722661077973
+max_out_degree: 417
+num_nodes: 18609
+num_channels: 51442
+total_network_capacity: 2873600
+avg_channel_size: 55.86096963570623
+max_channel_size: 1000000
+num_zombie_chans: 165176
 ```
 
 ## Advanced Usage
 Go in the `examples` folder for some advanced examples including:
-- WIP: Open channel using PSBT
-- Keysend Payments
-- Reconnect to your peers
+- Open channel using PSBT: `openchannel-external.py`
+- Open Batch of Channels using PSBT: `batchopenchannel-external.py`
+- Keysend Payments: `send-keysend.py`
+- Reconnect to your peers: `reconnect-peers.py`
+- Channel Acceptor API w/ a custom failure message: `channel-acceptor.py`
 
 ### Async
 

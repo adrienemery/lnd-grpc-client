@@ -2,9 +2,12 @@ import os
 from pathlib import Path
 import code
 import subprocess
+import readline
+import base64
 
 import click
 from yachalk import chalk
+
 
 from lndgrpc.client import LNDClient
 
@@ -59,7 +62,7 @@ def environment():
     node_port = click.prompt(chalk.yellow.bold("Enter your node's Port"), type=str, default="10009")
     print(chalk.white(node_port))
     
-    node_nickname = click.prompt(chalk.yellow.bold("Enter your node's Alias"), type=str, default="default-node-alias")
+    node_nickname = click.prompt(chalk.yellow.bold("Enter your node's Alias"), type=str, default="default-node-alias", confirmation_prompt=True)
     print(chalk.white(node_nickname))
 
     default_root_path = Path.expanduser(Path("~")).joinpath("Documents").joinpath("lnd-creds").joinpath(node_nickname)
