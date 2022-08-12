@@ -140,6 +140,7 @@ class BaseClient(object):
         network = os.getenv("LND_NETWORK", None)
         node_ip = os.getenv("LND_NODE_IP")
         node_port = os.getenv("LND_NODE_PORT")
+        lnd_macaroon = os.getenv("LND_MACAROON", "admin.macaroon")
         # Handle either passing in credentials_paths, or environment variable paths
 
         # IF credential_path
@@ -149,7 +150,7 @@ class BaseClient(object):
 
         if credential_path:
             credential_path = Path(credential_path)
-            macaroon_filepath = str(credential_path.joinpath("admin.macaroon").absolute())
+            macaroon_filepath = str(credential_path.joinpath(lnd_macaroon).absolute())
             cert_filepath = str(credential_path.joinpath("tls.cert").absolute())
 
         elif root_dir and network:

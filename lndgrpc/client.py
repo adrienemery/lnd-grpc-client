@@ -40,10 +40,10 @@ class LNDClient(
     pass
 
 
-def cli():
-    import code
-    # LNDClient gets all configuration parameters from environment variables!
-    lnd = LNDClient()
+# def cli():
+#     import code
+#     # LNDClient gets all configuration parameters from environment variables!
+#     lnd = LNDClient()
 
-    # Enter a shell for interacting with LND
-    code.interact(local=dict(globals(), **locals()))  
+#     # Enter a shell for interacting with LND
+#     code.interact(local=dict(globals(), **locals()))  
