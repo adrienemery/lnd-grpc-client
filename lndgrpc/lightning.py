@@ -166,12 +166,12 @@ class LightningRPC(BaseClient):
         return response
 
     @handle_rpc_errors
-    def connect_peer(self, pub_key, host, ln_at_url=None, permanent=False):
+    def connect_peer(self, pub_key, host, ln_at_url=None, perm=True, timeout=0):
         """Connect to a remote lnd peer"""
         if ln_at_url:
             pub_key, host = ln_at_url.split("@")
         ln_address = ln.LightningAddress(pubkey=pub_key, host=host)
-        request = ln.ConnectPeerRequest(addr=ln_address, perm=permanent)
+        request = ln.ConnectPeerRequest(addr=ln_address, perm=perm, timeout=timeout)
         response = self._ln_stub.ConnectPeer(request)
         return response
 
