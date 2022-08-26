@@ -60,7 +60,7 @@ class NeutrinoRPC(BaseClient):
         return response
 
     @handle_rpc_errors
-    def status(self, peer_addrs):
+    def status(self):
         """
         Status
         """
