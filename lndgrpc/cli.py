@@ -7,6 +7,8 @@ import base64
 
 import click
 from yachalk import chalk
+from ptpython.repl import embed
+
 
 
 from lndgrpc.client import LNDClient
@@ -21,7 +23,8 @@ def shell():
     lnd = LNDClient()
 
     # Enter a shell for interacting with LND
-    code.interact(local=dict(globals(), **locals()))
+    # code.interact(local=dict(globals(), **locals()))
+    embed(globals(), locals())
 
 @click.command(help="Input and save your credentials to disk")
 @click.option('--input_format', default="base64", type=click.Choice(["hex", "base64"]), help="Input format")
@@ -67,7 +70,7 @@ def environment():
 
     default_root_path = Path.expanduser(Path("~")).joinpath("Documents").joinpath("lnd-creds").joinpath(node_nickname)
     default_path = default_root_path.joinpath("lnd")
-    credential_path = Path(click.prompt(chalk.yellow.bold("Where do you want keep your node credentials? Macaroons and tls.cert?"), type=str, default=default_root_path))
+    credential_path = Path(click.prompt(chalk.yellow.bold("Where do you want keep your node credentials? Macaroons and tls.cert?"), type=str, default=default_path))
 
     macaroon_filename = click.prompt(chalk.yellow.bold("Enter your macaroon filename"), type=str, default="admin.macaroon")
 
