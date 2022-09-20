@@ -5,17 +5,20 @@ import binascii
 
 class WalletUnlockerRPC(BaseClient):
     #WALLETUNLOCKERRPC
+    @handle_rpc_errors
     def unlock(self, password):
         """Unlock encrypted wallet at lnd startup"""
         request = ln.UnlockWalletRequest(wallet_password=password.encode())
         response = self._wallet_stub.UnlockWallet(request)
         return response
 
+    @handle_rpc_errors
     def init_wallet(self, **kwargs):
         request = walletunlocker.InitWalletRequest(**kwargs)
         response = self._walletunlocker_stub.InitWallet(request)
         return response
 
+    @handle_rpc_errors
     def gen_seed(self, aezeed_passphrase, seed_entropy):
         request = walletunlocker.GenSeedRequest(
             aezeed_passphrase=aezeed_passphrase,
@@ -24,6 +27,7 @@ class WalletUnlockerRPC(BaseClient):
         response = self._walletunlocker_stub.GenSeed(request)
         return response
 
+    @handle_rpc_errors
     def change_password(self, current_password, new_password, stateless_init, new_macaroon_root_key):
         request = walletunlocker.ChangePasswordRequest(
             current_password=current_password,
