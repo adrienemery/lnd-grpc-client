@@ -57,6 +57,11 @@ class WalletKitStub(object):
                 request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.SerializeToString,
                 response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.FromString,
                 )
+        self.RequiredReserve = channel.unary_unary(
+                '/walletrpc.WalletKit/RequiredReserve',
+                request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveResponse.FromString,
+                )
         self.ImportAccount = channel.unary_unary(
                 '/walletrpc.WalletKit/ImportAccount',
                 request_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountRequest.SerializeToString,
@@ -197,6 +202,16 @@ class WalletKitServicer(object):
         ListAccounts retrieves all accounts belonging to the wallet by default. A
         name and key scope filter can be provided to filter through all of the
         wallet accounts and return only those matching.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RequiredReserve(self, request, context):
+        """
+        RequiredReserve returns the minimum amount of satoshis that should be kept
+        in the wallet in order to fee bump anchor channels if necessary. The value
+        scales with the number of public anchor channels but is capped at a maximum.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -447,6 +462,11 @@ def add_WalletKitServicer_to_server(servicer, server):
                     request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.FromString,
                     response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.SerializeToString,
             ),
+            'RequiredReserve': grpc.unary_unary_rpc_method_handler(
+                    servicer.RequiredReserve,
+                    request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveResponse.SerializeToString,
+            ),
             'ImportAccount': grpc.unary_unary_rpc_method_handler(
                     servicer.ImportAccount,
                     request_deserializer=lndgrpc_dot_compiled_dot_walletkit__pb2.ImportAccountRequest.FromString,
@@ -652,6 +672,23 @@ class WalletKit(object):
         return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/ListAccounts',
             lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsRequest.SerializeToString,
             lndgrpc_dot_compiled_dot_walletkit__pb2.ListAccountsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RequiredReserve(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/walletrpc.WalletKit/RequiredReserve',
+            lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_walletkit__pb2.RequiredReserveResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -51,6 +51,11 @@ class NeutrinoKitStub(object):
                 request_serializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterRequest.SerializeToString,
                 response_deserializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterResponse.FromString,
                 )
+        self.GetBlockHash = channel.unary_unary(
+                '/neutrinorpc.NeutrinoKit/GetBlockHash',
+                request_serializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashRequest.SerializeToString,
+                response_deserializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashResponse.FromString,
+                )
 
 
 class NeutrinoKitServicer(object):
@@ -118,6 +123,14 @@ class NeutrinoKitServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetBlockHash(self, request, context):
+        """
+        GetBlockHash returns the header hash of a block at a given height.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_NeutrinoKitServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -155,6 +168,11 @@ def add_NeutrinoKitServicer_to_server(servicer, server):
                     servicer.GetCFilter,
                     request_deserializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterRequest.FromString,
                     response_serializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterResponse.SerializeToString,
+            ),
+            'GetBlockHash': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetBlockHash,
+                    request_deserializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashRequest.FromString,
+                    response_serializer=lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -284,5 +302,22 @@ class NeutrinoKit(object):
         return grpc.experimental.unary_unary(request, target, '/neutrinorpc.NeutrinoKit/GetCFilter',
             lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterRequest.SerializeToString,
             lndgrpc_dot_compiled_dot_neutrino__pb2.GetCFilterResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetBlockHash(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/neutrinorpc.NeutrinoKit/GetBlockHash',
+            lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashRequest.SerializeToString,
+            lndgrpc_dot_compiled_dot_neutrino__pb2.GetBlockHashResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
