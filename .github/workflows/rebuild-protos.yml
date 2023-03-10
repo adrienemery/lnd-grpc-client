@@ -10,3 +10,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: lnd-grpc-client
+
+      - uses: actions/checkout@v3
+        with:
+          repository: "lightningnetwork/lnd"
+          ref: "v0.16.0-beta.rc2"
+          path: lnd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - run: |
+          ls lnd-grpc-client
+          ls lnd
+          export APP_DIR=$(readlink -f lnd-grpc-client)
+          export LND_DIR=$(readlink -f lnd)
+          python3 $APP_DIR/rebuild_protos.py
+          cd $APP_DIR
+          git status
+
