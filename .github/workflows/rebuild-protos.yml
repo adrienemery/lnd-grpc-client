@@ -14,11 +14,17 @@ jobs:
         with:
           path: lnd-grpc-client
 
+      - uses: oprypin/find-latest-tag@v1
+        with:
+          repository: "lightningnetwork/lnd"  # The repository to scan.
+          releases-only: true  # We know that all relevant tags have a GitHub release for them.
+        id: lnd-latest  # The step ID to refer to later.
+
       - name: Checkout LND
         uses: actions/checkout@v3
         with:
           repository: "lightningnetwork/lnd"
-          ref: "v0.16.0-beta.rc2"
+          ref: ${{ steps.lnd-latest.outputs.tag }}
           path: lnd
 
       - uses: actions/setup-python@v4
@@ -53,7 +59,8 @@ jobs:
         with:
           path: lnd-grpc-client
           base: master
-          branch: protos/v0.16.0-beta.rc2
-          commit-message: "[automated] Regenerated LND proto files for version: blah"
-          title: "Regenerated LND proto files"
+          branch: protos/${{ steps.lnd-latest.outputs.tag }}
+          commit-message: "[automated] Regenerated LND proto files for version: ${{ steps.lnd-latest.outputs.tag }}"
+          title: "LND ${{ steps.lnd-latest.outputs.tag }}: Regenerated proto files"
           body: "Updated the LND protos!"
+          reviewers: kornpow
