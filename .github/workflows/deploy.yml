@@ -6,8 +6,22 @@ on:
 
 
 jobs:
-  multi:
+  build:
+    uses: kornpow/lnd-grpc-client/.github/workflows/build.yml@github_actions
+
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Download build-output artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-output
+          path: dist/
+
+      - name: Publish distribution 📦 to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
