@@ -9,8 +9,6 @@ import click
 from yachalk import chalk
 from ptpython.repl import embed
 
-
-
 from lndgrpc.client import LNDClient
 
 @click.group()
@@ -23,12 +21,15 @@ def shell():
     lnd = LNDClient()
 
     # Enter a shell for interacting with LND
-    # code.interact(local=dict(globals(), **locals()))
-    embed(globals(), locals())
+    # Normal Shell
+    code.interact(local=dict(globals(), **locals()))
+
+    # Fancy Shell
+    # embed(globals(), locals())
 
 @click.command(help="Input and save your credentials to disk")
 @click.option('--input_format', default="base64", type=click.Choice(["hex", "base64"]), help="Input format")
-@click.option('--credential_type', default="macaroon", type=click.Choice(["macaroon", "tls"]), help="Input Type")
+@click.option('--type', "credential_type", default="macaroon", type=click.Choice(["macaroon", "tls"]), help="Input Type")
 def credentials(input_format, credential_type):
     credential_path = Path(os.getenv("LND_CRED_PATH", None))
     subprocess.check_call(["stty","-icanon"])
@@ -42,16 +43,14 @@ def credentials(input_format, credential_type):
     output_file = None
     if credential_type == "tls":
         output_file = credential_path.joinpath("tls.cert")
-        with open(output_file, "wb") as f:
-            f.write(data)
 
     if credential_type == "macaroon":
         macaroon_name = click.prompt(chalk.yellow.bold(f"Enter your macaroon name:"), type=str, default="admin")
         output_file = credential_path.joinpath(f"{macaroon_name}.macaroon")
-        with open(output_file, "wb") as f:
-            f.write(data)
-        
         print(f"Enable this macaroon by running:\n", chalk.red.bg_yellow(f"export LND_MACAROON={output_file.name}"))
+
+    with open(output_file, "wb") as f:
+        f.write(data)
 
     subprocess.check_call(["stty","icanon"])
     print(f"Wrote file: {output_file}")
