@@ -9,11 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout lnd-grpc-client
+        uses: actions/checkout@v3
         with:
           path: lnd-grpc-client
 
-      - uses: actions/checkout@v3
+      - name: Checkout LND
+        uses: actions/checkout@v3
         with:
           repository: "lightningnetwork/lnd"
           ref: "v0.16.0-beta.rc2"
@@ -23,12 +25,26 @@ jobs:
         with:
           python-version: "3.10"
 
-      - run: |
-          ls lnd-grpc-client
-          ls lnd
-          export APP_DIR=$(readlink -f lnd-grpc-client)
-          export LND_DIR=$(readlink -f lnd)
-          python3 $APP_DIR/rebuild_protos.py
-          cd $APP_DIR
-          git status
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.3.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Install Deps
+        working-directory: ./lnd-grpc-client
+        run: |
+          poetry install
+
+
+      - name: Rebuild the Protos
+        run: |
+            export CLIENT_DIR=$(readlink -f lnd-grpc-client)
+            export APP_DIR=$(readlink -f lnd)
+            cd lnd-grpc-client
+            source .venv/bin/activate
+            python3 $CLIENT_DIR/rebuild_protos.py
+            git status
 
