@@ -48,3 +48,12 @@ jobs:
             python3 $CLIENT_DIR/rebuild_protos.py
             git status
 
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: lnd-grpc-client
+          base: master
+          branch: protos/v0.16.0-beta.rc2
+          commit-message: "[automated] Regenerated LND proto files for version: blah"
+          title: "Regenerated LND proto files"
+          body: "Updated the LND protos!"
