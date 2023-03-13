@@ -7,7 +7,7 @@ from lndgrpc.compiled import peers_pb2 as lndgrpc_dot_compiled_dot_peers__pb2
 
 class PeersStub(object):
     """Peers is a service that can be used to get information and interact
-    with the other nodes of the newtwork.
+    with the other nodes of the network.
     """
 
     def __init__(self, channel):
@@ -25,7 +25,7 @@ class PeersStub(object):
 
 class PeersServicer(object):
     """Peers is a service that can be used to get information and interact
-    with the other nodes of the newtwork.
+    with the other nodes of the network.
     """
 
     def UpdateNodeAnnouncement(self, request, context):
@@ -54,7 +54,7 @@ def add_PeersServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class Peers(object):
     """Peers is a service that can be used to get information and interact
-    with the other nodes of the newtwork.
+    with the other nodes of the network.
     """
 
     @staticmethod
