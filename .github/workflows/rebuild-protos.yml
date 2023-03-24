@@ -1,0 +1,66 @@
+name: rebuild-protos
+
+on: 
+  workflow_dispatch:
+  # push:
+
+jobs:
+  multi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout lnd-grpc-client
+        uses: actions/checkout@v3
+        with:
+          path: lnd-grpc-client
+
+      - uses: oprypin/find-latest-tag@v1
+        with:
+          repository: "lightningnetwork/lnd"  # The repository to scan.
+          releases-only: true  # We know that all relevant tags have a GitHub release for them.
+        id: lnd-latest  # The step ID to refer to later.
+
+      - name: Checkout LND
+        uses: actions/checkout@v3
+        with:
+          repository: "lightningnetwork/lnd"
+          ref: ${{ steps.lnd-latest.outputs.tag }}
+          path: lnd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.3.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Install Deps
+        working-directory: ./lnd-grpc-client
+        run: |
+          poetry install
+
+
+      - name: Rebuild the Protos
+        run: |
+            export CLIENT_DIR=$(readlink -f lnd-grpc-client)
+            export APP_DIR=$(readlink -f lnd)
+            cd lnd-grpc-client
+            source .venv/bin/activate
+            python3 $CLIENT_DIR/rebuild_protos.py
+            git status
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: lnd-grpc-client
+          base: master
+          branch: protos/${{ steps.lnd-latest.outputs.tag }}
+          commit-message: "[automated] Regenerated LND proto files for version: ${{ steps.lnd-latest.outputs.tag }}"
+          title: "LND ${{ steps.lnd-latest.outputs.tag }}: Regenerated proto files"
+          body: "Updated the LND protos!"
+          reviewers: kornpow

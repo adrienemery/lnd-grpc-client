@@ -1,0 +1,13 @@
+name: test
+
+on: 
+  workflow_dispatch:
+  # push:
+  
+
+jobs:
+  multi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
