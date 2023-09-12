@@ -5,14 +5,16 @@ import binascii
 
 class WalletRPC(BaseClient):
     @handle_rpc_errors
-    def bump_fee(self, outpoint, target_conf, sat_per_vbyte, force):
+    def bump_fee(self, outpoint, sat_per_vbyte, force=False):
         """
         BumpFee
         """
+        txid_str, output_index = outpoint.split(":")
+        outpoint_obj = ln.OutPoint(txid_str=txid_str, output_index=int(output_index))
         request = walletkit.BumpFeeRequest(
-            outpoint=outpoint,
-            target_conf=target_conf,
-            sat_per_vbyte=sat_per_vbyte
+            outpoint=outpoint_obj,
+            sat_per_vbyte=sat_per_vbyte,
+            force=force,
         )
         response = self._walletkit_stub.BumpFee(request)
         return response
